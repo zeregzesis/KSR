@@ -1,0 +1,110 @@
+@startuml
+title KSR_Class_diagram
+class Partitioner{
+    - String filepath
+    - String content
+    - int startIndex
+    - int endIndex
+    void setFilepath(String newPath)
+    void getFileContents()
+    Article getNextArticle()
+}
+
+class Article{
+    - String contents
+}
+
+enum Places{
+    westgermany
+    usa
+    france
+    uk
+    canada
+    japan
+}
+
+class Dicts{
+    - String[] c1_dict
+    - String[] c2_dict
+    - String[] c3_dict
+    - String[] c4_dict
+    - String[] c5_dict
+    - String[] c6_dict
+    - String[] c7_dict
+    - String[] c8_dict
+    - String[] c9_dict
+    - String[] c10_dict
+}
+
+class Properties{
+    - String c1
+    - String c2
+    - String c3
+    - String c4
+    - String c5
+    - String c6
+    - String c7
+    - String c8
+    - String c9
+    - String c10
+    - Places label
+}
+
+
+class FeatureExtractor{
+    - Dicts dictionaries
+    void extractProperties(Article article)
+}
+
+class Classifier{
+
+}
+
+class App{
+    void main(String[] args)
+}
+
+class PropertiesList{
+    - List<Properties> dataset
+    void dropFeature(int feature_number)
+    - void shuffle()
+    List<PropertiesList> createSets(float test_set_split)
+}
+
+
+abstract Metrics{
+    - BiFunction<var, var, Double> metricFunction
+    float calculate()
+}
+
+class Chebyshev{
+
+}
+
+class Euclidian{
+
+}
+
+class Manhattan{
+
+}
+
+class Ngram{
+    
+}
+
+Metrics<|--Ngram
+Metrics<|--Manhattan
+Metrics<|--Chebyshev
+Metrics<|--Euclidian
+
+App --> Partitioner
+App --> Classifier
+PropertiesList o-- Properties
+Properties --> Places
+FeatureExtractor --> Dicts
+FeatureExtractor ..> PropertiesList : creates
+Partitioner ..> Article : creates
+FeatureExtractor ..> Article : uses
+Classifier ..> Metrics : uses
+Classifier ..> PropertiesList : uses
