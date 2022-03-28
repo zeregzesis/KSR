@@ -12,6 +12,7 @@ class Partitioner{
 
 class Article{
     - String contents
+    - Places label
 }
 
 enum Places{

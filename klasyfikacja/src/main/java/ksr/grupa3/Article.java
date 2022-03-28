@@ -5,11 +5,11 @@ import lombok.Data;
 @Data
 public class Article {
 
-    private final String contents;
-    private final Properties props;
+    private String contents;
+    private Places label;
 
-    public Article(String contents, Properties props){
+    public Article(String contents, Places label) {
         this.contents = contents;
-        this.props = props;
+        this.label = label;
     }
 }

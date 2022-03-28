@@ -34,10 +34,12 @@ public class Partition {
     public Article getNextArticle() {
 
         this.startIndex = this.content.indexOf("<REUTERS ", this.endIndex);
-        
-        //System.out.println(this.startIndex);
 
         if (this.startIndex == -1) return null;
+
+        int bodyStartIndex = this.content.indexOf("<BODY>", this.startIndex) + 6;
+
+        int bodyEndIndex = this.content.indexOf("</BODY>", bodyStartIndex);
 
         this.endIndex = content.indexOf("</REUTERS>", this.startIndex);
 
@@ -46,13 +48,9 @@ public class Partition {
 
         Places label = Places.valueOf(this.content.substring(placeStartIndex, placeEndIndex));
 
-        // ekstrakcja cech
+        Article art = new Article(this.content.substring(bodyStartIndex, bodyEndIndex).toLowerCase(), label);
 
-        // Properties props = new Properties( tutaj wyciągnięte cechy i label );
-
-        // Article art = new Article(this.content.substring(this.startIndex, this.endIndex), props);
-
-        return null;    // tutaj będzie zwracany obiekt Article z cechami, póki co jest null żeby java się nie czepiała że funkcja nic nie zwraca
+        return art;
     }
 
 }

@@ -6,5 +6,5 @@ enum Places{
     france,
     uk,
     canada,
-    japan
+    japan, UNKNOWN
 }
