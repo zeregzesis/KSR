@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class Dicts {
-    
+
     private List<String> c1_dict = new ArrayList<String>();
     private List<String> c2_dict = new ArrayList<String>();
     private List<String> c3_dict = new ArrayList<String>();
@@ -20,32 +20,32 @@ public class Dicts {
     private List<String> c7_dict = new ArrayList<String>();
     private List<String> c8_dict = new ArrayList<String>();
     private List<String> c9_dict = new ArrayList<String>();
-    
+
     public Dicts(String dictPath) throws FileNotFoundException {
         Scanner c1 = new Scanner(new File(dictPath + "\\c1.txt"));
         while (c1.hasNextLine()) {
             this.c1_dict.add(c1.nextLine().toLowerCase());
         }
         c1.close();
-        
+
         Scanner c2 = new Scanner(new File(dictPath + "\\c2.txt"));
         while (c2.hasNextLine()) {
             this.c2_dict.add(c2.nextLine().toLowerCase());
         }
         c2.close();
-        
+
         Scanner c3 = new Scanner(new File(dictPath + "\\c3.txt"));
         while (c3.hasNextLine()) {
             this.c3_dict.add(c3.nextLine().toLowerCase());
         }
         c3.close();
-        
+
         Scanner c4 = new Scanner(new File(dictPath + "\\c4.txt"));
         while (c4.hasNextLine()) {
             this.c4_dict.add(c4.nextLine().toLowerCase());
         }
         c4.close();
-        
+
         Scanner c5 = new Scanner(new File(dictPath + "\\c5.txt"));
         while (c5.hasNextLine()) {
             this.c5_dict.add(c5.nextLine().toLowerCase());

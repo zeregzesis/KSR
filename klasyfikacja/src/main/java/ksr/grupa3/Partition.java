@@ -9,14 +9,12 @@ public class Partition {
     String content;
     private int startIndex = 0;
     private int endIndex = 0;
-    
 
     public Partition(String path) {
         this.filepath = path;
-        try{
+        try {
             this.getFileContents();
-        }
-        catch (FileNotFoundException nofile) {
+        } catch (FileNotFoundException nofile) {
             System.out.println("Failed to open file");
         }
     }
@@ -35,7 +33,8 @@ public class Partition {
 
         this.startIndex = this.content.indexOf("<REUTERS ", this.endIndex);
 
-        if (this.startIndex == -1) return null;
+        if (this.startIndex == -1)
+            return null;
 
         int bodyStartIndex = this.content.indexOf("<BODY>", this.startIndex) + 6;
 
@@ -43,10 +42,15 @@ public class Partition {
 
         this.endIndex = content.indexOf("</REUTERS>", this.startIndex);
 
-        int placeStartIndex = content.indexOf("<D>", this.startIndex) + 3;
-        int placeEndIndex = content.indexOf("</D>", placeStartIndex);
+        int placeStartIndex = content.indexOf("<PLACES>", bodyStartIndex) + 8;
+        int placeEndIndex = content.indexOf("</PLACES>", placeStartIndex);
 
-        Places label = Places.valueOf(this.content.substring(placeStartIndex, placeEndIndex));
+        int dStartIndex = content.indexOf("<D>", placeStartIndex) + 3;
+        int dEndIndex = content.indexOf("</D>", dStartIndex);
+
+        //System.out.println(this.content.substring(placeStartIndex, placeEndIndex));
+
+        Places label = Places.valueOf(this.content.substring(dStartIndex, dEndIndex));
 
         Article art = new Article(this.content.substring(bodyStartIndex, bodyEndIndex).toLowerCase(), label);
 

@@ -1,14 +1,16 @@
 package ksr.grupa3;
+
 import java.util.Map;
 import java.util.*;
 
 import lombok.Data;
 
 @Data
-public class Properties{
+public class Properties {
     private Map<String, Integer> numericFeatures = new java.util.HashMap<String, Integer>();
     private Map<String, String> stringFeatures = new java.util.HashMap<String, String>();
     private Places label;
+    private Places assigned;
 
     public Properties() {
     }
@@ -25,11 +27,11 @@ public class Properties{
         this.label = label;
     }
 
-    public List<Integer> getNumericValuesAsList(){
+    public List<Integer> getNumericValuesAsList() {
         return new ArrayList<Integer>(numericFeatures.values());
     }
 
-    public List<String> getStringValuesAsList(){
+    public List<String> getStringValuesAsList() {
         return new ArrayList<String>(stringFeatures.values());
     }
 

@@ -1,0 +1,2 @@
+accuracy,precision_for_classification,recall_for_classification,f1score_for_classification,westgermany_precision,westgermany_recall,westgermany_f1score,usa_precision,usa_recall,usa_f1score,france_precision,france_recall,france_f1score,uk_precision,uk_recall,uk_f1score,canada_precision,canada_recall,canada_f1score,japan_precision,japan_recall,japan_f1score,
+0.9666666666666667,0.16666666666666666,0.16111111111111112,0.1638418079096045,0.0,0.0,0.0,1.0,0.9666666666666667,0.983050847457627,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,

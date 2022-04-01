@@ -17,17 +17,17 @@ public class FeatureExtractor {
 
     public Properties extract(Article article) {
         Properties properties = new Properties();
+        properties.setLabel(article.getLabel());
         String contents = article.getContents();
         properties.addToNumericFeatures("c10", 0);
         int count = 0, index = 0;
-        //Map<String, Integer> wordsFromC3 = new HashMap<String, Integer>();
-        //Map<String, Integer> wordsFromC4 = new HashMap<String, Integer>();
-        //Map<String, Integer> wordsFromC9 = new HashMap<String, Integer>();
+        // Map<String, Integer> wordsFromC3 = new HashMap<String, Integer>();
+        // Map<String, Integer> wordsFromC4 = new HashMap<String, Integer>();
+        // Map<String, Integer> wordsFromC9 = new HashMap<String, Integer>();
 
         Map<String, Integer> tempMap = new HashMap<String, Integer>();
 
-
-    // pierwsze wystąpienie
+        // pierwsze wystąpienie
         for (String key : dictionaries.getC1_dict()) {
 
             count = StringUtils.countMatches(contents, key);
@@ -100,8 +100,7 @@ public class FeatureExtractor {
         properties.addToStringFeatures("c8", this.getMin(tempMap));
         tempMap.clear();
 
-
-    // liczba wystąpień
+        // liczba wystąpień
         for (String key : dictionaries.getC3_dict()) {
 
             count = StringUtils.countMatches(contents, key);
@@ -141,9 +140,12 @@ public class FeatureExtractor {
     public String getMax(Map<String, Integer> map) {
         Map.Entry<String, Integer> maxEntry = null;
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            if (maxEntry == null ||entry.getValue() > maxEntry.getValue()) {
+            if (maxEntry == null || entry.getValue() > maxEntry.getValue()) {
                 maxEntry = entry;
             }
+        }
+        if (maxEntry == null) {
+            return "";
         }
         return maxEntry.getKey();
     }

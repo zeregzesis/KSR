@@ -1,14 +1,13 @@
 package ksr.grupa3;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 // argumenty do wywołania: yarn <nazwa> <inne yern'owe rzeczy> [absolutePath pliku z artykułami : String] [odstetek artykułów do setu uczącego (0;1) : Double] [metryka : String] [parametr k : int] {cecha do pominięcia} 
 
-public class App 
-{
-    public static void main( String[] args ) throws FileNotFoundException
-    {
+public class App {
+    public static void main(String[] args) throws IOException {
 
         // CLI zaczyna się tutaj?
 
@@ -18,40 +17,42 @@ public class App
         // ścieżka do słowników
         String dictPath = "C:/Users/maste/Documents/GitHub/KSR/klasyfikacja/dicts";
 
+        Partition part = new Partition(absolutePath);
+        FeatureExtractor fe = new FeatureExtractor(dictPath);
+        Dicts dicts = new Dicts(dictPath);
+        Metric metric = new ChebyshevMetric();
+        ConfusionMatrix matrix = new ConfusionMatrix();
+        TextSimilarityMeasure measure = new TFM();
+        
+        
         ArrayList<Article> articles = new ArrayList<Article>();
 
-        Partition part = new Partition(absolutePath);
+        PropertiesList pList = new PropertiesList();
 
-        Dicts dicts = new Dicts(dictPath);
-
-        //System.out.print(dicts.getC7_dict());
-
-        FeatureExtractor fe = new FeatureExtractor(dictPath);
+        
 
         Article art = part.getNextArticle();
 
-        //System.out.print(art.getContents());
+        int tempLimit = 100;
 
-        Properties p1 = fe.extract(art);
+        int counter = 0;
 
-        System.out.println(p1.getNumericFeatures());
-        System.out.println(p1.getStringFeatures());
+        while (counter < tempLimit) {
+            articles.add(art);
+            art = part.getNextArticle();
+            counter++;
+        }
 
-        // while (art != null) {
+        for (Article a : articles) {
+            pList.add(fe.extract(a));
+        }
 
-        //     //coś
+        KNN knn = new KNN(3, metric, measure, matrix, pList.createSets(0.7));
 
-        //     articles.add(art);
-        //     art = part.getNextArticle();
-        // }
+        knn.performKNN();
 
-        // tutaj odpalić ekstrakcję
+        CSVappender appender = new CSVappender(".\\data.csv");
+        appender.append(matrix);
 
-        //tutaj podzielić na set uczący i testowy
-
-        // tutaj odpalić k-NN dla podanego 'k', metryki i odpowiednich cech
-
-        // tutaj liczenie i wypisanie miar klasyfikacji(dokładność itd.) i zapis do .csv
-        
     }
 }
