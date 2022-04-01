@@ -49,8 +49,14 @@ public class Partition {
         int dEndIndex = content.indexOf("</D>", dStartIndex);
 
         //System.out.println(this.content.substring(placeStartIndex, placeEndIndex));
-
-        Places label = Places.valueOf(this.content.substring(dStartIndex, dEndIndex));
+        Places label = null;
+        try {
+            label = Places.valueOf(this.content.substring(dStartIndex, dEndIndex));
+        }
+        catch (IllegalArgumentException e) {
+            label = Places.westgermany;
+        }
+        
 
         Article art = new Article(this.content.substring(bodyStartIndex, bodyEndIndex).toLowerCase(), label);
 

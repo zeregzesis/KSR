@@ -19,8 +19,7 @@ public class App {
 
         Partition part = new Partition(absolutePath);
         FeatureExtractor fe = new FeatureExtractor(dictPath);
-        Dicts dicts = new Dicts(dictPath);
-        Metric metric = new ChebyshevMetric();
+        //Metric metric = new ChebyshevMetric();
         ConfusionMatrix matrix = new ConfusionMatrix();
         TextSimilarityMeasure measure = new TFM();
         
@@ -29,14 +28,12 @@ public class App {
 
         PropertiesList pList = new PropertiesList();
 
-        
-
         Article art = part.getNextArticle();
 
-        int tempLimit = 100;
+        int tempLimit = 2000;
 
         int counter = 0;
-
+        //while (art != null) {
         while (counter < tempLimit) {
             articles.add(art);
             art = part.getNextArticle();
@@ -47,7 +44,7 @@ public class App {
             pList.add(fe.extract(a));
         }
 
-        KNN knn = new KNN(3, metric, measure, matrix, pList.createSets(0.7));
+        KNN knn = new KNN(15, new EuclidianMetric(), measure, matrix, pList.createSets(0.7));
 
         knn.performKNN();
 

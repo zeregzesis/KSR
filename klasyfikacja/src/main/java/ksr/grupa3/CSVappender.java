@@ -10,7 +10,7 @@ public class CSVappender {
     FileWriter csvfile;
 
     public CSVappender(String csvfilepath) throws IOException {
-        //f=new File();
+        f=new File(csvfilepath);
         csvfile=new FileWriter(csvfilepath, true);
     }   
 
@@ -18,7 +18,9 @@ public class CSVappender {
     public void append(ConfusionMatrix confmat) {
         try {
             //appendHeadline();
-                
+            if(!f.exists() || f.length()==0){
+                appendHeadline();
+            }
             
 
 
@@ -29,7 +31,7 @@ public class CSVappender {
             }
             csvfile.append("\n");
             csvfile.close();
-            System.out.println("CSV file created succesfully.");
+            //System.out.println("CSV file created succesfully.");
         } catch (Exception e) {
             System.out.println("exception :" + e.getMessage());
         }
@@ -58,7 +60,7 @@ public class CSVappender {
             }
             csvfile.append("\n");
             //csvfile.close();
-            System.out.println("CSV file created succesfully.");
+           // System.out.println("CSV file created succesfully.");
         } catch (Exception e) {
             System.out.println("exception :" + e.getMessage());
         }
