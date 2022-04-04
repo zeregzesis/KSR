@@ -19,9 +19,6 @@ public class App {
 
         Partition part = new Partition(absolutePath);
         FeatureExtractor fe = new FeatureExtractor(dictPath);
-        //Metric metric = new ChebyshevMetric();
-        ConfusionMatrix matrix = new ConfusionMatrix();
-        TextSimilarityMeasure measure = new TFM();
         
         
         ArrayList<Article> articles = new ArrayList<Article>();
@@ -44,12 +41,21 @@ public class App {
             pList.add(fe.extract(a));
         }
 
-        KNN knn = new KNN(15, new EuclidianMetric(), measure, matrix, pList.createSets(0.7));
-
-        knn.performKNN();
-
-        CSVappender appender = new CSVappender(".\\data.csv");
-        appender.append(matrix);
-
+        //Metric metric = new EuclidianMetric();
+        //Metric metric = new ChebyshevMetric();
+        Metric metric = new ManhattanMetric();
+        TextSimilarityMeasure measure = new TFM();
+        
+        
+        for (int k = 2; k <= 20; k+=2) {
+            for(int i = 7; i > 2; i--) {
+                CSVappender appender = new CSVappender(".\\data.csv");
+                ConfusionMatrix matrix = new ConfusionMatrix();
+                KNN knn = new KNN(k, new EuclidianMetric(), measure, matrix, pList.createSets((float)i/10.0));
+                knn.performKNN();
+                appender.append(matrix, k, metric.getClass().getSimpleName(), measure.getClass().getSimpleName(), (float)i/10.0);
+            }
+            System.out.println("Done for k = " + k);
+        }
     }
 }

@@ -1,6 +1,6 @@
 @startuml
 title KSR_Class_diagram
-class Partitioner{
+class Partition{
     - String filepath
     - String content
     - int startIndex
@@ -57,7 +57,14 @@ class FeatureExtractor{
     void extractProperties(Article article)
 }
 
-class Classifier{
+class KNN{
+    - int k
+    - TextSimilarityMeasure textSimilarityMeasure
+    - ConfusionMatrix confusionMatrix
+    - PropertiesList train
+    - PropertiesList test
+    void performKNN()
+    Places evaluate(List<Places> places)
 
 }
 
@@ -78,34 +85,71 @@ abstract Metrics{
     float calculate()
 }
 
-class Chebyshev{
+class ChebyshevMertic{
 
 }
 
-class Euclidian{
+class EuclidianMertic{
 
 }
 
-class Manhattan{
+class ManhattanMertic{
 
 }
 
-class Ngram{
-    
+abstract class TextSimilarityMeasure{
+    - double sim(String s1, String s2);
 }
 
-Metrics<|--Ngram
-Metrics<|--Manhattan
-Metrics<|--Chebyshev
-Metrics<|--Euclidian
+class TFM{
 
-App --> Partitioner
-App --> Classifier
+}
+
+class ConfusionMatrix{
+    - int[][] confmat
+    int[][] getConfmat()
+    void incrementConfmat(Places predicted, Places accual)
+    double calculateAccuracy()
+    int getTP(Places place)
+    int getFN(Places place)
+    getFP(Places place)
+    int getTN(Places place)
+    double calculatePrecisionForCountry(Places place)
+    double calculateRecallForCountry(Places place)
+    double calculateF1ScoreForCountry(Places place)
+    int numberOfAllArticlesClassified()
+    double calculatePrecisionForClassification()
+    double calculateRecallForClassification()
+    double calculateF1scoreForClassification()
+    public List<Double> generateResults()
+    - void print()
+}
+
+class CSVappender{
+    - File f
+    - FileWriter csvfile
+    void append(ConfusionMatrix confmat,int k, String metric, String similarityMeasure, double trainSetSize)
+    void finalize()
+    void appendHeadline()
+}
+
+TextSimilarityMeasure <|-- TFM
+Metrics <|-- ManhattanMertic
+Metrics <|-- ChebyshevMertic
+Metrics <|-- EuclidianMertic
+
+App --> Partition
+App --> KNN
+App --> FeatureExtractor
+App --> ConfusionMatrix
+App --> CSVappender
+KNN ..> ConfusionMatrix : uses
 PropertiesList o-- Properties
 Properties --> Places
 FeatureExtractor --> Dicts
 FeatureExtractor ..> PropertiesList : creates
-Partitioner ..> Article : creates
+Partition ..> Article : creates
 FeatureExtractor ..> Article : uses
-Classifier ..> Metrics : uses
-Classifier ..> PropertiesList : uses
+KNN ..> Metrics : uses
+KNN ..> TextSimilarityMeasure : uses
+KNN ..> PropertiesList : uses

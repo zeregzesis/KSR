@@ -144,19 +144,19 @@ public class ConfusionMatrix {
         return nominator/6;
     }
 
-        public List<Double> generateResults(){
-          List<Double>  results= new ArrayList<Double>();
-            results.add(calculateAccuracy());
-            results.add(calculatePrecisionForClassification());
-            results.add(calculateRecallForClassification());
-            results.add(calculateF1scoreForClassification());
-            for(Places place:Places.values()){
-                results.add(calculatePrecisionForCountry(place));
-                results.add(calculateRecallForCountry(place));
-                results.add(calculateF1ScoreForCountry(place));
-            }
-        return results;
+    public List<Double> generateResults(){
+        List<Double>  results= new ArrayList<Double>();
+        results.add(calculateAccuracy());
+        results.add(calculatePrecisionForClassification());
+        results.add(calculateRecallForClassification());
+        results.add(calculateF1scoreForClassification());
+        for(Places place:Places.values()){
+            results.add(calculatePrecisionForCountry(place));
+            results.add(calculateRecallForCountry(place));
+            results.add(calculateF1ScoreForCountry(place));
         }
+    return results;
+    }
 
 }
 

@@ -15,13 +15,21 @@ public class CSVappender {
     }   
 
 
-    public void append(ConfusionMatrix confmat) {
+    public void append(ConfusionMatrix confmat,int k, String metric, String similarityMeasure, double trainSetSize) {
         try {
             //appendHeadline();
-            if(!f.exists() || f.length()==0){
-                appendHeadline();
-            }
+            // if(!f.exists() || f.length()==0){
+            //     appendHeadline();
+            // }
             
+            csvfile.append(String.valueOf(k));
+            csvfile.append(",");
+            csvfile.append(metric);
+            csvfile.append(",");
+            csvfile.append(similarityMeasure);
+            csvfile.append(",");
+            csvfile.append(String.valueOf(trainSetSize));
+            csvfile.append(",");
 
 
             List<Double> results = confmat.generateResults();
@@ -29,6 +37,7 @@ public class CSVappender {
                 csvfile.append(results.get(i).toString());
                 csvfile.append(",");
             }
+
             csvfile.append("\n");
             csvfile.close();
             //System.out.println("CSV file created succesfully.");
@@ -36,9 +45,24 @@ public class CSVappender {
             System.out.println("exception :" + e.getMessage());
         }
     }
+    public void finalize() {
+        try {
+            csvfile.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void appendHeadline() {
         try {
+            csvfile.append("k");
+            csvfile.append(",");
+            csvfile.append("Metric");
+            csvfile.append(",");
+            csvfile.append("TextSimMeasure");
+            csvfile.append(",");
+            csvfile.append("trainSetSize");
+            csvfile.append(",");
             csvfile.append("accuracy");
             csvfile.append(",");
             csvfile.append("precision_for_classification");
