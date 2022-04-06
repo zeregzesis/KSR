@@ -44,7 +44,7 @@ public class App {
         //Metric metric = new EuclidianMetric();
         //Metric metric = new ChebyshevMetric();
         Metric metric = new ManhattanMetric();
-        TextSimilarityMeasure measure = new TFM();
+        TextSimilarityMeasure measure = new Trigram();
         
         
         for (int k = 2; k <= 20; k+=2) {
