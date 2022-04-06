@@ -24,4 +24,4 @@ hs_err_pid*,
 
 # Build
 klasyfikacja/target/
-./data.csv
+data.csv
