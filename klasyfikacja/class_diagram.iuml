@@ -101,7 +101,7 @@ abstract class TextSimilarityMeasure{
     - double sim(String s1, String s2);
 }
 
-class TFM{
+class Trigram{
 
 }
 
@@ -133,7 +133,7 @@ class CSVappender{
     void appendHeadline()
 }
 
-TextSimilarityMeasure <|-- TFM
+TextSimilarityMeasure <|-- Trigram
 Metrics <|-- ManhattanMertic
 Metrics <|-- ChebyshevMertic
 Metrics <|-- EuclidianMertic

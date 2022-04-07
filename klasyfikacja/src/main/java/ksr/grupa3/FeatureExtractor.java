@@ -1,7 +1,6 @@
 package ksr.grupa3;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,124 +14,140 @@ public class FeatureExtractor {
         dictionaries = new Dicts(dictPath);
     }
 
-    public Properties extract(Article article) {
+    public Properties extract(Article article, List<String> features) {
         Properties properties = new Properties();
         properties.setLabel(article.getLabel());
         String contents = article.getContents();
         properties.addToNumericFeatures("c10", 0);
         int count = 0, index = 0;
-        // Map<String, Integer> wordsFromC3 = new HashMap<String, Integer>();
-        // Map<String, Integer> wordsFromC4 = new HashMap<String, Integer>();
-        // Map<String, Integer> wordsFromC9 = new HashMap<String, Integer>();
 
         Map<String, Integer> tempMap = new HashMap<String, Integer>();
 
-        // pierwsze wystąpienie
-        for (String key : dictionaries.getC1_dict()) {
+        // cechy oparte o pierwsze wystąpienie
+        if (!features.contains("c1")) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+            for (String key : dictionaries.getC1_dict()) {
+
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c1", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c1", this.getMin(tempMap));
-        tempMap.clear();
 
-        for (String key : dictionaries.getC2_dict()) {
+        if (!features.contains("c2")) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+            for (String key : dictionaries.getC2_dict()) {
+
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c2", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c2", this.getMin(tempMap));
-        tempMap.clear();
+        if (!features.contains("c5")) {
 
-        for (String key : dictionaries.getC5_dict()) {
+            for (String key : dictionaries.getC5_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c5", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c5", this.getMin(tempMap));
-        tempMap.clear();
 
-        for (String key : dictionaries.getC6_dict()) {
+        if (!features.contains("c6")) {
+            for (String key : dictionaries.getC6_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c6", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c6", this.getMin(tempMap));
-        tempMap.clear();
 
-        for (String key : dictionaries.getC7_dict()) {
+        if (!features.contains("c7")) {
+            for (String key : dictionaries.getC7_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c7", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c7", this.getMin(tempMap));
-        tempMap.clear();
+        if (!features.contains("c8")) {
+            for (String key : dictionaries.getC8_dict()) {
 
-        for (String key : dictionaries.getC8_dict()) {
-
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                index = StringUtils.indexOf(contents, key);
-                tempMap.put(key, index);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    index = StringUtils.indexOf(contents, key);
+                    tempMap.put(key, index);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c8", this.getMin(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c8", this.getMin(tempMap));
-        tempMap.clear();
 
-        // liczba wystąpień
-        for (String key : dictionaries.getC3_dict()) {
+        // cechy oparte o najczęstrze występowanie
+        if (!features.contains("c3")) {
+            for (String key : dictionaries.getC3_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                tempMap.put(key, count);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    tempMap.put(key, count);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c3", this.getMax(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c3", this.getMax(tempMap));
-        tempMap.clear();
 
-        for (String key : dictionaries.getC4_dict()) {
+        if (!features.contains("c4")) {
+            for (String key : dictionaries.getC4_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                tempMap.put(key, count);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    tempMap.put(key, count);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c4", this.getMax(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c4", this.getMax(tempMap));
-        tempMap.clear();
 
-        for (String key : dictionaries.getC9_dict()) {
+        if (!features.contains("c9")) {
+            for (String key : dictionaries.getC9_dict()) {
 
-            count = StringUtils.countMatches(contents, key);
-            if (count > 0) {
-                tempMap.put(key, count);
+                count = StringUtils.countMatches(contents, key);
+                if (count > 0) {
+                    tempMap.put(key, count);
+                }
+                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
-            properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+            properties.addToStringFeatures("c9", this.getMax(tempMap));
+            tempMap.clear();
         }
-        properties.addToStringFeatures("c9", this.getMax(tempMap));
-        tempMap.clear();
 
         return properties;
     }

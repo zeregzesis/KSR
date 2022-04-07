@@ -43,20 +43,17 @@ public class Partition {
         this.endIndex = content.indexOf("</REUTERS>", this.startIndex);
 
         int placeStartIndex = content.indexOf("<PLACES>", bodyStartIndex) + 8;
-        int placeEndIndex = content.indexOf("</PLACES>", placeStartIndex);
 
         int dStartIndex = content.indexOf("<D>", placeStartIndex) + 3;
         int dEndIndex = content.indexOf("</D>", dStartIndex);
 
-        //System.out.println(this.content.substring(placeStartIndex, placeEndIndex));
+        // System.out.println(this.content.substring(placeStartIndex, placeEndIndex));
         Places label = null;
         try {
             label = Places.valueOf(this.content.substring(dStartIndex, dEndIndex));
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             label = Places.westgermany;
         }
-        
 
         Article art = new Article(this.content.substring(bodyStartIndex, bodyEndIndex).toLowerCase(), label);
 

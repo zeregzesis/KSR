@@ -2,8 +2,6 @@ package ksr.grupa3;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Stream;
-import java.lang.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -34,49 +32,42 @@ public class KNN {
                         train.getPropertiesList().get(j), this.textSimilarityMeasure));
 
             }
-            Map<Integer, Double> tmp =
-                distances.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue())
-                        .limit(k)
-                        .collect(Collectors.toMap(
-                                Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+            Map<Integer, Double> tmp = distances.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue())
+                    .limit(k)
+                    .collect(Collectors.toMap(
+                            Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
             List<Places> labels = new ArrayList<>();
 
-            for ( int key : tmp.keySet() ) {
+            for (int key : tmp.keySet()) {
                 labels.add(train.getPropertiesList().get(key).getLabel());
             }
 
             Places predicted = evaluate(labels);
             Places accual = test.getPropertiesList().get(i).getLabel();
             confusionMatrix.incrementConfmat(predicted, accual);
-         
 
         }
 
     }
 
-   
-    private Places evaluate(List<Places> places){
-        Map <Places, Integer> map= new HashMap<>();
-        for(Places place : places){
-            Integer val=map.get(place);
-            map.put(place, val==null ? 1: val+1);
+    private Places evaluate(List<Places> places) {
+        Map<Places, Integer> map = new HashMap<>();
+        for (Places place : places) {
+            Integer val = map.get(place);
+            map.put(place, val == null ? 1 : val + 1);
         }
 
         Entry<Places, Integer> max = null;
 
-    for (Entry<Places, Integer> e : map.entrySet()) {
-        if (max == null || e.getValue() > max.getValue())
-            max = e;
+        for (Entry<Places, Integer> e : map.entrySet()) {
+            if (max == null || e.getValue() > max.getValue())
+                max = e;
+        }
+
+        return max.getKey();
+
     }
-
-    return max.getKey();
-
-    }
-
-    
-
-    
 
 }

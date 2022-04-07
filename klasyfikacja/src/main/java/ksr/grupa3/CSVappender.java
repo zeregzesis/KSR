@@ -10,18 +10,22 @@ public class CSVappender {
     FileWriter csvfile;
 
     public CSVappender(String csvfilepath) throws IOException {
-        f=new File(csvfilepath);
-        csvfile=new FileWriter(csvfilepath, true);
-    }   
 
+        f = new File(csvfilepath);
+        if (!f.isFile()) {
+            csvfile = new FileWriter(csvfilepath, true);
+            appendHeadline();
+        } else {
+            csvfile = new FileWriter(csvfilepath, true);
+        }
+    }
 
-    public void append(ConfusionMatrix confmat,int k, String metric, String similarityMeasure, double trainSetSize) {
+    public void close() throws IOException {
+        csvfile.close();
+    }
+
+    public void append(ConfusionMatrix confmat, int k, String metric, String similarityMeasure, double trainSetSize) {
         try {
-            //appendHeadline();
-            // if(!f.exists() || f.length()==0){
-            //     appendHeadline();
-            // }
-            
             csvfile.append(String.valueOf(k));
             csvfile.append(",");
             csvfile.append(metric);
@@ -31,7 +35,6 @@ public class CSVappender {
             csvfile.append(String.valueOf(trainSetSize));
             csvfile.append(",");
 
-
             List<Double> results = confmat.generateResults();
             for (int i = 0; i < results.size(); i++) {
                 csvfile.append(results.get(i).toString());
@@ -39,12 +42,11 @@ public class CSVappender {
             }
 
             csvfile.append("\n");
-            csvfile.close();
-            //System.out.println("CSV file created succesfully.");
         } catch (Exception e) {
             System.out.println("exception :" + e.getMessage());
         }
     }
+
     public void finalize() {
         try {
             csvfile.close();
@@ -83,8 +85,6 @@ public class CSVappender {
                 csvfile.append(",");
             }
             csvfile.append("\n");
-            //csvfile.close();
-           // System.out.println("CSV file created succesfully.");
         } catch (Exception e) {
             System.out.println("exception :" + e.getMessage());
         }

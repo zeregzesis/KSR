@@ -9,6 +9,11 @@ public class Trigram extends TextSimilarityMeasure {
         if (s1 == "" || s2 == "") {
             return 0.0;
         }
+        if (s1.length() < s2.length()) {
+            String temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
         double result = 0;
         double total = 0;
         for (int i = 0; i < s1.length() - 2; i++) {

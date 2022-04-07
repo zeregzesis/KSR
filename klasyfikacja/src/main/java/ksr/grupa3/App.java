@@ -1,61 +1,61 @@
 package ksr.grupa3;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-
-// argumenty do wywołania: yarn <nazwa> <inne yern'owe rzeczy> [absolutePath pliku z artykułami : String] [odstetek artykułów do setu uczącego (0;1) : Double] [metryka : String] [parametr k : int] {cecha do pominięcia} 
-
+import java.util.Arrays;
+import java.util.List;
 public class App {
     public static void main(String[] args) throws IOException {
 
-        // CLI zaczyna się tutaj?
+        // interpretacja argumentów
+        String absolutePath = args[0];
+        String dictPath = args[1];
+        double setSize = Float.parseFloat(args[2]);
+        Metric metric;
+        if ("M1".equals(args[3])) {
+            // System.out.print("Here");
+            metric = new EuclidianMetric();
+        } else if ("M2".equals(args[3])) {
+            metric = new ManhattanMetric();
+        } else if ("M3".equals(args[3])) {
+            metric = new ChebyshevMetric();
+        } else {
+            System.out.println("Niepoprawny argument metryki");
+            return;
+        }
+        int k = Integer.parseInt(args[4]);
+        List<String> featuresToIgnore = Arrays.asList(args).subList(5, args.length);
 
-        // zamiast tego dać podaną ścieżkę pliku z artykułami
-        String absolutePath = "C:/Users/maste/Documents/GitHub/KSR/klasyfikacja/output.txt";
-
-        // ścieżka do słowników
-        String dictPath = "C:/Users/maste/Documents/GitHub/KSR/klasyfikacja/dicts";
-
+        // deklaracja potrzebnych obiektów
         Partition part = new Partition(absolutePath);
         FeatureExtractor fe = new FeatureExtractor(dictPath);
-        
-        
-        ArrayList<Article> articles = new ArrayList<Article>();
-
         PropertiesList pList = new PropertiesList();
+        ArrayList<Article> articles = new ArrayList<Article>();
+        TextSimilarityMeasure measure = new Trigram();
+        CSVappender appender = new CSVappender(".\\data.csv");
+        ConfusionMatrix matrix = new ConfusionMatrix();
 
+        // wczytanie artykułów
         Article art = part.getNextArticle();
-
-        int tempLimit = 2000;
-
-        int counter = 0;
-        //while (art != null) {
-        while (counter < tempLimit) {
+        while (art != null) {
             articles.add(art);
             art = part.getNextArticle();
-            counter++;
         }
 
+        // ekstrakcja cech
         for (Article a : articles) {
-            pList.add(fe.extract(a));
+            pList.add(fe.extract(a, featuresToIgnore));
         }
 
-        //Metric metric = new EuclidianMetric();
-        //Metric metric = new ChebyshevMetric();
-        Metric metric = new ManhattanMetric();
-        TextSimilarityMeasure measure = new Trigram();
-        
-        
-        for (int k = 2; k <= 20; k+=2) {
-            for(int i = 7; i > 2; i--) {
-                CSVappender appender = new CSVappender(".\\data.csv");
-                ConfusionMatrix matrix = new ConfusionMatrix();
-                KNN knn = new KNN(k, new EuclidianMetric(), measure, matrix, pList.createSets((float)i/10.0));
-                knn.performKNN();
-                appender.append(matrix, k, metric.getClass().getSimpleName(), measure.getClass().getSimpleName(), (float)i/10.0);
-            }
-            System.out.println("Done for k = " + k);
-        }
+        // k-NN
+        KNN knn = new KNN(k, metric, measure, matrix, pList.createSets(setSize / 10.0));
+        knn.performKNN();
+
+        // zapis wyniku do pliku
+        appender.append(matrix, k, metric.getClass().getSimpleName(), measure.getClass().getSimpleName(),
+                setSize / 10.0);
+        appender.close();
+
+        System.out.println("Program zakończył działanie");
     }
 }

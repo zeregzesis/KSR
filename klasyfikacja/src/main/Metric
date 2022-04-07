@@ -1,5 +1,0 @@
-package ksr.grupa3;
-
-abstract class Metric{
-
-}
