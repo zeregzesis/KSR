@@ -33,7 +33,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c1", this.getMin(tempMap));
             tempMap.clear();
@@ -48,7 +48,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c2", this.getMin(tempMap));
             tempMap.clear();
@@ -62,7 +62,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c5", this.getMin(tempMap));
             tempMap.clear();
@@ -76,7 +76,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c6", this.getMin(tempMap));
             tempMap.clear();
@@ -90,7 +90,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c7", this.getMin(tempMap));
             tempMap.clear();
@@ -103,7 +103,7 @@ public class FeatureExtractor {
                     index = StringUtils.indexOf(contents, key);
                     tempMap.put(key, index);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c8", this.getMin(tempMap));
             tempMap.clear();
@@ -117,7 +117,7 @@ public class FeatureExtractor {
                 if (count > 0) {
                     tempMap.put(key, count);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c3", this.getMax(tempMap));
             tempMap.clear();
@@ -130,7 +130,7 @@ public class FeatureExtractor {
                 if (count > 0) {
                     tempMap.put(key, count);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c4", this.getMax(tempMap));
             tempMap.clear();
@@ -143,7 +143,7 @@ public class FeatureExtractor {
                 if (count > 0) {
                     tempMap.put(key, count);
                 }
-                properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
+                if (!features.contains("c10")) properties.addToNumericFeatures("c10", properties.getNumericFeatures().get("c10") + count);
             }
             properties.addToStringFeatures("c9", this.getMax(tempMap));
             tempMap.clear();

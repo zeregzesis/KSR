@@ -13,7 +13,6 @@ public class App {
         double setSize = Float.parseFloat(args[2]);
         Metric metric;
         if ("M1".equals(args[3])) {
-            // System.out.print("Here");
             metric = new EuclidianMetric();
         } else if ("M2".equals(args[3])) {
             metric = new ManhattanMetric();
@@ -48,12 +47,12 @@ public class App {
         }
 
         // k-NN
-        KNN knn = new KNN(k, metric, measure, matrix, pList.createSets(setSize / 10.0));
+        KNN knn = new KNN(k, metric, measure, matrix, pList.createSets(setSize));
         knn.performKNN();
 
         // zapis wyniku do pliku
         appender.append(matrix, k, metric.getClass().getSimpleName(), measure.getClass().getSimpleName(),
-                setSize / 10.0);
+                setSize);
         appender.close();
 
         System.out.println("Program zakończył działanie");

@@ -29,8 +29,7 @@ public class ConfusionMatrix {
 
     public double calculateAccuracy() {
         double allTPs = Places.stream().mapToDouble(place -> confmat[place.label][place.label]).sum();
-        System.out.println(allTPs);
-
+        
         double sumOfAllItems = 0.0;
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
@@ -47,7 +46,7 @@ public class ConfusionMatrix {
         return confmat[place.label][place.label];
     }
 
-    private int getFN(Places place) {
+    private int getFP(Places place) {
         int sum = 0;
         for (int i = 0; i < 6; i++) {
             sum += confmat[place.label][i];
@@ -57,7 +56,7 @@ public class ConfusionMatrix {
         return sum;
     }
 
-    private int getFP(Places place) {
+    private int getFN(Places place) {
         int sum = 0;
         for (int i = 0; i < 6; i++) {
             sum += confmat[i][place.label];

@@ -47,7 +47,6 @@ public class Partition {
         int dStartIndex = content.indexOf("<D>", placeStartIndex) + 3;
         int dEndIndex = content.indexOf("</D>", dStartIndex);
 
-        // System.out.println(this.content.substring(placeStartIndex, placeEndIndex));
         Places label = null;
         try {
             label = Places.valueOf(this.content.substring(dStartIndex, dEndIndex));
