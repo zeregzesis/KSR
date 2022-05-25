@@ -1,0 +1,71 @@
+@startuml
+title KSR_Ling_Class_diagram_ling
+
+
+
+class Summary{
+    - String summary
+    - double DoT
+}
+
+class LingSummary{
+    Summary getFirstFormSummary()
+    Summary getSecondFormSummary(FuzzySet secondSet)
+}
+
+class SingleSummary{
+    - LingQuantifier lingQuantifier
+    - FuzzySet fuzzySet
+}
+
+class CompoundSummary{
+    - List<LingQuantifier> lingQuantifier
+    - FuzzySet fuzzySet
+    Summary getThirdFormSummary(FuzzySet secondSet)
+}
+
+enum quantifierType {
+    ALMOST_NONE,
+    SOME,
+    ABOUT_HALF,
+    MOST,
+    ALMOST_ALL,
+    MUCH_MORE_THAN_500,
+    ABOUT_FEW_THOUSAND,
+    MUCH_LESS_THAN_8000
+}
+
+class LingQuantifier{
+    - String name
+    - FuzzySet fuzzySet
+    - quantifierType type
+    double compatibility(double value)
+}
+
+class Summarizer{
+    Summary combineSummaries(List<Summary> summaries)
+}
+
+class QualityMeasure{
+    - double T1()
+    - double T2()
+    - double T3()
+    - double T4()
+    - double T5()
+    - double T6()
+    - double T7()
+    - double T8()
+    - double T9()
+    - double T10()
+    - double T11()
+    List<double> getMeasures()
+}
+
+SingleSummary --|> LingSummary
+CompoundSummary --|> LingSummary
+LingSummary o-- Summary
+Summarizer ..> Summary
+Summarizer o-- Summary
+LingQuantifier ..> quantifierType
+SingleSummary o-- LingQuantifier
+CompoundSummary o-- LingQuantifier

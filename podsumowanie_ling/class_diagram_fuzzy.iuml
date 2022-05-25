@@ -1,0 +1,51 @@
+@startuml
+title KSR_Ling_Class_diagram_fuzzy
+
+class FoodItem{
+    - String name
+    - int calories
+    - float fat
+    - float protein
+    - float carbohydrates
+    - float saturatedFats
+    - float calcium
+    - float iron
+    - float water
+    - float phosphorus
+    - float sodium
+}
+
+class SubFunc{
+    - float start
+    - float end
+    - float func
+    float getValue(float x)
+}
+
+class MemberFunc{
+    - List<subFunc> subFuncList
+    float getValue(float x)
+}
+
+class LingVariable{
+    - String name
+    - List<String> values
+    - List<MemberFunc> memberFuncList
+}
+
+class FuzzySet{
+    - LingVariable variable
+    - String value
+    float DoM(FoodItem foodItem)
+    float cardinality(list<FoodItem>)
+    List<FoodItem> support(list<FoodItem>)
+    List<FoodItem> alphaCut(List<FoodItem>, float alpha)
+}
+
+MemberFunc *-- SubFunc
+FuzzySet --> FoodItem
+FuzzySet ..> LingVariable
+LingVariable *-- MemberFunc
+
+
+
