@@ -8,11 +8,10 @@ import lombok.Setter;
 @Setter
 public class SingleSummary extends LingSummary {
     
-    private LingQuantifier lingQuantifier;
+    
 
     public SingleSummary(FuzzySet fuzzySet, LingQuantifier lingQuantifier) {
-        super(fuzzySet);
-        this.lingQuantifier = lingQuantifier;
+        super(fuzzySet, lingQuantifier);
     }
     
 }

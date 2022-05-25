@@ -11,6 +11,6 @@ public class MemberFunc {
                 return subFunc.getValue(x);
             }
         }
-        return -1;
+        return 0;
     }
 }

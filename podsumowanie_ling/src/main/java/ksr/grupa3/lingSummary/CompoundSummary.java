@@ -10,14 +10,11 @@ import lombok.Setter;
 @Setter
 public class CompoundSummary extends LingSummary {
     
-    private List<LingQuantifier> lingQuantifiers;
-
-    public CompoundSummary(FuzzySet fuzzySet, List<LingQuantifier> lingQuantifiers) {
-        super(fuzzySet);
-        this.lingQuantifiers = lingQuantifiers;
+    public CompoundSummary(FuzzySet fuzzySet, LingQuantifier lingQuantifier) {
+        super(fuzzySet, lingQuantifier);
     }
 
-    public Summary getThirdFormSummary(FuzzySet secondSet) {
+    public Summary getThirdFormSummary(FuzzySet secondSet, LingQuantifier secondQuantifier) {
         return new Summary("", 0);
     }
     
