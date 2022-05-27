@@ -2,6 +2,12 @@ package ksr.grupa3.fuzzy;
 
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class MemberFunc {
     private List<SubFunc> subFuncs;
 

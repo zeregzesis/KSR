@@ -72,6 +72,7 @@ public class QualityMeasure {
         return 0;
     }
 
+    // to będzie do wywalenia/kompletnego przerobienia bo każda funkcja będzie miała inne parametry(chyba)
     public static List<Double> getMeasures() {
         List<Double> measures = new ArrayList<>();
         for (Method method : QualityMeasure.class.getDeclaredMethods()) {
