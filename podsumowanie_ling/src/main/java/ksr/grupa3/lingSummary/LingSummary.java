@@ -10,7 +10,10 @@ public interface LingSummary {
     public Summary getFirstFormSummary(List<FoodItem> foodItems);
 
     public Summary getSecondFormSummary(List<FoodItem> foodItems, FuzzySet secondSet);
-    
+
+    public Summary getThirdFormSummary(List<FoodItem> foodItems, FuzzySet secondSet);
+
+    //public Summary getFourthFormSummary(List<FoodItem> foodItems, FuzzySet secondSet);   
     
 
 }

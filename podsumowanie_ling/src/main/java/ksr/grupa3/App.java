@@ -51,7 +51,7 @@ public class App {
         }
 
         // zostanie stworzony w switchu przez lingSummary, póki co dałem to żeby print nie marudził że niezainicjalizowane
-        Summary summary = new Summary("", 0);
+        Summary summary = null;
 
         // Której formy posdumowanie?
         switch(Integer.parseInt(args[3])) {
