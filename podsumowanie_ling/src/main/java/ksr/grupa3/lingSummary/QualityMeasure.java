@@ -12,10 +12,127 @@ import ksr.grupa3.fuzzy.MemberFunc;
 public class QualityMeasure {
 
 
-    //degree of truth
+    public static double T1(LingSummary_alt lingSummary){
+        
+        if(lingSummary.summarizers.size()==1){
+            //policzyć sigmaCount dla sumaryzatora
+            double sigmaCount=0.0;
+            //policzyć M - jeśli kwantyfikator jest absolutny to wziąć 1, jak relatywny to przestrzeń rozważań.
+            double M=1;
+            // return lingSummary.quantifier.fuzztySet.DoM(sigmaCount/M); // jakoś tak, ale nie chcę ci zmieniać w kodzie w chuj
+            //na razie:
+            return 0.1;
+        }
+        else{
+            //wyznaczyć intersecta dla sumaryzatorów
+            //proponuję w klasie summarizer zrobić funkcję intersect, która by robiła intersecta na podstawie fuzzy setów
+            Summarizer intersected=lingSummary.summarizers[0];
+            for(int i=0; i<lingSummary.summarizers.size()-1;i++){
+                intersected= Summarizer((intersected.intersect(lingSummary.summarizers[i+1])).fuzzySet); //coś takiego
+            }
+            //policzyć sigmaCount dla sumaryzatora intersected
+            double sigmaCountIntersected=0.0;
+            
+            //policzyć sigmaCount dla Sumaryzatora S2
+            // double sigmaCountS2=lingSummary.summarizers[1].fuzzySet.cardinality(); //coś takiego
+            double sigmaCountS2=0.1;
+            // return lingSummary.quantifier.funkcjaprzynależności(sigmaCountIntersected/sigmaCountS2);
+            return 0;
+        }
+        
+
+    }
+
+
+
+    public static double T2(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+
+    public static double T3(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+
+    public static double T4(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T5(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T6(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T7(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T8(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T9(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+
+    public static double T10(LingSummary_alt lingSummary){
+        
+        
+
+        return 0;
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     public static double T1(double sCount, double M, MemberFunc func) {
         return func.getValue(sCount / M);
     }
+
+
+    
+
 
     public static double T2(List<FuzzySet> fuzzySets, List<FoodItem> foodItems) {
         double res = 1;
