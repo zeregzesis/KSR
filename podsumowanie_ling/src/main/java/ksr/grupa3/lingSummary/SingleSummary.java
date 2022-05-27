@@ -23,30 +23,38 @@ public class SingleSummary implements LingSummary {
 
     public Summary getFirstFormSummary(List<FoodItem> foodItems) {
 
-        double maxDoT = foodItems.size();
-        double actualDoT = 0;
+        String summary =
+            lingQuantifier.getName().toLowerCase() +
+            " of all food products have " + fuzzySet.getValue().toLowerCase() +
+            " " + fuzzySet.getVariable().getName().toLowerCase()
+            + ".";
 
-        for (FoodItem foodItem : foodItems) {
-            actualDoT += fuzzySet.DoM(foodItem);
-        }
+        summary = summary.substring(0, 1).toUpperCase() + summary.substring(1);
 
-        double DoT = 0.0;
+        List<Double> measures = QualityMeasure.getMeasures();
 
-        if (lingQuantifier.getIsAbsolute()){
-            DoT = QualityMeasure.T1(actualDoT, 1, lingQuantifier.getMemberFunc());
-        }
-        else {
-            DoT = QualityMeasure.T1(actualDoT, maxDoT, lingQuantifier.getMemberFunc());
-        }
-
-        //double summary = lingQuantifier.compatibility(actualDoT / maxDoT);
-
-        return new Summary("", 0);
-        //return new Summary(
+        return new Summary(summary, measures);
     }
 
     public Summary getSecondFormSummary(List<FoodItem> foodItems, FuzzySet secondSet){
-        return new Summary("", 0);
+        
+        String summary =
+            lingQuantifier.getName().toLowerCase() +
+            " of all food products, which have " +
+            secondSet.getValue().toLowerCase() + " " +
+            secondSet.getVariable().getName().toLowerCase() +
+            ", have " + fuzzySet.getValue().toLowerCase() + " " +
+            fuzzySet.getVariable().getName().toLowerCase() + ".";
+
+            summary = summary.substring(0, 1).toUpperCase() + summary.substring(1);
+
+            List<Double> measures = QualityMeasure.getMeasures();
+
+            return new Summary(summary, measures);
+    }
+
+    public Summary getThirdFormSummary(List<FoodItem> foodItems, FuzzySet secondSet){
+        return null;
     }
     
 }
