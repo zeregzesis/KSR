@@ -18,39 +18,52 @@ public class FuzzySet {
     private String value;
 
     public double DoM(FoodItem foodItem) {
+
         return variable.getMemberFuncList().get(variable.getValues().indexOf(value)).getValue(foodItem.getProperty(variable.getFoodProperty()));
+
     }
 
     public double cardinality(List<FoodItem> foodItems) {
+
         double ret = 0.0;
         for (FoodItem foodItem : foodItems) {
             ret += DoM(foodItem);
         }
+
         return ret;
+
     }
 
     public List<FoodItem> support(List<FoodItem> foodItems) {
+
         List<FoodItem> ret = new ArrayList<>();
         for (FoodItem foodItem : foodItems) {
             if (DoM(foodItem) > 0) {
                 ret.add(foodItem);
             }
         }
+
         return ret;
+
     }
 
     public int supportCount(List<FoodItem> foodItems) {
+
         return support(foodItems).size();
+
     }
 
     public List<FoodItem> alphaCut(List<FoodItem> foodItems, double alpha){
+
         List<FoodItem> ret = new ArrayList<>();
         for (FoodItem foodItem : foodItems) {
             if (DoM(foodItem) >= alpha) {
                 ret.add(foodItem);
             }
         }
+
         return ret;
+
     }
 
     public int alphaCutCount(List<FoodItem> foodItems, double alpha){
@@ -63,14 +76,9 @@ public class FuzzySet {
         String newVariableName = this.getVariable().getName() + " or " + other.getVariable().getName();
         String newValue = this.getValue() + " or " + other.getValue();
 
-        // TODO: zastąpić te potwory wywołaniem funkcji na klasie LingVariable
-        List<SubFunc> temp = this.getVariable().getMemberFuncList().get(
-                this.getVariable().getValues().indexOf(this.getValue())
-            ).getSubFuncs();
-        List<SubFunc> temp2 = other.getVariable().getMemberFuncList().get(
-                other.getVariable().getValues().indexOf(other.getValue())
-            ).getSubFuncs();
-
+        List<SubFunc> temp = this.getVariable().getMemberFunc(this.getValue()).getSubFuncs();
+        List<SubFunc> temp2 = this.getVariable().getMemberFunc(other.getValue()).getSubFuncs();
+            
         double start = Math.min(
                     temp.get(1).getStart(),
                     temp2.get(1).getStart()
@@ -127,13 +135,8 @@ public class FuzzySet {
         String newVariableName = this.getVariable().getName() + " and " + other.getVariable().getName();
         String newValue = this.getValue() + " and " + other.getValue();
 
-        // TODO: zastąpić te potwory wywołaniem funkcji na klasie LingVariable
-        List<SubFunc> temp = this.getVariable().getMemberFuncList().get(
-                this.getVariable().getValues().indexOf(this.getValue())
-            ).getSubFuncs();
-        List<SubFunc> temp2 = other.getVariable().getMemberFuncList().get(
-                other.getVariable().getValues().indexOf(other.getValue())
-            ).getSubFuncs();
+        List<SubFunc> temp = this.getVariable().getMemberFunc(this.getValue()).getSubFuncs();
+        List<SubFunc> temp2 = this.getVariable().getMemberFunc(other.getValue()).getSubFuncs();
 
             double start = Math.min(
                     temp.get(1).getStart(),

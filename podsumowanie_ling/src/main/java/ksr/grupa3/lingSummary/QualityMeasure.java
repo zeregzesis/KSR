@@ -4,211 +4,257 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ksr.grupa3.fuzzy.FoodItem;
 import ksr.grupa3.fuzzy.FuzzySet;
-import ksr.grupa3.fuzzy.MemberFunc;
+import ksr.grupa3.fuzzy.SubFunc;
 
 public class QualityMeasure {
 
+    public static double tNorm(Double a, Double b) {
 
-    public static double T1(LingSummary_alt lingSummary){
-        
-        if(lingSummary.summarizers.size()==1){
-            //policzyć sigmaCount dla sumaryzatora
-            double sigmaCount=0.0;
-            //policzyć M - jeśli kwantyfikator jest absolutny to wziąć 1, jak relatywny to przestrzeń rozważań.
-            double M=1;
-            // return lingSummary.quantifier.fuzztySet.DoM(sigmaCount/M); // jakoś tak, ale nie chcę ci zmieniać w kodzie w chuj
-            //na razie:
-            return 0.1;
+        return Math.min(a, b);
+
+    }
+
+    public static double T1(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double card = summarizer.cardinality(foodItems);
+
+        if (summarizer.getDivisors().size() == 0) 
+            return card / (summarizer.getLingQuantifier().getIsAbsolute() ? 1 :  foodItems.size());
+
+        return card / summarizer.divisorCardinality(foodItems);
+
+    }
+
+    public static double T2(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double ret = 1.0;
+
+        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
+            ret *= (fuzzySet.supportCount(foodItems) / foodItems.size());
         }
-        else{
-            //wyznaczyć intersecta dla sumaryzatorów
-            //proponuję w klasie summarizer zrobić funkcję intersect, która by robiła intersecta na podstawie fuzzy setów
-            Summarizer intersected=lingSummary.summarizers[0];
-            for(int i=0; i<lingSummary.summarizers.size()-1;i++){
-                intersected= Summarizer((intersected.intersect(lingSummary.summarizers[i+1])).fuzzySet); //coś takiego
+
+        ret = 1 - Math.pow(ret, 1/summarizer.getFuzzySets().size());
+
+        return ret;
+
+    }
+    
+    // nie mam pojęcia czy to wgl dobrze jest
+    public static double T3(Summarizer summarizer, List<FoodItem> foodItems) {
+        
+        int topSum = 0;
+        int bottomSum = 0;
+        
+        for (FoodItem foodItem : foodItems) {
+
+            double us = 0;
+            double uw = 0;
+
+            List<Double> funcValues = new ArrayList<>();
+            for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
+                funcValues.add(fuzzySet.getVariable().getFuncValue(fuzzySet.getValue(), foodItem.getProperty(fuzzySet.getVariable().getFoodProperty())));
             }
-            //policzyć sigmaCount dla sumaryzatora intersected
-            double sigmaCountIntersected=0.0;
-            
-            //policzyć sigmaCount dla Sumaryzatora S2
-            // double sigmaCountS2=lingSummary.summarizers[1].fuzzySet.cardinality(); //coś takiego
-            double sigmaCountS2=0.1;
-            // return lingSummary.quantifier.funkcjaprzynależności(sigmaCountIntersected/sigmaCountS2);
-            return 0;
+
+            for (int i = 0; i < summarizer.getSetAnd().size(); i++) {
+
+                if (summarizer.getSetAnd().get(i)) {
+                    try {
+                        us += (double) QualityMeasure.class.getMethod("tNorm").invoke(null, funcValues.get(i), funcValues.get(i+1));
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
+                            | SecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        us += 1 - (double) QualityMeasure.class.getMethod("tNorm").invoke(null, 1 - funcValues.get(i), 1 - funcValues.get(i+1));
+                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
+                            | SecurityException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            if (summarizer.getDivisors().size() > 0) {
+
+                List<Double> divisorValues = new ArrayList<>();
+                for (FuzzySet divisor : summarizer.getDivisors()) {
+                    divisorValues.add(divisor.getVariable().getFuncValue(divisor.getValue(), foodItem.getProperty(divisor.getVariable().getFoodProperty())));
+                }
+
+                for (int i = 0; i < summarizer.getDivisorAnd().size(); i++) {
+
+                    if (summarizer.getDivisorAnd().get(i)) {
+                        try {
+                            uw += (double) QualityMeasure.class.getMethod("tNorm").invoke(null, divisorValues.get(i), divisorValues.get(i+1));
+                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
+                                | SecurityException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else {
+                        try {
+                            uw += 1 - (double) QualityMeasure.class.getMethod("tNorm").invoke(null, 1 - divisorValues.get(i), 1 - divisorValues.get(i+1));
+                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
+                                | SecurityException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                }
+
+                topSum += ((us > 0 && uw > 0) ? 1 : 0);
+                bottomSum += ((uw > 0) ? 1 : 0);
+
+            }
+            else {
+                topSum += ((us > 0) ? 1 : 0);
+                bottomSum += 1;
+            }
+
         }
         
+        return topSum / bottomSum;
 
     }
 
 
+    public static double T4(Summarizer summarizer, List<FoodItem> foodItems){
 
-    public static double T2(LingSummary_alt lingSummary){
-        
-        
+        double agregate = 1;
+        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
 
-        return 0;
+            double r = 0;
+            for (FoodItem foodItem : foodItems) {
+                r += (fuzzySet.DoM(foodItem) > 0 ? 1 : 0);
+            }
 
-    }
+            r /= foodItems.size();
+            agregate *= r;
 
-
-    public static double T3(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-
-    public static double T4(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T5(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T6(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T7(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T8(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T9(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-
-    public static double T10(LingSummary_alt lingSummary){
-        
-        
-
-        return 0;
-
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    public static double T1(double sCount, double M, MemberFunc func) {
-        return func.getValue(sCount / M);
-    }
-
-
-    
-
-
-    public static double T2(List<FuzzySet> fuzzySets, List<FoodItem> foodItems) {
-        double res = 1;
-        for (FuzzySet fuzzySet : fuzzySets) {
-            res *= fuzzySet.supportCount(foodItems);
         }
-        res = Math.pow(res, 1.0 / fuzzySets.size());
+        try {
+            return agregate - (double) QualityMeasure.class.getMethod("T3").invoke(null, summarizer, foodItems);
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+            e.printStackTrace();
+        }
 
-        return 1 - res;
+        return -1;
+
     }
 
-    public static double T3() {
-        return 0;
-    }
-
-    public static double T4() {
-        return 0;
-    }
-
-    public static double T5(int numberOfSummarizers) {
-        return 2*Math.pow(0.5, numberOfSummarizers);
-    }
-
-    public static double OptimalSummary(List<Double> weights){
-        double res=0;
+    public static double T5(Summarizer summarizer, List<FoodItem> foodItems){
         
-        
-        return res;
+        return 2 * Math.pow(0.5, summarizer.getFuzzySets().size());
 
     }
 
+    public static double optimalSummaryMetric(Summarizer summarizer, List<FoodItem> foodItems, List<Double> weights) {
 
-    public static double T6() {
-        return 0;
+        if (Math.abs(1.0 - weights.stream().collect(Collectors.summingDouble(Double::doubleValue))) < 0.0001d) {
+            return T1(summarizer, foodItems) * weights.get(0) +
+                T2(summarizer, foodItems) * weights.get(1) +
+                T3(summarizer, foodItems) * weights.get(2) +
+                T4(summarizer, foodItems) * weights.get(3) +
+                T5(summarizer, foodItems) * weights.get(4);
+        }
+
+        return -1;
+
     }
 
-    public static double T7() {
-        return 0;
+    public static double T6(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double start = summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().get(0).getEnd();
+        double end = summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().get(summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().size() - 1).getStart();
+
+        return (end - start) / (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1);
+
     }
 
-    public static double T8() {
-        return 0;
+    public static double T7(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double intSum = 0;
+        for(SubFunc subFunc : summarizer.getLingQuantifier().getMemberFunc().getSubFuncs()) {
+            intSum += subFunc.getIntegral();
+        }
+
+        return 1 - (intSum / (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1));
+
     }
 
-    public static double T9() {
-        return 0;
+    public static double T8(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double agregate = 1;
+        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
+            agregate *= fuzzySet.cardinality(foodItems) / foodItems.size();
+        }
+
+        return 1 - Math.pow(agregate, 1.0 / summarizer.getFuzzySets().size());
+
     }
 
-    public static double T10() {
-        return 0;
+    public static double T9(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double agregate = 1;
+        for (FuzzySet divisor : summarizer.getDivisors()) {
+            agregate *= divisor.supportCount(foodItems) / foodItems.size();
+        }
+
+        return 1 - Math.pow(agregate, 1.0 / summarizer.getDivisors().size());
+
     }
 
-    public static double T11() {
-        return 0;
+    public static double T10(Summarizer summarizer, List<FoodItem> foodItems) {
+
+        double agregate = 1;
+        for (FuzzySet divisor : summarizer.getDivisors()) {
+            agregate *= divisor.cardinality(foodItems) / foodItems.size();
+        }
+
+        return 1 - Math.pow(agregate, 1.0 / summarizer.getDivisors().size());
+
+    }
+
+    public static double ExtendedOptimalSummaryMetric(Summarizer summarizer, List<FoodItem> foodItems, List<Double> weights) {
+
+        if (Math.abs(1.0 - weights.stream().collect(Collectors.summingDouble(Double::doubleValue))) < 0.0001d) {
+            return T1(summarizer, foodItems) * weights.get(0) +
+                T2(summarizer, foodItems) * weights.get(1) +
+                T3(summarizer, foodItems) * weights.get(2) +
+                T4(summarizer, foodItems) * weights.get(3) +
+                T5(summarizer, foodItems) * weights.get(4) +
+                T6(summarizer, foodItems) * weights.get(5) +
+                T7(summarizer, foodItems) * weights.get(6) +
+                T8(summarizer, foodItems) * weights.get(7) +
+                T9(summarizer, foodItems) * weights.get(8) +
+                T10(summarizer, foodItems) * weights.get(9);
+        }
+
+        return -1;
+
     }
 
     // to będzie do wywalenia/kompletnego przerobienia bo każda funkcja będzie miała inne parametry(chyba)
-    public static List<Double> getMeasures() {
+    public static List<Double> getMeasures(Summarizer summarizer, List<FoodItem> foodItems) {
+
         List<Double> measures = new ArrayList<>();
         for (Method method : QualityMeasure.class.getDeclaredMethods()) {
+
             double temp = -1;
             try {
-                temp = (double) method.invoke(null);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            measures.add(temp);
-        }
-        return measures;
-    }
+                temp = (double) method.invoke(null, summarizer, foodItems);
+                measures.add(temp);
+            } catch (IllegalAccessException | InvocationTargetException e) {}
 
-    private boolean isQuantifierAbsolute(){
-        
-        
-        
-        return true;
+        }
+
+        return measures;
 
     }
     

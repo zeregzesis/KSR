@@ -25,5 +25,9 @@ public record FoodItem
             }
             return -1;
         }
+
+        public boolean equals(FoodItem other) {
+            return this.name.equals(other.name);
+        }
     }
 

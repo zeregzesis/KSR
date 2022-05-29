@@ -17,8 +17,10 @@ public class SingleSummary implements LingSummary {
     
 
     public SingleSummary(FuzzySet fuzzySet, LingQuantifier lingQuantifier) {
+
         this.fuzzySet = fuzzySet;
         this.lingQuantifier = lingQuantifier;
+
     }
 
     public Summary getFirstFormSummary(List<FoodItem> foodItems) {
@@ -34,6 +36,7 @@ public class SingleSummary implements LingSummary {
         List<Double> measures = QualityMeasure.getMeasures();
 
         return new Summary(summary, measures);
+
     }
 
     public Summary getSecondFormSummary(List<FoodItem> foodItems, FuzzySet secondSet){
@@ -51,10 +54,13 @@ public class SingleSummary implements LingSummary {
             List<Double> measures = QualityMeasure.getMeasures();
 
             return new Summary(summary, measures);
+
     }
 
     public Summary getThirdFormSummary(List<FoodItem> foodItems, FuzzySet secondSet){
+
         return null;
+        
     }
     
 }

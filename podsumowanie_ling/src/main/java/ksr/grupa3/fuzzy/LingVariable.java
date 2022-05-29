@@ -16,20 +16,30 @@ public class LingVariable {
     private List<MemberFunc> MemberFuncList;
 
     public double getFuncValue(String value, double x){
+
         return MemberFuncList.get(values.indexOf(value)).getValue(x);
+
     }
 
     public MemberFunc getMemberFunc(String value){
+
         return MemberFuncList.get(values.indexOf(value));
+
     }
 
     public SubFunc getSubFunc(String value, double x){
+
         List<SubFunc> temp = MemberFuncList.get(values.indexOf(value)).getSubFuncs();
+
         for (SubFunc subFunc : temp) {
-            if (subFunc.getStart() <= x && x <= subFunc.getEnd()) {
+
+            if (subFunc.getStart() <= x && x <= subFunc.getEnd())
                 return subFunc;
-            }
+    
         }
+
         return null;
+
     }
+    
 }
