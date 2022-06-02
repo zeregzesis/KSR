@@ -13,33 +13,47 @@ class FoodItem{
     - float water
     - float phosphorus
     - float sodium
+
+    double getProperty(Field)
 }
 
 class SubFunc{
     - float start
     - float end
-    - float func
-    float getValue(float x)
+    - Experssion func
+    - Argument arg
+    double getValue(float)
+    double getIntegral()
+
 }
 
 class MemberFunc{
     - List<subFunc> subFuncList
-    float getValue(float x)
+    double getValue(double)
 }
 
 class LingVariable{
     - String name
+    - Field foodProperty
     - List<String> values
     - List<MemberFunc> memberFuncList
+
+    double getFuncValue(String, double)
+    MemberFunc getMemberFunc(String)
+    SubFunc getSubFunc(String, double)
 }
 
 class FuzzySet{
     - LingVariable variable
     - String value
-    float DoM(FoodItem foodItem)
-    float cardinality(list<FoodItem>)
+    double DoM(FoodItem foodItem)
+    double cardinality(list<FoodItem>)
     List<FoodItem> support(list<FoodItem>)
-    List<FoodItem> alphaCut(List<FoodItem>, float alpha)
+    int supportCount(list<FoodItem>)
+    List<FoodItem> alphaCut(List<FoodItem>, float)
+    int alphaCutCount(List<FoodItem>, float)
+    FuzzySet setSum(FuzzySet)
+    FuzzySet setIntersect(FuzzySet)
 }
 
 MemberFunc *-- SubFunc

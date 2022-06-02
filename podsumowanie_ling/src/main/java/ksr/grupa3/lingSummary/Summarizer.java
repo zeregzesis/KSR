@@ -1,5 +1,7 @@
 package ksr.grupa3.lingSummary;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -9,28 +11,26 @@ import java.util.stream.Collectors;
 import ksr.grupa3.fuzzy.FoodItem;
 import ksr.grupa3.fuzzy.FuzzySet;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 @Getter
+@Setter
+@NoArgsConstructor
 public class Summarizer {
 
     private List<FuzzySet> fuzzySets = new ArrayList<>();
     private List<Boolean> setAnd = new ArrayList<>();
+
     private List<FuzzySet> divisors = new ArrayList<>();
     private List<Boolean> divisorAnd = new ArrayList<>();
 
+    private List<Qualifier> qualifiers;
+
     private LingQuantifier lingQuantifier;
 
-    public Summarizer(LingQuantifier lingQuantifier, FuzzySet fuzzySet) {
+    public static double tNorm(Double a, Double b) {
 
-        this.lingQuantifier = lingQuantifier;
-        this.fuzzySets.add(fuzzySet);
-
-    }
-
-    public Summarizer(LingQuantifier lingQuantifier, List<FuzzySet> fuzzySets, List<Boolean> setAnd) {
-
-        this.lingQuantifier = lingQuantifier;
-        this.fuzzySets = fuzzySets;
-        this.setAnd = setAnd;
+        return Math.min(a, b);
 
     }
 
@@ -44,24 +44,33 @@ public class Summarizer {
     public void addDivisor(FuzzySet fuzzySet, boolean and) {
 
         divisors.add(fuzzySet);
-        divisorAnd.add(and);
+        if (divisors.size() > 1)
+            divisorAnd.add(and);
 
     }
 
     public double DoM(FoodItem foodItem, boolean onlyDiv) {
 
         double setDoM = fuzzySets.get(0).DoM(foodItem);
-        for (int i = 0; i < setAnd.size(); i++) {
-            setDoM = (setAnd.get(i) ? Math.min(setDoM, fuzzySets.get(i+1).DoM(foodItem)) : Math.max(setDoM, fuzzySets.get(i+1).DoM(foodItem)));
+
+        if (fuzzySets.size() > 1) {
+            for (int i = 0; i < setAnd.size(); i++) {
+                setDoM = (setAnd.get(i) ? tNorm(setDoM, fuzzySets.get(i+1).DoM(foodItem)) : 1 - tNorm(1 - setDoM, 1 - fuzzySets.get(i+1).DoM(foodItem)));
+            }
         }
 
         if (divisors.size() == 0) {
+            if (onlyDiv) {
+                return 1;
+            }
             return setDoM;
         }
-
         double divisorDoM = divisors.get(0).DoM(foodItem);
-        for (int i = 0; i < divisorAnd.size(); i++) {
-            divisorDoM = (divisorAnd.get(i) ? Math.min(divisorDoM, divisors.get(i+1).DoM(foodItem)) : Math.max(divisorDoM, divisors.get(i+1).DoM(foodItem)));
+
+        if (divisors.size() > 1) {
+            for (int i = 0; i < divisorAnd.size(); i++) {
+                divisorDoM = (divisorAnd.get(i) ? tNorm(divisorDoM, divisors.get(i+1).DoM(foodItem)) : 1 - tNorm(1 - divisorDoM, 1 - divisors.get(i+1).DoM(foodItem)));
+            }
         }
         
         return (onlyDiv ? divisorDoM : Math.min(divisorDoM, setDoM));
@@ -118,6 +127,8 @@ public class Summarizer {
 
     public Summary constructSummary(List<FoodItem> foodItems) {
 
+        foodItems = qualifiers.get(0).filter(foodItems);
+
         String division = (divisors.size() > 0) ? ", which have " + divisors.get(0).getValue() + " " + divisors.get(0).getVariable().getName() : "";
 
         for (int i = 0; i < divisorAnd.size(); i++) {
@@ -142,15 +153,34 @@ public class Summarizer {
 
         }
 
+        String qualifier = qualifiers.get(0).getName() + (qualifiers.size() > 1 ? " compared to " + qualifiers.get(1).getToFind() : "") + " ";
+
         description += ".";
         
         String summary =
             lingQuantifier.getName().toLowerCase() +
-            " of all food products " +
+            " of " +
+            qualifier +
             division +
             description;
 
-        return new Summary(summary, QualityMeasure.getMeasures(this, foodItems));
+        List<Double> temp = new ArrayList<>();
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T1(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T2(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T3(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T4(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T5(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T6(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T7(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        temp.add((double) BigDecimal.valueOf(QualityMeasure.T8(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        try {temp.add((double) BigDecimal.valueOf(QualityMeasure.T9(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());} catch (Exception e) {temp.add(-1.0);};
+        try {temp.add((double) BigDecimal.valueOf(QualityMeasure.T10(this, foodItems)).setScale(2, RoundingMode.HALF_UP).doubleValue());} catch (Exception e) {temp.add(-1.0);};
+        //temp.add((double)((BigDecimal)QualityMeasure.optimalSummaryMetric(this, foodItems, List.of(0.2, 0.2, 0.2, 0.2, 0.2) )));
+        //temp.add((double)((BigDecimal)QualityMeasure.ExtendedOptimalSummaryMetric(this, foodItems, List.of(0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1))));
+
+        //return new Summary(summary, QualityMeasure.getMeasures(this, foodItems));
+
+        return new Summary(summary, temp);
 
     }
 

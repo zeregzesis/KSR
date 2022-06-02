@@ -18,11 +18,17 @@
 *.zip
 *.tar.gz
 *.rar
+*.ser
+*.txt
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*,
 
 # Build
 klasyfikacja/target/
+
+# Other
 data.csv
 eksperymenty.txt
+podsumowanie_ling/target/
+podsumowanie_ling/src/main/java/ksr/grupa3/dataLayer/Init.java

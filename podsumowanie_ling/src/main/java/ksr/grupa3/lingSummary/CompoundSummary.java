@@ -22,15 +22,15 @@ public class CompoundSummary implements LingSummary {
     
 
     public Summary getFirstFormSummary(List<FoodItem> foodItems) {
-        return new Summary("", 0);
+        return new Summary("", null);
     }
 
     public Summary getSecondFormSummary(List<FoodItem> foodItems, FuzzySet secondSet){
-        return new Summary("", 0);
+        return new Summary("", null);
     }
 
-    public Summary getThirdFormSummary(FuzzySet secondSet, LingQuantifier secondQuantifier) {
-        return new Summary("", 0);
+    public Summary getThirdFormSummary(List<FoodItem> foodItems, FuzzySet secondSet) {
+        return new Summary("", null);
     }
     
 }

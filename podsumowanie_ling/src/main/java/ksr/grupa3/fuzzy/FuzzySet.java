@@ -19,8 +19,8 @@ public class FuzzySet {
 
     public double DoM(FoodItem foodItem) {
 
-        return variable.getMemberFuncList().get(variable.getValues().indexOf(value)).getValue(foodItem.getProperty(variable.getFoodProperty()));
-
+        return variable.getFuncValue(this.value, foodItem.getProperty(variable.getFoodProperty()));
+        
     }
 
     public double cardinality(List<FoodItem> foodItems) {

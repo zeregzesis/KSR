@@ -1,4 +1,4 @@
-package ksr.grupa3.lingSummary;
+package ksr.grupa3.ling;
 
 import java.io.Serializable;
 
@@ -8,14 +8,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LingQuantifier implements Serializable {
+public class Quantifier implements Serializable {
 
     private String name;
     private MemberFunc memberFunc;
     private Boolean isAbsolute;
+    private Boolean isForthForm = false;
 
     public double getValue(double x) {
-        return memberFunc.getValue(x);
+        return (memberFunc != null ? memberFunc.getValue(x) : -1);
     }
 
 }

@@ -1,113 +1,102 @@
 package ksr.grupa3;
 
+//import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+//import java.util.Arrays;
 import java.util.List;
+//import java.util.Random;
 
-import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.FuzzySet;
+//import ksr.grupa3.dataLayer.CSVFileReader;
+import ksr.grupa3.dataLayer.Init;
+import ksr.grupa3.dataLayer.Serializer;
+
+//import ksr.grupa3.fuzzy.FoodItem;
+//import ksr.grupa3.fuzzy.FuzzySet;
 import ksr.grupa3.fuzzy.LingVariable;
-import ksr.grupa3.lingSummary.CompoundSummary;
-import ksr.grupa3.lingSummary.LingQuantifier;
-import ksr.grupa3.lingSummary.LingSummary;
-import ksr.grupa3.lingSummary.SingleSummary;
-import ksr.grupa3.lingSummary.Summary;
+
+import ksr.grupa3.ling.Quantifier;
+//import ksr.grupa3.ling.Qualifier;
+//import ksr.grupa3.ling.Summarizer;
+//import ksr.grupa3.ling.Summary;
+import ksr.grupa3.ling.Subject;
+
 
 //TODO: Przerobić UML żeby reprezentował stan faktyczny
 
 public class App {
-    public static void main(String[] args) throws IOException {
+    
+    public static void main(String[] args) throws IOException, NoSuchFieldException, SecurityException, ClassNotFoundException {
 
-        // póki co zrobimy konsolowo, żeby móc to wgl testować
-        // to co poniżej i tak trzeba będzie zakomentować żeby zrobić wszystkie domyślne kwantyfikatory i zmienne i je zserializować do pliku
+        Init.initialize();
+
+        //Random rand = new Random();
         
-        // tutaj trzeba będzie to zaczytać z pliku/bazy danych
-        List<FoodItem> foodItems = new ArrayList<>();
-
-        // tutaj trzeba będzie deserializować z pliku
-        List<LingQuantifier> quantifiers = new ArrayList<>();
-        List<LingVariable> lingVariables = new ArrayList<>();
-
-        // wybór kwantyfikatora, zmiennej i jej wartości
-        LingQuantifier lingQuantifier = quantifiers.get(Integer.parseInt(args[0]));
-        LingVariable lingVariable = lingVariables.get(Integer.parseInt(args[1]));
-        String value = args[2];
-
-        FuzzySet fuzzySet = new FuzzySet(lingVariable, value);
-
-        // zostanie stworzony w switchu
-        LingSummary lingSummary;
-
-        // Single czy Compound?
-        switch(Integer.parseInt(args[2])){
-            case 1:
-                lingSummary = new SingleSummary(fuzzySet, lingQuantifier);
-                break;
-            case 2:
-                lingSummary = new CompoundSummary(fuzzySet, lingQuantifier);
-                break;
-            default:
-                break;
+        List<Object> listOfObjects = Serializer.deserialize("quantifiers.ser");
+        List<Quantifier> quantifiers = new ArrayList<>();
+        for (Object object : listOfObjects) {
+            quantifiers.add((Quantifier) object);
         }
 
-        // zostanie stworzony w switchu przez lingSummary, póki co dałem to żeby print nie marudził że niezainicjalizowane
-        Summary summary = null;
-
-        // Której formy posdumowanie?
-        switch(Integer.parseInt(args[3])) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            default:
-                break;
+        listOfObjects = Serializer.deserialize("variables.ser");
+        List<LingVariable> variables = new ArrayList<>();
+        for (Object object : listOfObjects) {
+            variables.add((LingVariable) object);
         }
 
-        System.out.println(summary.toString());
+        listOfObjects = Serializer.deserialize("subjects.ser");
+        List<Subject> subjects = new ArrayList<>();
+        for (Object object : listOfObjects) {
+            subjects.add((Subject) object);
+        }
+
+        /*  REWORK!!!
+        List<FoodItem> foodItems = CSVFileReader.readCsv();
+
+        LingVariable lingVariable;
+        LingVariable secondLingVariable;
+        String value;
+        FuzzySet set;
+        Summarizer summarizer;
+        Summary summary;
+
+        List<String> firstFormSummaries = new ArrayList<>();
+        List<String> secondFormSummaries = new ArrayList<>();
+
+        
+        for (Quantifier quantifier : quantifiers) {
+
+            //first form
+            lingVariable = variables.get(rand.nextInt(variables.size()));
+            value = lingVariable.getValues().get(rand.nextInt(lingVariable.getValues().size()));
+            set = new FuzzySet(lingVariable, value);
+            summarizer = new Summarizer(new ArrayList<>(Arrays.asList(set)), new ArrayList<>());
+            //secondLingVariable = variables.get(rand.nextInt(variables.size()));
+            secondLingVariable = variables.get(6);
+            summarizer.addSet(new FuzzySet(secondLingVariable, secondLingVariable.getValues().get(0)), true);
+            summary = new Summary(quantifier, List.of(subjects.get(0)), new Qualifier(), summarizer);
+            firstFormSummaries.add(summary.constructSummary(List.copyOf(foodItems)));
+            
+
+            //second form
+            lingVariable = variables.get(rand.nextInt(variables.size()));
+            value = lingVariable.getValues().get(rand.nextInt(lingVariable.getValues().size()));
+            Qualifier qualifier = new Qualifier(new ArrayList<>(Arrays.asList(new FuzzySet(lingVariable, value))), new ArrayList<>());
+            summary = new Summary(quantifier, List.of(subjects.get(0)), qualifier, summarizer);
+            secondFormSummaries.add(summary.constructSummary(List.copyOf(foodItems)));
+        }
+
+        FileWriter firstform = new FileWriter("first.txt");
+        for (String s : firstFormSummaries) {
+            firstform.write(s + "\n");
+        }
+        firstform.close();
+        
+         FileWriter secondform = new FileWriter("second.txt");
+        for (String s : secondFormSummaries) {
+           secondform.write(s + "\n");
+        }
+        secondform.close();
+    }*/
     }
 }
-
-// wrzuciłem to tutaj bo łatwiej będzie zrobić te wstępne kwantyfikatory na bazie tych case'ów
-
-/*
-    public double compatibility(double value){
-        switch (quantifierType){
-            case ALMOST_NONE:
-                return Math.exp(-Math.pow(12.5 * value, 2));
-            case SOME:
-                return Math.exp(-Math.pow(12.5 * value - 3.125, 2));
-            case ABOUT_HALF:
-                return Math.exp(-Math.pow(12.5 * value - 6.25, 2));
-            case MOST:
-                return Math.exp(-Math.pow(12.5 * value - 9.375, 2));
-            case ALMOST_ALL:
-                return Math.exp(-Math.pow(12.5 * value - 12.5, 2));
-            case MUCH_MORE_THAN_500:
-                if (value < 500)
-                    return 0;
-                else if (value > 2000)
-                    return 1;
-                else
-                    return (2.0/3000.0) * value - (1.0/3.0);
-            case ABOUT_FEW_THOUSAND:
-                if (value < 4000)
-                    return Math.exp(-Math.pow(0.001 * value - 4, 2));
-                else if (value > 6000)
-                    return Math.exp(-Math.pow(0.001 * value - 6, 2));
-                else
-                    return 1;
-            case MUCH_LESS_THAN_8000:
-                if (value > 8000)
-                    return 0;
-                else if (value < 6000)
-                    return 1;
-                else
-                    return 0.0005 * value + 4;
-            default:
-                return 0;
-        }
-    }*/

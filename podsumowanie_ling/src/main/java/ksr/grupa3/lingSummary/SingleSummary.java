@@ -33,9 +33,11 @@ public class SingleSummary implements LingSummary {
 
         summary = summary.substring(0, 1).toUpperCase() + summary.substring(1);
 
-        List<Double> measures = QualityMeasure.getMeasures();
+        //List<Double> measures = QualityMeasure.getMeasures();
 
-        return new Summary(summary, measures);
+        //return new Summary(summary, measures);
+
+        return new Summary(summary, null);
 
     }
 
@@ -51,9 +53,11 @@ public class SingleSummary implements LingSummary {
 
             summary = summary.substring(0, 1).toUpperCase() + summary.substring(1);
 
-            List<Double> measures = QualityMeasure.getMeasures();
+            //List<Double> measures = QualityMeasure.getMeasures();
 
-            return new Summary(summary, measures);
+            //return new Summary(summary, measures);
+            
+            return new Summary(summary, null);
 
     }
 

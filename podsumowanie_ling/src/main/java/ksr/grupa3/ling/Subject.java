@@ -1,4 +1,4 @@
-package ksr.grupa3.lingSummary;
+package ksr.grupa3.ling;
 
 import java.io.Serializable;
 import java.util.List;
@@ -8,12 +8,12 @@ import ksr.grupa3.fuzzy.FoodItem;
 import lombok.Data;
 
 @Data
-public class Qualifier implements Serializable{
+public class Subject implements Serializable{
     
     private String toFind;
     private String name;
 
-    public Qualifier(String name) {
+    public Subject(String name) {
         this.name = name;
         int begin = name.indexOf("\"");
         int end = name.lastIndexOf("\"");

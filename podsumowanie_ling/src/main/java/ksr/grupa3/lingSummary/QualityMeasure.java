@@ -12,20 +12,16 @@ import ksr.grupa3.fuzzy.SubFunc;
 
 public class QualityMeasure {
 
-    public static double tNorm(Double a, Double b) {
-
-        return Math.min(a, b);
-
-    }
+    
 
     public static double T1(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double card = summarizer.cardinality(foodItems);
 
         if (summarizer.getDivisors().size() == 0) 
-            return card / (summarizer.getLingQuantifier().getIsAbsolute() ? 1 :  foodItems.size());
+            return summarizer.getLingQuantifier().getValue(card / (summarizer.getLingQuantifier().getIsAbsolute() ? 1 :  foodItems.size()));
 
-        return card / summarizer.divisorCardinality(foodItems);
+        return summarizer.getLingQuantifier().getValue(card / summarizer.divisorCardinality(foodItems));
 
     }
 
@@ -34,7 +30,7 @@ public class QualityMeasure {
         double ret = 1.0;
 
         for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
-            ret *= (fuzzySet.supportCount(foodItems) / foodItems.size());
+            ret *= ( (double) fuzzySet.supportCount(foodItems) / foodItems.size());
         }
 
         ret = 1 - Math.pow(ret, 1/summarizer.getFuzzySets().size());
@@ -43,7 +39,6 @@ public class QualityMeasure {
 
     }
     
-    // nie mam pojęcia czy to wgl dobrze jest
     public static double T3(Summarizer summarizer, List<FoodItem> foodItems) {
         
         int topSum = 0;
@@ -51,76 +46,15 @@ public class QualityMeasure {
         
         for (FoodItem foodItem : foodItems) {
 
-            double us = 0;
-            double uw = 0;
+            int temp = (summarizer.getDivisors().size() > 0 || summarizer.DoM(foodItem, true) > 0) ? 1 : 0;
 
-            List<Double> funcValues = new ArrayList<>();
-            for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
-                funcValues.add(fuzzySet.getVariable().getFuncValue(fuzzySet.getValue(), foodItem.getProperty(fuzzySet.getVariable().getFoodProperty())));
-            }
-
-            for (int i = 0; i < summarizer.getSetAnd().size(); i++) {
-
-                if (summarizer.getSetAnd().get(i)) {
-                    try {
-                        us += (double) QualityMeasure.class.getMethod("tNorm").invoke(null, funcValues.get(i), funcValues.get(i+1));
-                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                            | SecurityException e) {
-                        e.printStackTrace();
-                    }
-                }
-                else {
-                    try {
-                        us += 1 - (double) QualityMeasure.class.getMethod("tNorm").invoke(null, 1 - funcValues.get(i), 1 - funcValues.get(i+1));
-                    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                            | SecurityException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            }
-
-            if (summarizer.getDivisors().size() > 0) {
-
-                List<Double> divisorValues = new ArrayList<>();
-                for (FuzzySet divisor : summarizer.getDivisors()) {
-                    divisorValues.add(divisor.getVariable().getFuncValue(divisor.getValue(), foodItem.getProperty(divisor.getVariable().getFoodProperty())));
-                }
-
-                for (int i = 0; i < summarizer.getDivisorAnd().size(); i++) {
-
-                    if (summarizer.getDivisorAnd().get(i)) {
-                        try {
-                            uw += (double) QualityMeasure.class.getMethod("tNorm").invoke(null, divisorValues.get(i), divisorValues.get(i+1));
-                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                                | SecurityException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    else {
-                        try {
-                            uw += 1 - (double) QualityMeasure.class.getMethod("tNorm").invoke(null, 1 - divisorValues.get(i), 1 - divisorValues.get(i+1));
-                        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException
-                                | SecurityException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-
-                topSum += ((us > 0 && uw > 0) ? 1 : 0);
-                bottomSum += ((uw > 0) ? 1 : 0);
-
-            }
-            else {
-                topSum += ((us > 0) ? 1 : 0);
-                bottomSum += 1;
-            }
+            topSum += (summarizer.DoM(foodItem, false) > 0 && temp == 1) ? 1 : 0;
+            bottomSum += temp;
 
         }
-        
-        return topSum / bottomSum;
 
+        return (double) topSum / bottomSum;
+        
     }
 
 
@@ -138,18 +72,13 @@ public class QualityMeasure {
             agregate *= r;
 
         }
-        try {
-            return agregate - (double) QualityMeasure.class.getMethod("T3").invoke(null, summarizer, foodItems);
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-            e.printStackTrace();
-        }
 
-        return -1;
+        return Math.abs(agregate - QualityMeasure.T3(summarizer, foodItems));
 
     }
 
     public static double T5(Summarizer summarizer, List<FoodItem> foodItems){
-        
+
         return 2 * Math.pow(0.5, summarizer.getFuzzySets().size());
 
     }
@@ -173,18 +102,21 @@ public class QualityMeasure {
         double start = summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().get(0).getEnd();
         double end = summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().get(summarizer.getLingQuantifier().getMemberFunc().getSubFuncs().size() - 1).getStart();
 
-        return (end - start) / (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1);
+        return 1 - Math.abs(end - start) / (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1);
 
     }
 
     public static double T7(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double intSum = 0;
-        for(SubFunc subFunc : summarizer.getLingQuantifier().getMemberFunc().getSubFuncs()) {
-            intSum += subFunc.getIntegral();
+
+        List<SubFunc> temp = summarizer.getLingQuantifier().getMemberFunc().getSubFuncs();
+
+        for (int i = 1; i < temp.size() - 1; i++) {
+            intSum += temp.get(i).getIntegral();
         }
 
-        return 1 - (intSum / (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1));
+        return 1 - (double) (Math.abs(intSum) / (double) (summarizer.getLingQuantifier().getIsAbsolute() ? foodItems.size() : 1));
 
     }
 
@@ -192,7 +124,7 @@ public class QualityMeasure {
 
         double agregate = 1;
         for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
-            agregate *= fuzzySet.cardinality(foodItems) / foodItems.size();
+            agregate *= ((double) (fuzzySet.cardinality(foodItems) / foodItems.size()));
         }
 
         return 1 - Math.pow(agregate, 1.0 / summarizer.getFuzzySets().size());
@@ -203,7 +135,7 @@ public class QualityMeasure {
 
         double agregate = 1;
         for (FuzzySet divisor : summarizer.getDivisors()) {
-            agregate *= divisor.supportCount(foodItems) / foodItems.size();
+            agregate *= ((double) divisor.supportCount(foodItems) / foodItems.size());
         }
 
         return 1 - Math.pow(agregate, 1.0 / summarizer.getDivisors().size());
@@ -214,7 +146,7 @@ public class QualityMeasure {
 
         double agregate = 1;
         for (FuzzySet divisor : summarizer.getDivisors()) {
-            agregate *= divisor.cardinality(foodItems) / foodItems.size();
+            agregate *= ((double) divisor.cardinality(foodItems) / foodItems.size());
         }
 
         return 1 - Math.pow(agregate, 1.0 / summarizer.getDivisors().size());
@@ -250,7 +182,7 @@ public class QualityMeasure {
             try {
                 temp = (double) method.invoke(null, summarizer, foodItems);
                 measures.add(temp);
-            } catch (IllegalAccessException | InvocationTargetException e) {}
+            } catch (IllegalAccessException | InvocationTargetException | IllegalArgumentException e) {}
 
         }
 

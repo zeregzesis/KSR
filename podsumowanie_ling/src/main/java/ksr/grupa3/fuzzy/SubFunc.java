@@ -1,5 +1,8 @@
 package ksr.grupa3.fuzzy;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 import org.mariuszgromada.math.mxparser.Argument;
 import org.mariuszgromada.math.mxparser.Expression;
 
@@ -8,9 +11,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SubFunc {
-    private Argument arg;
-    private Expression func;
+public class SubFunc implements Serializable {
+    private transient Argument arg;
+    private transient Expression func;
     private double start;
     private double end;
     
@@ -46,6 +49,22 @@ public class SubFunc {
 
         return newFunc.calculate();
 
+    }
+
+    private void writeObject(java.io.ObjectOutputStream stream)
+            throws IOException {
+        stream.writeObject(start);
+        stream.writeObject(end);
+        stream.writeObject(arg.getArgumentName());
+        stream.writeObject(func.getExpressionString());
+    }
+
+    private void readObject(java.io.ObjectInputStream stream)
+            throws IOException, ClassNotFoundException {
+        start = (double) stream.readObject();
+        end = (double) stream.readObject();
+        arg = new Argument((String) stream.readObject());
+        func = new Expression((String) stream.readObject(), arg);
     }
     
 }
