@@ -4,11 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.GaussFuction;
-import ksr.grupa3.fuzzy.oldVariable;
-import ksr.grupa3.fuzzy.MembershipFuction;
-import ksr.grupa3.fuzzy.TrapezoidFuction;
+import ksr.grupa3.fuzzy.*;
 import ksr.grupa3.ling.Quantifier;
 import ksr.grupa3.ling.Subject;
 
@@ -118,7 +114,7 @@ public class Init {
         // SubFunc value2 = new SubFunc("exp(-(0.001 * x - 4)^2)", 6000, 13544);
         // zero2 = new SubFunc("0", 13544, 13544);
         // memberFunc = new MemberFunc(List.of(zero, value, one, value2, zero2));
-        memberFunc = new GaussFuction(2, 5000, 850);
+        memberFunc = new GaussFuction(1, 5000, 850);
         aboutFewThousand.setMemberFunc(memberFunc);
         aboutFewThousand.setIsAbsolute(true);
         quantifiers.add(aboutFewThousand);
@@ -140,44 +136,52 @@ public class Init {
         List<String> values = List.of("low", "medium", "high");
 
         // low
-        SubFunc temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 0, 85);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.009 * x + 1.739", 85, 200);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 200, 903);
-        subFuncs.add(temp);
+        memberFuncs.add(new TrapezoidFuction(0,0,85,200));
 
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+
+
+//        SubFunc temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 0, 85);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.009 * x + 1.739", 85, 200);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 200, 903);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         // medium
-        temp = new SubFunc("0", 0, 150);
-        subFuncs.add(temp);
-        temp = new SubFunc("exp(-(x - 300)^2 / 50^2)", 150, 450);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 450, 903);
-        subFuncs.add(temp);
+        memberFuncs.add(new GaussFuction(1,300,35.5));
 
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+//        temp = new SubFunc("0", 0, 150);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("exp(-(x - 300)^2 / 50^2)", 150, 450);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 450, 903);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         // high
-        temp = new SubFunc("0", 0, 350);
-        subFuncs.add(temp);
-        temp = new SubFunc("exp(-(x - 300)^2 / 50^2)", 350, 500);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 500, 903);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 903, 903);
-        subFuncs.add(temp);
+        memberFuncs.add(new TrapezoidFuction(350,500,902,902));
 
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+//        temp = new SubFunc("0", 0, 350);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("exp(-(x - 300)^2 / 50^2)", 350, 500);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 500, 903);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 903, 903);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
         oldVariable caloricValue = new oldVariable("caloric value", foodItem.getClass().getDeclaredField("calories"), values, List.copyOf(memberFuncs));
@@ -191,62 +195,66 @@ public class Init {
         values = List.of("close to none", "low", "medium", "high");
 
         // close to none
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 0, 1);
-        subFuncs.add(temp);
-        temp = new SubFunc("-x + 2", 1, 2);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 2, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,0,1,2));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 0, 1);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-x + 2", 1, 2);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 2, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         // low
-        temp = new SubFunc("0", 0, 1);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.25 * x - 0.25", 1, 5);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 5, 8);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.25 * x + 3", 8, 12);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 12, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(1,5,8,12));
+//        temp = new SubFunc("0", 0, 1);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.25 * x - 0.25", 1, 5);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 5, 8);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.25 * x + 3", 8, 12);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 12, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         // medium
-        temp = new SubFunc("0", 0, 7);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.25 * x - 7/3", 7, 11);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.026 * x + 1.282", 11, 50);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 50, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(7,11,50));
+//        temp = new SubFunc("0", 0, 7);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.25 * x - 7/3", 7, 11);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.026 * x + 1.282", 11, 50);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 50, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         // high
-        temp = new SubFunc("0", 0, 20);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.05 * x - 1", 20, 40);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 40, 101);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 101, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(20,40,100,100));
+//        temp = new SubFunc("0", 0, 20);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.05 * x - 1", 20, 40);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 40, 101);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 101, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
         oldVariable fatContent = new oldVariable("Fat content", foodItem.getClass().getDeclaredField("fat"), values, List.copyOf(memberFuncs));
@@ -259,44 +267,48 @@ public class Init {
     values = List.of("low", "medium", "high");
 
     // low
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("1/6 * x", 0, 6);
-    subFuncs.add(temp);
-    temp = new SubFunc("-1/4 * x + 2.5", 6, 10);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 10, 89);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(0,6,10));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1/6 * x", 0, 6);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-1/4 * x + 2.5", 6, 10);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 10, 89);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // medium
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("exp(-(x-10)^2 / 16)", 0, 20);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 20, 89);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new GaussFuction(1,10,2.5));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("exp(-(x-10)^2 / 16)", 0, 20);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 20, 89);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // high
-    temp = new SubFunc("0", 0, 10);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.1 * x - 1", 10, 20);
-    subFuncs.add(temp);
-    temp = new SubFunc("1", 20, 101);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 101, 101);
-    subFuncs.add(temp);
+        memberFuncs.add(new TrapezoidFuction(10,20,100,100));
+//    temp = new SubFunc("0", 0, 10);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.1 * x - 1", 10, 20);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1", 20, 101);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 101, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
 
 
     oldVariable proteinContent = new oldVariable("Protein content", foodItem.getClass().getDeclaredField("protein"), values, List.copyOf(memberFuncs));
@@ -309,60 +321,64 @@ public class Init {
     values = List.of("close to none", "low", "medium", "high");
 
     // close to none
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("-x + 1", 0, 1);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 1, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(0,0,1));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-x + 1", 0, 1);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 1, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // low
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.2 * x", 0, 5);
-    subFuncs.add(temp);
-    temp = new SubFunc("1", 5, 10);
-    subFuncs.add(temp);
-    temp = new SubFunc("-0.2 * x + 3", 10, 15);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 15, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,5,10,15));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.2 * x", 0, 5);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1", 5, 10);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-0.2 * x + 3", 10, 15);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 15, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // medium
-    temp = new SubFunc("0", 0, 15);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.04 * x - 0.6", 15, 40);
-    subFuncs.add(temp);
-    temp = new SubFunc("-0.05 * x + 3", 40, 60);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 60, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(15,40,60));
+//    temp = new SubFunc("0", 0, 15);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.04 * x - 0.6", 15, 40);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-0.05 * x + 3", 40, 60);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 60, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // high
-    temp = new SubFunc("0", 0, 50);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.029 * x - 1.429", 50, 85);
-    subFuncs.add(temp);
-    temp = new SubFunc("1", 85, 101);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 101, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(50,85,100,100));
+//    temp = new SubFunc("0", 0, 50);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.029 * x - 1.429", 50, 85);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1", 85, 101);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 101, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
 
     oldVariable carbohydrateContent = new oldVariable("Carbohydrate content", foodItem.getClass().getDeclaredField("carbohydrates"), values, List.copyOf(memberFuncs));
@@ -375,60 +391,64 @@ public class Init {
     values = List.of("close to none", "low", "regular", "high");
 
     // close to none
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("-x + 1", 0, 1);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 1, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(0,0,1));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-x + 1", 0, 1);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 1, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // low
-    temp = new SubFunc("0", -1, 0);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.25 * x", 0, 4);
-    subFuncs.add(temp);
-    temp = new SubFunc("-1/3 * x + 7/3", 4, 7);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 7, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(0,4,7));
+//    temp = new SubFunc("0", -1, 0);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.25 * x", 0, 4);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-1/3 * x + 7/3", 4, 7);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 7, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // regular
-    temp = new SubFunc("0", 0, 5);
-    subFuncs.add(temp);
-    temp = new SubFunc("0.5 * x - 2.5", 5, 7);
-    subFuncs.add(temp);
-    temp = new SubFunc("1", 7, 12);
-    subFuncs.add(temp);
-    temp = new SubFunc("-1/3 * x + 5", 12, 15);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 15, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(5,7,12,15));
+//    temp = new SubFunc("0", 0, 5);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0.5 * x - 2.5", 5, 7);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1", 7, 12);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("-1/3 * x + 5", 12, 15);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 15, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
     // high
-    temp = new SubFunc("0", 0, 12);
-    subFuncs.add(temp);
-    temp = new SubFunc("32/30 * x - 2", 12, 18);
-    subFuncs.add(temp);
-    temp = new SubFunc("1", 18, 101);
-    subFuncs.add(temp);
-    temp = new SubFunc("0", 101, 101);
-    subFuncs.add(temp);
-
-    memberFunc = new MemberFunc(List.copyOf(subFuncs));
-    memberFuncs.add(memberFunc);
-    subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(12,18,96,96));
+//    temp = new SubFunc("0", 0, 12);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("32/30 * x - 2", 12, 18);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("1", 18, 101);
+//    subFuncs.add(temp);
+//    temp = new SubFunc("0", 101, 101);
+//    subFuncs.add(temp);
+//
+//    memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//    memberFuncs.add(memberFunc);
+//    subFuncs.clear();
 
 
     oldVariable satFatContent = new oldVariable("Saturated fats content", foodItem.getClass().getDeclaredField("saturatedFats"), values, List.copyOf(memberFuncs));
@@ -439,49 +459,52 @@ public class Init {
 // sodium
 
         memberFuncs = new ArrayList<>();
-        subFuncs = new ArrayList<>();
+//        subFuncs = new ArrayList<>();
 
          values = List.of("low", "medium", "high");
 
         //low
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 0, 200);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.009 * x + 2.739", 200, 315);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 315, 38759);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,0,200,315));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 0, 200);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.009 * x + 2.739", 200, 315);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 315, 38759);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //medium
-        temp = new SubFunc("0", -1, 130);
-        subFuncs.add(temp);
-        temp = new SubFunc("exp(-1*((x-315)^2)/75^2)", 130, 500);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 500, 38759);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new GaussFuction(1,315,46.25));
+//        temp = new SubFunc("0", -1, 130);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("exp(-1*((x-315)^2)/75^2)", 130, 500);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 500, 38759);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //high
-        temp = new SubFunc("0", -1, 400);
-        subFuncs.add(temp);
-        temp = new SubFunc("1.0/300*x-1.25", 400, 700);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 700, 38759);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 38759, 3214124);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(400,700,38758,38758));
+//        temp = new SubFunc("0", -1, 400);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1.0/300*x-1.25", 400, 700);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 700, 38759);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 38759, 3214124);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         oldVariable SodiumContent = new oldVariable("Sodium Content", foodItem.getClass().getDeclaredField("sodium"), values, List.copyOf(memberFuncs));
 
@@ -493,49 +516,52 @@ public class Init {
 // Phosphorus
 
         memberFuncs = new ArrayList<>();
-        subFuncs = new ArrayList<>();
+//        subFuncs = new ArrayList<>();
 
          values = List.of("low", "medium", "high");
 
         //low
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 0, 50);
-        subFuncs.add(temp);
-        temp = new SubFunc("-1.0/50.0 * x + 2.0", 50, 100);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 100, 9919);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,0,40,100));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 0, 50);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-1.0/50.0 * x + 2.0", 50, 100);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 100, 9919);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //medium
-        temp = new SubFunc("0", -1, 80);
-        subFuncs.add(temp);
-        temp = new SubFunc("exp(-1*((x-140)^2)/20^2)", 80, 200);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 200, 9919);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new GaussFuction(1,140,15));
+//        temp = new SubFunc("0", -1, 80);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("exp(-1*((x-140)^2)/20^2)", 80, 200);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 200, 9919);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //high
-        temp = new SubFunc("0", -1, 160);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.025*x-4", 160, 200);
-        subFuncs.add(temp);
-        temp = new SubFunc("1",200, 9919);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 9919, 3214124);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(160,200,9918,9918));
+//        temp = new SubFunc("0", -1, 160);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.025*x-4", 160, 200);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1",200, 9919);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 9919, 3214124);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
 
@@ -547,55 +573,58 @@ public class Init {
 // Water Content
 
         memberFuncs = new ArrayList<>();
-        subFuncs = new ArrayList<>();
+//        subFuncs = new ArrayList<>();
 
          values = List.of("low", "medium", "high");
 
         //low
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.2*x", 0, 5);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 5, 25);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.1*x+3.5", 25, 35);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 35, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,5,25,35));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.2*x", 0, 5);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 5, 25);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.1*x+3.5", 25, 35);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 35, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //medium
-        temp = new SubFunc("0", -1, 30);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.06667*x-2", 30, 45);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 45, 55);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.05*x+3.75", 55, 75);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 75, 101);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(30,45,55,75));
+//        temp = new SubFunc("0", -1, 30);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.06667*x-2", 30, 45);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 45, 55);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.05*x+3.75", 55, 75);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 75, 101);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //high
-        temp = new SubFunc("0", -1, 65);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.05*x-3.25", 65, 85);
-        subFuncs.add(temp);
-        temp = new SubFunc("1",85, 101);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 101, 3214124);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(65, 85,100,100));
+//        temp = new SubFunc("0", -1, 65);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.05*x-3.25", 65, 85);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1",85, 101);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 101, 3214124);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
 
@@ -607,51 +636,54 @@ public class Init {
 // Richness of Iron
 
         memberFuncs = new ArrayList<>();
-        subFuncs = new ArrayList<>();
+//        subFuncs = new ArrayList<>();
 
          values = List.of("poor", "medium", "rich");
 
         //poor
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.6667*x+1", 0, 1.5);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 1.5, 125);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(0,0,1.5));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.6667*x+1", 0, 1.5);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 1.5, 125);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //medium
-        temp = new SubFunc("0", -1, 0.75);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.8*x-0.6", 0.75, 2);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 2, 5);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.5*x+3.5", 5, 7);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 7, 125);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0.75,2,5,7));
+//        temp = new SubFunc("0", -1, 0.75);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.8*x-0.6", 0.75, 2);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 2, 5);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.5*x+3.5", 5, 7);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 7, 125);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //rich
-        temp = new SubFunc("0", -1, 6);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.3333*x-2", 6, 9);
-        subFuncs.add(temp);
-        temp = new SubFunc("1",9, 125);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 125, 3214124);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(6,9,10,10));
+//        temp = new SubFunc("0", -1, 6);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.3333*x-2", 6, 9);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1",9, 125);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 125, 3214124);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
 
@@ -664,84 +696,89 @@ public class Init {
 // Calcium Content
 
         memberFuncs = new ArrayList<>();
-        subFuncs = new ArrayList<>();
+//        subFuncs = new ArrayList<>();
 
          values = List.of("low", "low-mid", "mid", "high-mid", "high");
 
         //low
-        temp = new SubFunc("0", -1, 0);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.2 * x", 0, 5);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 5, 10);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.2 * x", 10, 15);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 15, 7365);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(0,5,10,15));
+//        temp = new SubFunc("0", -1, 0);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.2 * x", 0, 5);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 5, 10);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.2 * x", 10, 15);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 15, 7365);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //low-mid
-        temp = new SubFunc("0", -1, 12);
-        subFuncs.add(temp); 
-        temp = new SubFunc("0.043*x-0.522", 12 , 35);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 35, 40);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.06667*x+3.6667", 40, 55);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 55, 7365);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(12,35,40,55));
+//        temp = new SubFunc("0", -1, 12);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.043*x-0.522", 12 , 35);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 35, 40);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.06667*x+3.6667", 40, 55);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 55, 7365);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //mid
-        temp = new SubFunc("0", 0, 50);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.05 * x - 2.5", 50, 70);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.05 * x + 5", 70, 90);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 90, 7365);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(50,70,90));
+//        temp = new SubFunc("0", 0, 50);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.05 * x - 2.5", 50, 70);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.05 * x + 5", 70, 90);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 90, 7365);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         //high-mid
-        temp = new SubFunc("0", 0, 85);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.029*x -2.429", 85, 120);
-        subFuncs.add(temp);
-        temp = new SubFunc("-0.03333 * x + 5", 120, 150);
-        subFuncs.add(temp);
-        temp = new SubFunc("0",150, 7365);
-        subFuncs.add(temp);
-
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TriangleFuction(85,120,150));
+//        temp = new SubFunc("0", 0, 85);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.029*x -2.429", 85, 120);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("-0.03333 * x + 5", 120, 150);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0",150, 7365);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
         
         //high
-        temp = new SubFunc("0", 0, 140);
-        subFuncs.add(temp);
-        temp = new SubFunc("0.05 * x - 7", 140, 160);
-        subFuncs.add(temp);
-        temp = new SubFunc("1", 160, 7365);
-        subFuncs.add(temp);
-        temp = new SubFunc("0", 7365, 7365);
-        subFuncs.add(temp);
-        
-        memberFunc = new MemberFunc(List.copyOf(subFuncs));
-        memberFuncs.add(memberFunc);
-        subFuncs.clear();
+        memberFuncs.add(new TrapezoidFuction(140,160,7364,7364));
+//        temp = new SubFunc("0", 0, 140);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0.05 * x - 7", 140, 160);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("1", 160, 7365);
+//        subFuncs.add(temp);
+//        temp = new SubFunc("0", 7365, 7365);
+//        subFuncs.add(temp);
+//
+//        memberFunc = new MemberFunc(List.copyOf(subFuncs));
+//        memberFuncs.add(memberFunc);
+//        subFuncs.clear();
 
 
 

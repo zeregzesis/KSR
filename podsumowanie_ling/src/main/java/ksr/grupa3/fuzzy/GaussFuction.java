@@ -22,12 +22,12 @@ public class GaussFuction implements MembershipFuction {
 
     @Override
     public double getBegin() {
-        return a;
+        return b-4*c;
     }
 
     @Override
     public double getEnd() {
-        return c;
+        return b+4*c;
     }
 
     @Override
