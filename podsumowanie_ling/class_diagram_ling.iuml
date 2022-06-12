@@ -4,75 +4,75 @@ title KSR_Ling_Class_diagram_ling
 
 
 class Summary{
-    - String summary
-    - List<Double> measures
-}
-/'
-interface LingSummary{
-    Summary getFirstFormSummary(List<FoodItem>)
-    Summary getSecondFormSummary(List<FoodItem>, FuzzySet)
-    getThirdFormSummary(List<FoodItem>, FuzzySet)
-    getFourthFormSummary(List<FoodItem>, FuzzySet)
+    - Quantifier quantifier
+    - List<Subjects> subjects
+    - Agregator qualifier
+    - Agregator summarizer
+    - SummaryType summaryType
+
+    - double T1(List<FoodItem>)
+    - double T2(List<FoodItem>)
+    - double T3(List<FoodItem>)
+    - double T4(List<FoodItem>)
+    - double T5(List<FoodItem>)
+    double optimalSummaryMetric(List<FoodItem>, List<Double>)
+    - double T6(List<FoodItem>)
+    - double T7(List<FoodItem>)
+    - double T8(List<FoodItem>)
+    - double T9(List<FoodItem>)
+    - double T10(List<FoodItem>)
+    - double T11(List<FoodItem>)
+    double ExtendedOptimalSummaryMetric(List<FoodItem>, List<Double>)
+    List<double> getStandardMeasures(List<FoodItem>)
+    String generateLinguisticSummary(List<FoodItem>)
+
 }
 
-
-class SingleSummary implements LingSummary{
-    - LingQuantifier lingQuantifier
-    - FuzzySet fuzzySet
-}
-
-class CompoundSummary{
-    - List<LingQuantifier> lingQuantifier
-    - FuzzySet fuzzySet
-    Summary getThirdFormSummary(FuzzySet secondSet)
-}
-'/
-class LingQuantifier{
+class Quantifier{
     - String name
-    - MemberFunc mamberFunc
+    - MemberFunc memberFunc
     - boolean isAbsolute
+    - boolean isForthForm
+
     double getValue(double)
 }
 
-class Summarizer{
-    - List<FuzzySet> fuzzySets
-    - List<Boolean> setAnd
-    - List<FuzzySet> divisors
-    - List<Boolean> divisorAnd
-    - LingQuantifier lingQuantifier
+class Agregator{
+    - List<FuzzySet> setList
+    - List<Boolean> andList
 
-    void addFuzzySet(FuzzySet, boolean)
-    void addDivisor(FuzzySet, boolean)
+    void addSet(FuzzySet, boolean)
+    double tNorm(double, double)
+    static double implication(double, double)
     double DoM(FoodItem, boolean)
     double cardinality(List<FoodItem>)
-    double divisorCardinality(List<FoodItem>)
-    List<FoodItem> summarizedSupport(List<FoodItem>)
-    int summarizedSupportCount(List<FoodItem>)
-    Summary constructSummary(List<FoodItem>)
 }
 
-class QualityMeasure{
-    - static double T1(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T2(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T3(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T4(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T5(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double optimalSummaryMetric(Summarizer, List<FoodItem>, List<Double>)
-    - static double T6(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T7(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T8(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T9(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double T10(Summarizer summarizer, List<FoodItem> foodItems)
-    - static double ExtendedOptimalSummaryMetric(Summarizer summarizer, List<FoodItem> foodItems, List<Double>)
-    List<double> getMeasures()
+class Subject{
+    - String toFind
+    - String name
+
+    boolean isPartOf(FoodItem)
+    List<FoodItem> filter(List<FoodItem>)
 }
 
+class SummaryBuilder{
+    static Summary buildSummary(Quantifier, List<Subject>, Agregator, Agregator, SummaryType)
+}
 
-Summarizer *-- Summary
-Summarizer ..> QualityMeasure
-Summarizer o-- LingQuantifier
-/'
-LingSummary o-- Summary
-SingleSummary o-- LingQuantifier
-CompoundSummary o-- LingQuantifier
-'/
+enum SummaryType {
+    SINGLE_SUBJECT(0),
+    FIRST_FORM(1),
+    SECOND_FORM(2),
+    THIRD_FORM(3),
+    FOURTH_FORM(4)
+    int value;
+
+    SummaryType(int value)
+}
+
+Summary o-u- SummaryType
+Summary o-l- Quantifier
+Summary o-- Subject
+Summary o-r- Agregator
+Summary .d.> SummaryBuilder

@@ -10,12 +10,12 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LingVariable implements Serializable {
+public class oldVariable implements Serializable {
     
     private String name;
     private transient Field foodProperty;
     private List<String> values;
-    private List<MemberFunc> MemberFuncList;
+    private List<MembershipFuction> MemberFuncList;
 
     public double getFuncValue(String value, double x) {
         try{
@@ -34,12 +34,12 @@ public class LingVariable implements Serializable {
 
     }
 
-    public MemberFunc getMemberFunc(String value){
+    public MembershipFuction getMemberFunc(String value){
 
         return MemberFuncList.get(values.indexOf(value));
 
     }
-
+    /*
     public SubFunc getSubFunc(String value, double x){
 
         List<SubFunc> temp = MemberFuncList.get(values.indexOf(value)).getSubFuncs();
@@ -53,7 +53,7 @@ public class LingVariable implements Serializable {
 
         return null;
 
-    }
+    }*/
 
     private void writeObject(java.io.ObjectOutputStream stream)
             throws IOException {
@@ -67,7 +67,7 @@ public class LingVariable implements Serializable {
             throws IOException, ClassNotFoundException {
         name = (String) stream.readObject();
         values = (List<String>) stream.readObject();
-        MemberFuncList = (List<MemberFunc>) stream.readObject();
+        MemberFuncList = (List<MembershipFuction>) stream.readObject();
         try {
             foodProperty = FoodItem.class.getDeclaredField((String) stream.readObject());
         } catch (NoSuchFieldException | SecurityException e) {

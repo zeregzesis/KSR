@@ -31,4 +31,4 @@ klasyfikacja/target/
 data.csv
 eksperymenty.txt
 podsumowanie_ling/target/
-podsumowanie_ling/src/main/java/ksr/grupa3/dataLayer/Init.java
+#podsumowanie_ling/src/main/java/ksr/grupa3/dataLayer/Init.java

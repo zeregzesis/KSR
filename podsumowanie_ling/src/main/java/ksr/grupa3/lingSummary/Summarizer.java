@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.fuzzy.oldSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,11 +17,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Summarizer {
+    /*
 
-    private List<FuzzySet> fuzzySets = new ArrayList<>();
+    private List<oldSet> fuzzySets = new ArrayList<>();
     private List<Boolean> setAnd = new ArrayList<>();
 
-    private List<FuzzySet> divisors = new ArrayList<>();
+    private List<oldSet> divisors = new ArrayList<>();
     private List<Boolean> divisorAnd = new ArrayList<>();
 
     private List<Qualifier> qualifiers;
@@ -34,14 +35,14 @@ public class Summarizer {
 
     }
 
-    public void addFuzzySet(FuzzySet fuzzySet, boolean and) {
+    public void addFuzzySet(oldSet fuzzySet, boolean and) {
 
         fuzzySets.add(fuzzySet);
         setAnd.add(and);
 
     }
 
-    public void addDivisor(FuzzySet fuzzySet, boolean and) {
+    public void addDivisor(oldSet fuzzySet, boolean and) {
 
         divisors.add(fuzzySet);
         if (divisors.size() > 1)
@@ -183,5 +184,5 @@ public class Summarizer {
         return new Summary(summary, temp);
 
     }
-
+*/
 }

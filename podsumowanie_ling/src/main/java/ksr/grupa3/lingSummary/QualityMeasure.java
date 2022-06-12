@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.fuzzy.oldSet;
 import ksr.grupa3.fuzzy.SubFunc;
 
 public class QualityMeasure {
 
     
-
+    /*
     public static double T1(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double card = summarizer.cardinality(foodItems);
@@ -29,8 +29,8 @@ public class QualityMeasure {
 
         double ret = 1.0;
 
-        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
-            ret *= ( (double) fuzzySet.supportCount(foodItems) / foodItems.size());
+        for (oldSet fuzzySet : summarizer.getFuzzySets()) {
+            ret *= ( (double) fuzzySet.height(foodItems) / foodItems.size());
         }
 
         ret = 1 - Math.pow(ret, 1/summarizer.getFuzzySets().size());
@@ -61,7 +61,7 @@ public class QualityMeasure {
     public static double T4(Summarizer summarizer, List<FoodItem> foodItems){
 
         double agregate = 1;
-        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
+        for (oldSet fuzzySet : summarizer.getFuzzySets()) {
 
             double r = 0;
             for (FoodItem foodItem : foodItems) {
@@ -123,7 +123,7 @@ public class QualityMeasure {
     public static double T8(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double agregate = 1;
-        for (FuzzySet fuzzySet : summarizer.getFuzzySets()) {
+        for (oldSet fuzzySet : summarizer.getFuzzySets()) {
             agregate *= ((double) (fuzzySet.cardinality(foodItems) / foodItems.size()));
         }
 
@@ -134,8 +134,8 @@ public class QualityMeasure {
     public static double T9(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double agregate = 1;
-        for (FuzzySet divisor : summarizer.getDivisors()) {
-            agregate *= ((double) divisor.supportCount(foodItems) / foodItems.size());
+        for (oldSet divisor : summarizer.getDivisors()) {
+            agregate *= ((double) divisor.height(foodItems) / foodItems.size());
         }
 
         return 1 - Math.pow(agregate, 1.0 / summarizer.getDivisors().size());
@@ -145,7 +145,7 @@ public class QualityMeasure {
     public static double T10(Summarizer summarizer, List<FoodItem> foodItems) {
 
         double agregate = 1;
-        for (FuzzySet divisor : summarizer.getDivisors()) {
+        for (oldSet divisor : summarizer.getDivisors()) {
             agregate *= ((double) divisor.cardinality(foodItems) / foodItems.size());
         }
 
@@ -189,5 +189,5 @@ public class QualityMeasure {
         return measures;
 
     }
-    
+    */
 }

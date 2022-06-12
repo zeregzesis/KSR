@@ -12,11 +12,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class FuzzySet {
+public class oldSet {
 
-    private LingVariable variable;
+    private oldVariable variable;
     private String value;
-
+    /*
     public double DoM(FoodItem foodItem) {
 
         return variable.getFuncValue(this.value, foodItem.getProperty(variable.getFoodProperty()));
@@ -47,7 +47,7 @@ public class FuzzySet {
 
     }
 
-    public int supportCount(List<FoodItem> foodItems) {
+    public int height(List<FoodItem> foodItems) {
 
         return support(foodItems).size();
 
@@ -66,12 +66,72 @@ public class FuzzySet {
 
     }
 
-    public int alphaCutCount(List<FoodItem> foodItems, double alpha){
+    public int alphaCutHeight(List<FoodItem> foodItems, double alpha){
         return alphaCut(foodItems, alpha).size();
     }
 
+    public List<FoodItem> complement(List<FoodItem> foodItems) {
+
+        List<FoodItem> ret = new ArrayList<>();
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) == 0) {
+                ret.add(foodItem);
+            }
+        }
+
+        return ret;
+
+    }
+
+    public boolean isNormal(List<FoodItem> foodItems) {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) != 1) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean isEmpty(List<FoodItem> foodItems) {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) != 0) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    // mock żeby się nie czepiał, bo nie mam pojęcia jak to gówno zrobić
+    public boolean isConvex(List<FoodItem> foodItems) {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) < 0.5) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean isConcave(List<FoodItem> foodItems) {
+
+        if (isConvex(foodItems) || isEmpty(foodItems) || isNormal(foodItems)) {
+            return false;
+        }
+
+        return true;
+
+    }
+
     
-    public FuzzySet setSum(FuzzySet other) {
+    public oldSet setUnion(oldSet other) {
 
         String newVariableName = this.getVariable().getName() + " or " + other.getVariable().getName();
         String newValue = this.getValue() + " or " + other.getValue();
@@ -125,12 +185,12 @@ public class FuzzySet {
         List<String> newValues = new ArrayList<>(this.getVariable().getValues());
         newValues.add(newValue);
         
-        LingVariable newVariable = new LingVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
+        oldVariable newVariable = new oldVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
         
-        return new FuzzySet(newVariable, newValue);
+        return new oldSet(newVariable, newValue);
     }
 
-    public FuzzySet setIntersect(FuzzySet other) {
+    public oldSet setIntersect(oldSet other) {
 
         String newVariableName = this.getVariable().getName() + " and " + other.getVariable().getName();
         String newValue = this.getValue() + " and " + other.getValue();
@@ -206,11 +266,11 @@ public class FuzzySet {
             List<String> newValues = new ArrayList<>(this.getVariable().getValues());
             newValues.add(newValue);
 
-            LingVariable newVariable = new LingVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
+            oldVariable newVariable = new oldVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
             
-            return new FuzzySet(newVariable, newValue);
+            return new oldSet(newVariable, newValue);
     }
 
     
-
+*/
 }

@@ -2,7 +2,7 @@ package ksr.grupa3.ling;
 
 import java.io.Serializable;
 
-import ksr.grupa3.fuzzy.MemberFunc;
+import ksr.grupa3.fuzzy.MembershipFuction;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,12 +11,12 @@ import lombok.Setter;
 public class Quantifier implements Serializable {
 
     private String name;
-    private MemberFunc memberFunc;
+    private MembershipFuction memberFunc;
     private Boolean isAbsolute;
     private Boolean isForthForm = false;
 
     public double getValue(double x) {
-        return (memberFunc != null ? memberFunc.getValue(x) : -1);
+        return (memberFunc != null ? Math.min(1, memberFunc.getValue(x)) : -1);
     }
 
 }

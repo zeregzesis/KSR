@@ -22,6 +22,7 @@ class SubFunc{
     - float end
     - Experssion func
     - Argument arg
+
     double getValue(float)
     double getIntegral()
 
@@ -46,13 +47,19 @@ class LingVariable{
 class FuzzySet{
     - LingVariable variable
     - String value
+
     double DoM(FoodItem foodItem)
     double cardinality(list<FoodItem>)
     List<FoodItem> support(list<FoodItem>)
-    int supportCount(list<FoodItem>)
+    int height(list<FoodItem>)
     List<FoodItem> alphaCut(List<FoodItem>, float)
-    int alphaCutCount(List<FoodItem>, float)
-    FuzzySet setSum(FuzzySet)
+    int alphaCutHeight(List<FoodItem>, float)
+    List<FoodItem> complement(List<FoodItem>)
+    boolean isNormal(List<FoodItem>)
+    boolean isEmpty(List<FoodItem>)
+    boolean isConvex(List<FoodItem>)
+    boolean isConcave(List<FoodItem>)
+    FuzzySet setUnion(FuzzySet)
     FuzzySet setIntersect(FuzzySet)
 }
 

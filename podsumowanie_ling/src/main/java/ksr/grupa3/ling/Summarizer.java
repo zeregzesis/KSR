@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.fuzzy.newSet;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Summarizer implements Agregator, Serializable {
-    List<FuzzySet> summarizedSets = new ArrayList<>();
+public class Summarizer implements Serializable {
+    List<newSet> summarizedSets = new ArrayList<>();
     List<Boolean> summarizedAnd = new ArrayList<>();
 
-    public Summarizer(List<FuzzySet> summarizedSets, List<Boolean> summarizedAnd) {
+    public Summarizer(List<newSet> summarizedSets, List<Boolean> summarizedAnd) {
         if (summarizedSets.size() == 1 && summarizedAnd.size() > 0) {
             throw new IllegalArgumentException("One set qualifier cannot have any operations");
         }
@@ -27,7 +27,7 @@ public class Summarizer implements Agregator, Serializable {
         this.summarizedAnd = summarizedAnd;
     }
 
-    public void addSet(FuzzySet set, boolean and) {
+    public void addSet(newSet set, boolean and) {
         summarizedSets.add(set);
         summarizedAnd.add(and);
     }
@@ -39,7 +39,7 @@ public class Summarizer implements Agregator, Serializable {
 
     }
 
-    // implikacja Łukasiewicza
+    // implikacja Łukasiewicza (nie powinna chyba być tutaj, ale nie mam pomysłu gdzie ją dać żeby miało to sens)
     public static double implication(Double a, Double b) {
 
         return Math.min(1, 1-a+b);
