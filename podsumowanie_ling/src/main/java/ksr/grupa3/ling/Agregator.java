@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.newSet;
-import ksr.grupa3.fuzzy.newVariable;
+import ksr.grupa3.fuzzy.FuzzySet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,15 +14,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Agregator implements Serializable {
-    List<newSet> setList = new ArrayList<>();
+    List<FuzzySet> setList = new ArrayList<>();
     List<Boolean> andList = new ArrayList<>();
-    List<newVariable> variableList = new ArrayList<>();
+    List<Label> variableList = new ArrayList<>();
 
-    public Agregator(newSet qualifier) {
+    public Agregator(FuzzySet qualifier) {
         this.setList.add(qualifier);
     }
 
-    public Agregator(List<newSet> summarizedSets, List<Boolean> summarizedAnd, List<newVariable> summarizedVariables) {
+    public Agregator(List<FuzzySet> summarizedSets, List<Boolean> summarizedAnd, List<Label> summarizedVariables) {
         if (summarizedSets.size() == 1 && summarizedAnd.size() > 0) {
             throw new IllegalArgumentException("One set agregator cannot have any operations");
         }
@@ -40,7 +39,7 @@ public class Agregator implements Serializable {
         this.variableList = summarizedVariables;
     }
 
-    public void addSet(newSet set, boolean and) {
+    public void addSet(FuzzySet set, boolean and) {
         setList.add(set);
         andList.add(and);
     }
@@ -74,39 +73,25 @@ public class Agregator implements Serializable {
 
     }
 
-    public List<FoodItem> UoD() {
-        List<FoodItem> foodItems = new ArrayList<>();
-        for (newSet set : setList) {
-            foodItems.addAll(set.getFoodItems());
-        }
-        return foodItems.stream().distinct().collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-    }
-
     public double cardinality() {
-        
-        List<FoodItem> foodItems = UoD();
-
-        double cardinality = 0;
-        for (FoodItem foodItem : foodItems) {
-            cardinality += DoM(foodItem);
-        }
-
-        return cardinality;
+        return asSet().cardinality();
     }
 
-    public double cardinality(List<FoodItem> foodItems) {
-
-
-        double cardinality = 0;
-        for (FoodItem foodItem : foodItems) {
-            cardinality += DoM(foodItem);
-        }
-
-        return cardinality;
+    public double UoD() {
+        return asSet().getMembershipFuction().getUpperBound();
     }
 
-    public int size() {
-        return UoD().size();
+    // public int size() {
+    //     return UoD().size();
+    // }
+
+    public FuzzySet asSet() {
+        FuzzySet set = setList.get(0).copyOf();
+        for (int i = 1; i < setList.size(); i++) {
+            set = (andList.get(i - 1) ? set.setIntersect(setList.get(i).copyOf()) : set.setUnion(setList.get(i).copyOf()));
+        }
+
+        return set;
     }
 
     public String getVariableName(int index) {
@@ -115,6 +100,10 @@ public class Agregator implements Serializable {
 
     public String getVariableValue(int index) {
         return variableList.get(index).getValue();
+    }
+
+    public double size() {
+        return asSet().getFoodItems().size();
     }
 
 }

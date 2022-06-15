@@ -17,56 +17,78 @@ class FoodItem{
     double getProperty(Field)
 }
 
-class SubFunc{
-    - float start
-    - float end
-    - Experssion func
-    - Argument arg
-
-    double getValue(float)
-    double getIntegral()
-
-}
-
-class MemberFunc{
-    - List<subFunc> subFuncList
-    double getValue(double)
-}
-
-class LingVariable{
-    - String name
-    - Field foodProperty
-    - List<String> values
-    - List<MemberFunc> memberFuncList
-
-    double getFuncValue(String, double)
-    MemberFunc getMemberFunc(String)
-    SubFunc getSubFunc(String, double)
-}
-
 class FuzzySet{
-    - LingVariable variable
-    - String value
+    - List<FoodItem> foodItems
+    - List<Double> values
+    - MembershipFuction membershipFuction
 
-    double DoM(FoodItem foodItem)
-    double cardinality(list<FoodItem>)
-    List<FoodItem> support(list<FoodItem>)
-    int height(list<FoodItem>)
-    List<FoodItem> alphaCut(List<FoodItem>, float)
-    int alphaCutHeight(List<FoodItem>, float)
-    List<FoodItem> complement(List<FoodItem>)
-    boolean isNormal(List<FoodItem>)
-    boolean isEmpty(List<FoodItem>)
-    boolean isConvex(List<FoodItem>)
-    boolean isConcave(List<FoodItem>)
+    public FuzzySet(List<FoodItem>, MembershipFunction, Field)
+
+    double DoM()
+    double cardinality()
+    List<FoodItem> support()
+    int height()
+    List<FoodItem> alphaCut(float)
+    int alphaCutHeight(float)
+    List<FoodItem> complement()
+    boolean isNormal()
+    boolean isEmpty()
+    boolean isConvex()
+    boolean isConcave()
     FuzzySet setUnion(FuzzySet)
     FuzzySet setIntersect(FuzzySet)
 }
 
-MemberFunc *-- SubFunc
-FuzzySet --> FoodItem
-FuzzySet ..> LingVariable
-LingVariable *-- MemberFunc
+class GaussFuction{
+    - double a
+    - double b
+    - double c
+    - double upperBound
 
+    double getValue(double)
+    double getBegin()
+    double getEnd()
+    double getIntegral()
+    double getUpperBound()
+}
 
+interface MembershipFunction{
+    double getValue(double)
+    double getBegin()
+    double getEnd()
+    double getIntegral()
+    double getUpperBound()
+}
 
+class TrapezoidFuction{
+    - double a
+    - double b
+    - double c
+    - double d
+    - double upperBound
+
+    double getValue(double)
+    double getBegin()
+    double getEnd()
+    double getIntegral()
+    double getUpperBound()
+}
+
+class TriangleFuction{
+    - double a
+    - double b
+    - double c
+    - double upperBound
+
+    double getValue(double)
+    double getBegin()
+    double getEnd()
+    double getIntegral()
+    double getUpperBound()
+}
+
+FuzzySet ..> FoodItem
+FuzzySet ..> MembershipFunction
+TrapezoidFuction ..|> MembershipFunction
+GaussFuction ..|> MembershipFunction
+TriangleFuction ..|> MembershipFunction

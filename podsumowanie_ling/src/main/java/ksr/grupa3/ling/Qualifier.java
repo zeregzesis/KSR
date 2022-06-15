@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.newSet;
+import ksr.grupa3.fuzzy.FuzzySet;
 import ksr.grupa3.fuzzy.oldSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,14 +15,14 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class Qualifier implements Serializable {
-    List<newSet> qualifierSets = new ArrayList<>();
+    List<FuzzySet> qualifierSets = new ArrayList<>();
     List<Boolean> qualifierAnd = new ArrayList<>();
 
-    public Qualifier(newSet qualifier) {
+    public Qualifier(FuzzySet qualifier) {
         this.qualifierSets.add(qualifier);
     }
 
-    public Qualifier(List<newSet> qualifierSets, List<Boolean> qualifierAnd) {
+    public Qualifier(List<FuzzySet> qualifierSets, List<Boolean> qualifierAnd) {
         if (qualifierSets.size() == 1 && qualifierAnd.size() > 0) {
             throw new IllegalArgumentException("One set qualifier cannot have any operations");
         }
@@ -34,7 +34,7 @@ public class Qualifier implements Serializable {
         this.qualifierAnd = qualifierAnd;
     }
 
-    public void addSet(newSet set, boolean and) {
+    public void addSet(FuzzySet set, boolean and) {
         qualifierSets.add(set);
         qualifierAnd.add(and);
     }

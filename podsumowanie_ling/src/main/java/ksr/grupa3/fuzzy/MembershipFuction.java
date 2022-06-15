@@ -5,8 +5,10 @@ import java.io.Serializable;
 public interface MembershipFuction extends Serializable {
 
     public double getValue(double x);
+    public String asFunction();
     public double getBegin();
     public double getEnd();
+    public double getUpperBound();
     public double getIntegral();
     
 }

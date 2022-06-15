@@ -2,20 +2,17 @@ package ksr.grupa3.fuzzy;
 
 import org.mariuszgromada.math.mxparser.Argument;
 import org.mariuszgromada.math.mxparser.Expression;
-
+import lombok.AllArgsConstructor;
+import lombok.Data;
+@Data
+@AllArgsConstructor
 public class TrapezoidFuction implements MembershipFuction {
 
     private double a;
     private double b;
     private double c;
     private double d;
-
-    public TrapezoidFuction(double a, double b, double c, double d) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
-        this.d = d;
-    }
+    private double upperBound;
 
     @Override
     public double getValue(double x) {
@@ -33,6 +30,11 @@ public class TrapezoidFuction implements MembershipFuction {
     }
 
     @Override
+    public String asFunction() {
+        return "if(x<=" + a + ", 0, if(x<" + b + ", (1/(" + b + "- " + a + "))*(x - " + a + "), if(x<" + c + ", 1, if(x<" + d + ", 1+(-1/(" + d + "-" + c + "))*(x - " + c + "), 0))))";
+    }
+
+    @Override
     public double getBegin() {
         return a;
     }
@@ -44,10 +46,25 @@ public class TrapezoidFuction implements MembershipFuction {
 
     @Override
     public double getIntegral() {
-        String newExp = "int(if (x <= " + a + ", 0, if (x > " + a + " && x < " + b + ", (x - " + a + "), if (x >= " + b + " && x < " + c + ", 1, if (x > " + c + " && x < " + d + ", 1 + (-1/(x - " + c + "))*(x - " + c + "), 0))))";
-        Expression newFunc = new Expression(newExp, new Argument("x"));
+        double integral = 0;
+        String newExp;
+        Expression newFunc;
+        Argument arg = new Argument("x");
 
-        return newFunc.calculate();
+        if (a != b) {
+            newExp = "int((1/(" + Double.toString(b) + " - " + Double.toString(a) + "))*(x - " + Double.toString(a) + "), x, " + Double.toString(a) + ", " + Double.toString(b) + ")";
+            newFunc = new Expression(newExp, arg);
+            integral += newFunc.calculate();
+        }
+
+        if (c != d) {
+            newExp = "int(1+(-1/(" + Double.toString(d) + " - " + Double.toString(c) + "))*(x - " + Double.toString(c) + "), x, " + Double.toString(c) + ", " + Double.toString(d) + ")";
+            newFunc = new Expression(newExp, arg);
+            integral += newFunc.calculate();
+        }
+        
+
+        return integral + (c - b);
     }
     
 

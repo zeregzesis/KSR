@@ -12,15 +12,14 @@ import ksr.grupa3.dataLayer.Init;
 import ksr.grupa3.dataLayer.Serializer;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.newSet;
-import ksr.grupa3.fuzzy.newVariable;
-import ksr.grupa3.fuzzy.oldVariable;
-
+import ksr.grupa3.fuzzy.FuzzySet;
 import ksr.grupa3.ling.Quantifier;
 import ksr.grupa3.ling.Agregator;
 import ksr.grupa3.ling.Summary;
 import ksr.grupa3.ling.SummaryBuilder;
 import ksr.grupa3.ling.SummaryType;
+import ksr.grupa3.ling.Variable;
+import ksr.grupa3.ling.Label;
 import ksr.grupa3.ling.Subject;
 
 public class App {
@@ -38,9 +37,9 @@ public class App {
         }
 
         listOfObjects = Serializer.deserialize("variables.ser");
-        List<oldVariable> variables = new ArrayList<>();
+        List<Variable> variables = new ArrayList<>();
         for (Object object : listOfObjects) {
-            variables.add((oldVariable) object);
+            variables.add((Variable) object);
         }
 
         listOfObjects = Serializer.deserialize("subjects.ser");
@@ -62,39 +61,39 @@ public class App {
 
         Quantifier forthFormQuantifier = quantifiers.remove(quantifiers.size() - 1);
         
-        for (oldVariable variable : variables) {
+        for (Variable variable : variables) {
 
             for (String value : variable.getValues()) {
 
-                newSet set = new newSet(foodItems, variable, value);
-                newVariable var = new newVariable(variable.getName(), variable.getFoodProperty(), value);
-                Agregator summarizer = new Agregator(new ArrayList<newSet>(Arrays.asList(set)), new ArrayList<>(), new ArrayList<>(Arrays.asList(var)));
+                FuzzySet set = new FuzzySet(foodItems, variable, value);
+                Label var = new Label(variable.getName(), variable.getFoodProperty(), value);
+                Agregator summarizer = new Agregator(new ArrayList<FuzzySet>(Arrays.asList(set)), new ArrayList<>(), new ArrayList<>(Arrays.asList(var)));
 
                 for (Quantifier quantifier : quantifiers) {
 
-                    Summary summary = SummaryBuilder.buildSummary(quantifier, List.of(subjects.get(0)), new Agregator(), summarizer, SummaryType.SINGLE_SUBJECT);
+                    Summary summary = SummaryBuilder.buildSummary(quantifier, subjects.get(0), null, new Agregator(), summarizer, SummaryType.SINGLE_SUBJECT);
 
                     firstForm.add(summary);
 
                     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    oldVariable qualVar = variables.get(rand.nextInt(variables.size()));
+                    Variable qualVar = variables.get(rand.nextInt(variables.size()));
                     
                     while (qualVar == variable) {
                         qualVar = variables.get(rand.nextInt(variables.size()));
                     }
-                    newVariable newQualVar = new newVariable(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
-                    newSet qualSet = new newSet(foodItems, qualVar, newQualVar.getValue());
-                    Agregator qualifier = new Agregator(new ArrayList<newSet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
+                    Label newQualVar = new Label(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
+                    FuzzySet qualSet = new FuzzySet(foodItems, qualVar, newQualVar.getValue());
+                    Agregator qualifier = new Agregator(new ArrayList<FuzzySet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
 
-                    summary = SummaryBuilder.buildSummary(quantifier, List.of(subjects.get(0)), qualifier, summarizer, SummaryType.SINGLE_SUBJECT);
+                    summary = SummaryBuilder.buildSummary(quantifier, subjects.get(0), null, qualifier, summarizer, SummaryType.SINGLE_SUBJECT);
 
                     secondForm.add(summary);
                     
 
                     /////////////////////////////////////////////////////////////////////////////////////////////////
 
-                    summary = SummaryBuilder.buildSummary(quantifier, List.of(subjects.get(1), subjects.get(2)), new Agregator(), summarizer, SummaryType.FIRST_FORM);
+                    summary = SummaryBuilder.buildSummary(quantifier, subjects.get(1), subjects.get(2), new Agregator(), summarizer, SummaryType.FIRST_FORM);
 
                     compFirstForm.add(summary);
 
@@ -104,11 +103,11 @@ public class App {
                     while (qualVar == variable) {
                         qualVar = variables.get(rand.nextInt(variables.size()));
                     }
-                    newQualVar = new newVariable(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
-                    qualSet = new newSet(foodItems, qualVar, newQualVar.getValue());
-                    qualifier = new Agregator(new ArrayList<newSet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
+                    newQualVar = new Label(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
+                    qualSet = new FuzzySet(foodItems, qualVar, newQualVar.getValue());
+                    qualifier = new Agregator(new ArrayList<FuzzySet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
 
-                    summary = SummaryBuilder.buildSummary(quantifier, List.of(subjects.get(1), subjects.get(2)), qualifier, summarizer, SummaryType.SECOND_FORM);
+                    summary = SummaryBuilder.buildSummary(quantifier, subjects.get(1), subjects.get(2), qualifier, summarizer, SummaryType.SECOND_FORM);
 
                     compSecondForm.add(summary);
 
@@ -118,18 +117,18 @@ public class App {
                     while (qualVar == variable) {
                         qualVar = variables.get(rand.nextInt(variables.size()));
                     }
-                    newQualVar = new newVariable(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
-                    qualSet = new newSet(foodItems, qualVar, newQualVar.getValue());
-                    qualifier = new Agregator(new ArrayList<newSet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
+                    newQualVar = new Label(qualVar.getName(), qualVar.getFoodProperty(), qualVar.getValues().get(rand.nextInt(qualVar.getValues().size())));
+                    qualSet = new FuzzySet(foodItems, qualVar, newQualVar.getValue());
+                    qualifier = new Agregator(new ArrayList<FuzzySet>(Arrays.asList(qualSet)), new ArrayList<>(), new ArrayList<>(Arrays.asList(newQualVar)));
 
-                    summary = SummaryBuilder.buildSummary(quantifier, List.of(subjects.get(1), subjects.get(2)), qualifier, summarizer, SummaryType.THIRD_FORM);
+                    summary = SummaryBuilder.buildSummary(quantifier, subjects.get(1), subjects.get(2), qualifier, summarizer, SummaryType.THIRD_FORM);
 
                     compThirdForm.add(summary);
                 }
 
                 
 
-                Summary summary = SummaryBuilder.buildSummary(forthFormQuantifier, List.of(subjects.get(1), subjects.get(2)), new Agregator(), summarizer, SummaryType.FOURTH_FORM);
+                Summary summary = SummaryBuilder.buildSummary(forthFormQuantifier, subjects.get(1), subjects.get(2), new Agregator(), summarizer, SummaryType.FOURTH_FORM);
 
                 compForthForm.add(summary);
 
@@ -163,38 +162,55 @@ public class App {
         
 
         //compForthForm.sort(Comparator.comparingDouble(s -> s.getCompoundMeasure().get(0)));
-        
+        long start, end;
 
-        
+        start = System.currentTimeMillis();
         for (Summary s : firstForm) {
             first.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("first measures done");
+        end = System.currentTimeMillis();
+        System.out.println("first measures done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         for (Summary s : secondForm) {
             second.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("second measures done");
+        end = System.currentTimeMillis();
+        System.out.println("second measures done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         for (Summary s : compFirstForm) {
             compFirst.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("compound first measures done");
+        end = System.currentTimeMillis();
+        System.out.println("compound first measures done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         for (Summary s : compSecondForm) {
             compSecond.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("compound second measures done");
+        end = System.currentTimeMillis();
+        System.out.println("compound second measures done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         for (Summary s : compThirdForm) {
             compThird.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("compound third measures done");
+        end = System.currentTimeMillis();
+        System.out.println("compound third measures done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         for (Summary s : compForthForm) {
             compForth.write(s.generateLinguisticSummary() + "\n");
+            //System.out.println("Next!");
         }
-        System.out.println("compound forth measures done");
+        end = System.currentTimeMillis();
+        System.out.println("compound forth measures done in " + (end - start) + " ms");
 
         first.close();
         second.close();

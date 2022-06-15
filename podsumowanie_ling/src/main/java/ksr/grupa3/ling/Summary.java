@@ -7,26 +7,25 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.newSet;
+import ksr.grupa3.fuzzy.FuzzySet;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class Summary {
     private Quantifier quantifier;
-    private List<Subject> subjects;
+    private Subject subject;
+    private Subject secondSubject;
     private Agregator qualifier;
     private Agregator summarizer;
     private SummaryType summaryType;
 
     public double T1() {
 
-        double card = summarizer.cardinality();
-
         if (qualifier.getSetList().size() == 0) 
-            return quantifier.getValue(card / (quantifier.getIsAbsolute() ? 1 :  summarizer.size()));
+            return quantifier.getValue(summarizer.cardinality() / summarizer.size());
 
-        double qualCard = qualifier.cardinality();
-        return quantifier.getValue(Math.min(card, qualCard) / qualCard);
+        FuzzySet union = summarizer.asSet().setIntersect(qualifier.asSet());
+        return quantifier.getValue(union.cardinality() / union.getFoodItems().size());
 
     }
 
@@ -34,8 +33,8 @@ public class Summary {
 
         double ret = 1.0;
 
-        for (newSet fuzzySet : summarizer.getSetList()) {
-            ret *= ( (double) fuzzySet.height() / fuzzySet.getFoodItems().size());
+        for (FuzzySet fuzzySet : summarizer.getSetList()) {
+            ret *= ( (fuzzySet.getMembershipFuction().getEnd() - fuzzySet.getMembershipFuction().getBegin()) / fuzzySet.getMembershipFuction().getUpperBound());
         }
 
         ret = 1 - Math.pow(ret, 1/summarizer.getSetList().size());
@@ -48,10 +47,13 @@ public class Summary {
         
         int topSum = 0;
         int bottomSum = 0;
-        
-        for (FoodItem foodItem : summarizer.UoD()) {
 
-            int temp = (qualifier.getSetList().size() == 0 || qualifier.DoM(foodItem) > 0) ? 1 : 0;
+        if (qualifier.getSetList().size() == 0)
+            return summarizer.asSet().support().size() / summarizer.asSet().getFoodItems().size();
+        
+        for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
+
+            int temp = (qualifier.DoM(foodItem) > 0) ? 1 : 0;
 
             topSum += (summarizer.DoM(foodItem) > 0 && temp == 1) ? 1 : 0;
             bottomSum += temp;
@@ -66,14 +68,14 @@ public class Summary {
     public double T4(){
 
         double agregate = 1;
-        for (newSet fuzzySet : summarizer.getSetList()) {
+        for (FuzzySet fuzzySet : summarizer.getSetList()) {
 
             double r = 0;
-            for (FoodItem foodItem : summarizer.UoD()) {
+            for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
                 r += (fuzzySet.DoM(foodItem) > 0 ? 1 : 0);
             }
 
-            r /= summarizer.size();
+            r /= summarizer.asSet().getFoodItems().size();
             agregate *= r;
 
         }
@@ -107,29 +109,22 @@ public class Summary {
         double start = quantifier.getMemberFunc().getBegin();
         double end = quantifier.getMemberFunc().getEnd();
 
-        return 1 - Math.abs(end - start) / (quantifier.getIsAbsolute() ? summarizer.size() : 1);
+        return 1 - Math.abs(end - start) / quantifier.getMemberFunc().getUpperBound();
 
     }
 
     public double T7() {
 
-        // double intSum = 0;
-
-        // List<SubFunc> temp = quantifier.getMemberFunc().getSubFuncs();
-
-        // for (int i = 1; i < temp.size() - 1; i++) {
-        //     intSum += temp.get(i).getIntegral();
-        // }
-
-        return 1 - (double) (Math.abs(quantifier.getMemberFunc().getIntegral()) / (double) (quantifier.getIsAbsolute() ? summarizer.size() : 1));
+        return 1 - quantifier.getMemberFunc().getIntegral() / quantifier.getMemberFunc().getUpperBound();
 
     }
 
     public double T8() {
 
         double agregate = 1;
-        for (newSet fuzzySet : summarizer.getSetList()) {
-            agregate *= ((double) (fuzzySet.cardinality() / summarizer.size()));
+        for (FuzzySet fuzzySet : summarizer.getSetList()) {
+            agregate *= fuzzySet.getMembershipFuction().getIntegral() / fuzzySet.getMembershipFuction().getUpperBound();
+            //agregate *= ((double) (fuzzySet.cardinality() / summarizer.size()));
         }
 
         return 1 - Math.pow(agregate, 1.0 / summarizer.getSetList().size());
@@ -139,11 +134,12 @@ public class Summary {
     public double T9() {
 
         if (qualifier.getSetList().size() == 0)
-            return -1;
+            return 0;
 
         double agregate = 1;
-        for (newSet qual : qualifier.getSetList()) {
-            agregate *= ((double) qual.height() / qualifier.size());
+        for (FuzzySet qual : qualifier.getSetList()) {
+            agregate *= qual.getMembershipFuction().getEnd() - qual.getMembershipFuction().getBegin() / qual.getMembershipFuction().getUpperBound();
+            //agregate *= ((double) qual.getMembershipFuction().getEnd() - qual.getMembershipFuction().getBegin() / qual.getMembershipFuction().getUpperBound());
         }
 
         return 1 - Math.pow(agregate, 1.0 / qualifier.getSetList().size());
@@ -153,11 +149,12 @@ public class Summary {
     public double T10() {
 
         if (qualifier.getSetList().size() == 0)
-            return -1;
+            return 0;
 
         double agregate = 1;
-        for (newSet divisor : qualifier.getSetList()) {
-            agregate *= ((double) divisor.cardinality() / qualifier.size());
+        for (FuzzySet divisor : qualifier.getSetList()) {
+            agregate *= divisor.getMembershipFuction().getIntegral() / divisor.getMembershipFuction().getUpperBound();
+            //agregate *= ((double) divisor.cardinality() / qualifier.size());
         }
 
         return 1 - Math.pow(agregate, 1.0 / qualifier.getSetList().size());
@@ -167,13 +164,13 @@ public class Summary {
     public double T11(){
 
         if (qualifier.getSetList().size() == 0)
-            return 0;
+            return 1;
 
         return 2 * Math.pow(0.5, qualifier.getSetList().size());
 
     }
 
-    public double ExtendedOptimalSummaryMetric(List<FoodItem> foodItems, List<Double> weights) {
+    public double ExtendedOptimalSummaryMetric(List<Double> weights) {
 
         if (weights.size() == 11 && Math.abs(1.0 - weights.stream().collect(Collectors.summingDouble(Double::doubleValue))) < 0.0001d) {
             return T1() * weights.get(0) +
@@ -193,8 +190,7 @@ public class Summary {
 
     }
 
-    // to będzie do wywalenia/kompletnego przerobienia bo każda funkcja będzie miała inne parametry(chyba)
-    public List<Double> getStandardMeasures() {
+    public List<Double> getStandardMeasures(List<Double> weights) {
 
         List<Double> ret = new ArrayList<>();
 
@@ -220,7 +216,37 @@ public class Summary {
 
         ret.add((double) BigDecimal.valueOf(T11()).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-        //System.out.println("Measures done");
+        if (weights.size() == 5) {
+            ret.add((double) BigDecimal.valueOf(
+                ret.get(0) * weights.get(0) +
+                ret.get(1) * weights.get(1) +
+                ret.get(2) * weights.get(2) +
+                ret.get(3) * weights.get(3) +
+                ret.get(4) * weights.get(4)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        }
+
+        if (weights.size() == 11) {
+
+            ret.add((double) BigDecimal.valueOf(
+                ret.get(0) * 0.2 +
+                ret.get(1) * 0.2 +
+                ret.get(2) * 0.2 +
+                ret.get(3) * 0.2 +
+                ret.get(4) * 0.2).setScale(2, RoundingMode.HALF_UP).doubleValue());
+
+            ret.add((double) BigDecimal.valueOf(
+                ret.get(0) * weights.get(0) +
+                ret.get(1) * weights.get(1) +
+                ret.get(2) * weights.get(2) +
+                ret.get(3) * weights.get(3) +
+                ret.get(4) * weights.get(4) +
+                ret.get(5) * weights.get(5) +
+                ret.get(6) * weights.get(6) +
+                ret.get(7) * weights.get(7) +
+                ret.get(8) * weights.get(8) +
+                ret.get(9) * weights.get(9) +
+                ret.get(10) * weights.get(10)).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        }
         
         return ret;
 
@@ -228,36 +254,38 @@ public class Summary {
 
     public List<Double> getCompoundMeasure() {
 
-        List<FoodItem> firstSubjectItems = subjects.get(0).filter(summarizer.UoD());
-        List<FoodItem> secondSubjectItems = subjects.get(1).filter(summarizer.UoD());
+        List<FoodItem> items = summarizer.asSet().getFoodItems();
+
+        List<FoodItem> firstSubjectItems = subject.filter(items);
+        List<FoodItem> secondSubjectItems = secondSubject.filter(items);
 
         switch(summaryType) {
             case FIRST_FORM:
-                double top = (1.0 / firstSubjectItems.size()) * summarizer.cardinality(firstSubjectItems);
-                double bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.cardinality(secondSubjectItems)));
+                double top = (1.0 / firstSubjectItems.size()) * summarizer.cardinality();
+                double bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.cardinality()));
                 double T = quantifier.getValue(top / bottom);
                 T = (double) BigDecimal.valueOf(T).setScale(2, RoundingMode.HALF_UP).doubleValue();
                 return List.of(T);
             case SECOND_FORM:
-                double combCard = 0;
-                for (FoodItem foodItem : secondSubjectItems) {
-                    combCard += Math.min(summarizer.DoM(foodItem), qualifier.DoM(foodItem));
-                }
+                // double combCard = 0;
+                // for (FoodItem foodItem : secondSubjectItems) {
+                //     combCard += Math.min(summarizer.DoM(foodItem), qualifier.DoM(foodItem));
+                // }
 
-                top = (1.0 / firstSubjectItems.size()) * summarizer.cardinality(firstSubjectItems);
-                bottom =  (top + ((1.0 / secondSubjectItems.size()) * combCard));
+                top = (1.0 / firstSubjectItems.size()) * summarizer.cardinality();
+                bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.asSet().setIntersect(qualifier.asSet()).cardinality()));
 
                 T = quantifier.getValue(top / bottom);
                 T = (double) BigDecimal.valueOf(T).setScale(2, RoundingMode.HALF_UP).doubleValue();
                 return List.of(T);
             case THIRD_FORM:
-                combCard = 0;
-                for (FoodItem foodItem : firstSubjectItems) {
-                    combCard += Math.min(summarizer.DoM(foodItem), qualifier.DoM(foodItem));
-                }
+                // combCard = 0;
+                // for (FoodItem foodItem : firstSubjectItems) {
+                //     combCard += Math.min(summarizer.DoM(foodItem), qualifier.DoM(foodItem));
+                // }
 
-                top = (1.0 / firstSubjectItems.size()) * combCard;
-                bottom =  (top + ((1.0 / secondSubjectItems.size()) * (1.0 / secondSubjectItems.size()) * summarizer.cardinality(secondSubjectItems)));
+                top = (1.0 / firstSubjectItems.size()) * summarizer.asSet().setIntersect(qualifier.asSet()).cardinality();
+                bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.cardinality()));
 
                 T = quantifier.getValue(top / bottom);
                 T = (double) BigDecimal.valueOf(T).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -266,7 +294,7 @@ public class Summary {
             // nie mam pojęcia czy dobrze, trzeba będzie przetestować
             case FOURTH_FORM:
                 double incl = 0;
-                for (FoodItem foodItem : summarizer.UoD()) {
+                for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
                     incl += Summarizer.implication( (secondSubjectItems.indexOf(foodItem) != -1 ? summarizer.DoM(foodItem) : 0), (firstSubjectItems.indexOf(foodItem) != -1 ? summarizer.DoM(foodItem) : 0));
                 }
                 incl /= (double) (secondSubjectItems.size() + firstSubjectItems.size());
@@ -280,7 +308,7 @@ public class Summary {
     public String generateLinguisticSummary() {
 
         String quant = quantifier.getName();
-        List<Double> measures = (summaryType == SummaryType.SINGLE_SUBJECT ? getStandardMeasures() : getCompoundMeasure());
+        List<Double> measures = (summaryType == SummaryType.SINGLE_SUBJECT ? getStandardMeasures(List.of(1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0, 1.0/11.0)) : getCompoundMeasure());
 
         //List<FoodItem> firstSubjectItems = subjects.get(0).filter(List.copyOf(foodItems));
         //List<FoodItem> secondSubjectItems = (summaryType != SummaryType.SINGLE_SUBJECT ? subjects.get(1).filter(List.copyOf(foodItems)) : new ArrayList<>());
@@ -308,49 +336,13 @@ public class Summary {
         }
         summ += ".";
 
-        String subj = " of " + subjects.get(0).getName();
-        String secondSubj = (summaryType != SummaryType.SINGLE_SUBJECT ? subjects.get(1).getName() : "");
+        String subj = " of " + subject.getName();
+        String secondSubj = (summaryType != SummaryType.SINGLE_SUBJECT ? secondSubject.getName() : "");
         String connector = (summaryType == SummaryType.SINGLE_SUBJECT ? "" : (summaryType == SummaryType.FOURTH_FORM ? " than " : ", comparing to "));
         String summary = "";
 
         summary = quant + subj + (summaryType == SummaryType.SINGLE_SUBJECT || summaryType == SummaryType.THIRD_FORM ? " " + qual : connector + secondSubj) + ( summaryType == SummaryType.SECOND_FORM ? " " + qual : (summaryType == SummaryType.THIRD_FORM ? connector + secondSubj : "")) + " " + summ;
 
-        /* 
-        switch(summaryType) {
-
-            case SINGLE_SUBJECT:
-                summary = quant + subj + " " + qual + 
-                " " + summ;
-                break;
-
-            case FIRST_FORM:
-                summary = quant + subj + connector + secondSubj + 
-                " " + summ;
-                break;
-
-            case SECOND_FORM:
-                summary = quant + subj + connector + secondSubj + 
-                " " + qual + " " + summ;
-                break;
-
-            case THIRD_FORM:
-
-                summary = quant + subj + " " + qual + 
-                connector + secondSubj + " " + summ;
-                break;
-
-            case FOURTH_FORM:
-                
-                summary = quant + subj + connector + secondSubj + 
-                " " + summ;
-                break;
-
-            default:
-                break;
-            
-            
-        }*/
-        
         return summary + measures.toString();
 
     }

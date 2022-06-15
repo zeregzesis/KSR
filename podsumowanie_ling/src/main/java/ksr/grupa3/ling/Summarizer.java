@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ksr.grupa3.fuzzy.FoodItem;
-import ksr.grupa3.fuzzy.newSet;
+import ksr.grupa3.fuzzy.FuzzySet;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class Summarizer implements Serializable {
-    List<newSet> summarizedSets = new ArrayList<>();
+    List<FuzzySet> summarizedSets = new ArrayList<>();
     List<Boolean> summarizedAnd = new ArrayList<>();
 
-    public Summarizer(List<newSet> summarizedSets, List<Boolean> summarizedAnd) {
+    public Summarizer(List<FuzzySet> summarizedSets, List<Boolean> summarizedAnd) {
         if (summarizedSets.size() == 1 && summarizedAnd.size() > 0) {
             throw new IllegalArgumentException("One set qualifier cannot have any operations");
         }
@@ -27,7 +27,7 @@ public class Summarizer implements Serializable {
         this.summarizedAnd = summarizedAnd;
     }
 
-    public void addSet(newSet set, boolean and) {
+    public void addSet(FuzzySet set, boolean and) {
         summarizedSets.add(set);
         summarizedAnd.add(and);
     }
@@ -61,14 +61,21 @@ public class Summarizer implements Serializable {
 
     }
 
-    public double cardinality(List<FoodItem> foodItems) {
-        double cardinality = 0;
-        for (FoodItem foodItem : foodItems) {
-            cardinality += DoM(foodItem);
+    public double cardinality() {
+        FuzzySet set = summarizedSets.get(0).copyOf();
+        for (int i = 1; i < summarizedSets.size(); i++) {
+            set = (summarizedAnd.get(i - 1) ? set.setIntersect(summarizedSets.get(i).copyOf()) : set.setUnion(summarizedSets.get(i).copyOf()));
         }
-        return cardinality;
+        return set.cardinality();
     }
 
-    
+    public double UoD() {
+        FuzzySet set = summarizedSets.get(0).copyOf();
+        for (int i = 1; i < summarizedSets.size(); i++) {
+            set = (summarizedAnd.get(i - 1) ? set.setIntersect(summarizedSets.get(i).copyOf()) : set.setUnion(summarizedSets.get(i).copyOf()));
+        }
+
+        return set.getMembershipFuction().getUpperBound();
+    }
 
 }

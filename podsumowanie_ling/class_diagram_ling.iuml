@@ -1,60 +1,67 @@
 @startuml
 title KSR_Ling_Class_diagram_ling
 
+class Agregator{
+    - List<FuzzySet> setList
+    - List<Boolean> andList
+    - List<Label> variableList
 
-
-class Summary{
-    - Quantifier quantifier
-    - List<Subjects> subjects
-    - Agregator qualifier
-    - Agregator summarizer
-    - SummaryType summaryType
-
-    - double T1(List<FoodItem>)
-    - double T2(List<FoodItem>)
-    - double T3(List<FoodItem>)
-    - double T4(List<FoodItem>)
-    - double T5(List<FoodItem>)
-    double optimalSummaryMetric(List<FoodItem>, List<Double>)
-    - double T6(List<FoodItem>)
-    - double T7(List<FoodItem>)
-    - double T8(List<FoodItem>)
-    - double T9(List<FoodItem>)
-    - double T10(List<FoodItem>)
-    - double T11(List<FoodItem>)
-    double ExtendedOptimalSummaryMetric(List<FoodItem>, List<Double>)
-    List<double> getStandardMeasures(List<FoodItem>)
-    String generateLinguisticSummary(List<FoodItem>)
-
+    void addSet(FuzzySet, boolean)
+    double tNorm(double, double)
+    static double implication(double, double)
+    double DoM(FoodItem)
+    List<FoodItem> UoD()
+    int size()
+    double cardinality()
+    String getVariableName(int)
+    String getVariableValue(int)
 }
 
 class Quantifier{
     - String name
-    - MemberFunc memberFunc
+    - MembershipFuction memberFunc
     - boolean isAbsolute
     - boolean isForthForm
 
     double getValue(double)
 }
 
-class Agregator{
-    - List<FuzzySet> setList
-    - List<Boolean> andList
-
-    void addSet(FuzzySet, boolean)
-    double tNorm(double, double)
-    static double implication(double, double)
-    double DoM(FoodItem, boolean)
-    double cardinality(List<FoodItem>)
-}
-
 class Subject{
     - String toFind
     - String name
+    - boolean neg
 
     boolean isPartOf(FoodItem)
     List<FoodItem> filter(List<FoodItem>)
 }
+
+class Summary{
+    - Quantifier quantifier
+    - Subject subject
+    - Subject secondSubject
+    - Agregator qualifier
+    - Agregator summarizer
+    - SummaryType summaryType
+
+    - double T1()
+    - double T2()
+    - double T3()
+    - double T4()
+    - double T5()
+    double optimalSummaryMetric(List<Double>)
+    - double T6()
+    - double T7()
+    - double T8()
+    - double T9()
+    - double T10()
+    - double T11()
+    double ExtendedOptimalSummaryMetric(List<Double>)
+    List<double> getStandardMeasures(List<Double>)
+    List<Double> getCompoundMeasure()
+    String generateLinguisticSummary()
+
+}
+
 
 class SummaryBuilder{
     static Summary buildSummary(Quantifier, List<Subject>, Agregator, Agregator, SummaryType)
@@ -66,13 +73,32 @@ enum SummaryType {
     SECOND_FORM(2),
     THIRD_FORM(3),
     FOURTH_FORM(4)
+
     int value;
 
     SummaryType(int value)
 }
 
-Summary o-u- SummaryType
+class Variable{
+    - String name
+    - Field foodProperty
+    - List<String> values
+    - List<MemberFunc> memberFuncList
+
+    double getFuncValue(String, double)
+    MemberFunc getMemberFunc(String)
+}
+
+class Label{
+    - String name
+    - Field foodProperty
+    - String value
+}
+
+Summary *-u- SummaryType
 Summary o-l- Quantifier
 Summary o-- Subject
 Summary o-r- Agregator
 Summary .d.> SummaryBuilder
+Label ..> Variable
+Label --o Agregator

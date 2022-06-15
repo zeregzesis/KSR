@@ -7,6 +7,7 @@ import java.util.List;
 import ksr.grupa3.fuzzy.*;
 import ksr.grupa3.ling.Quantifier;
 import ksr.grupa3.ling.Subject;
+import ksr.grupa3.ling.Variable;
 
 public class Init {
 
@@ -14,7 +15,7 @@ public class Init {
 
         List<Subject> subjects = new ArrayList<>();
         List<Quantifier> quantifiers = new ArrayList<>();
-        List<oldVariable> variables = new ArrayList<>();
+        List<Variable> variables = new ArrayList<>();
 
 
         Subject subject = new Subject("all products");
@@ -28,93 +29,93 @@ public class Init {
 
 
         Quantifier almostNone = new Quantifier();
-        // almostNone.setName("Almost none");
+        almostNone.setName("Almost none");
         // SubFunc zero = new SubFunc("0", 0, 0);
         // SubFunc value = new SubFunc("exp(-(12.5 * x)^2)", 0, 1);
         // SubFunc zero2 = new SubFunc("0", 0.25, 1);
         // MemberFunc memberFunc = new MemberFunc(List.of(zero, value, zero2));
-        MembershipFuction memberFunc = new GaussFuction(1, 0.0, 0.056);
+        MembershipFuction memberFunc = new GaussFuction(1, 0.0, 0.056, 1);
         almostNone.setMemberFunc(memberFunc);
         almostNone.setIsAbsolute(false);
         quantifiers.add(almostNone);
 
         Quantifier some = new Quantifier();
-        // some.setName("Some");
+        some.setName("Some");
         // zero = new SubFunc("0", 0, 0);
         // value = new SubFunc("exp(-(12.5 * x - 3.125)^2)", 0, 0.5);
         // zero2 = new SubFunc("0", 0.5, 1);
         // memberFunc = new MemberFunc(List.of(zero, value, zero2));
-        memberFunc = new GaussFuction(1, 0.25, 0.056);
+        memberFunc = new GaussFuction(1, 0.25, 0.056, 1);
         some.setMemberFunc(memberFunc);
         some.setIsAbsolute(false);
         quantifiers.add(some);
 
         Quantifier aboutHalf = new Quantifier();
-        // aboutHalf.setName("About half");
+        aboutHalf.setName("About half");
         // zero = new SubFunc("0", 0, 0.25);
         // value = new SubFunc("exp(-(12.5 * x - 6.25)^2)", 0.25, 0.75);
         // zero2 = new SubFunc("0", 0.75, 1);
         // memberFunc = new MemberFunc(List.of(zero, value, zero2));
-        memberFunc = new GaussFuction(1, 0.5, 0.056);
+        memberFunc = new GaussFuction(1, 0.5, 0.056, 1);
         aboutHalf.setMemberFunc(memberFunc);
         aboutHalf.setIsAbsolute(false);
         quantifiers.add(aboutHalf);
 
         Quantifier most = new Quantifier();
-        // most.setName("Most");
+        most.setName("Most");
         // zero = new SubFunc("0", 0, 0.5);
         // value = new SubFunc("exp(-(12.5 * x - 9.375)^2)", 0.5, 1);
         // zero2 = new SubFunc("0", 1, 1);
         // memberFunc = new MemberFunc(List.of(zero, value, zero2));
-        memberFunc = new GaussFuction(1, 0.75, 0.056);
+        memberFunc = new GaussFuction(1, 0.75, 0.056, 1);
         most.setMemberFunc(memberFunc);
         most.setIsAbsolute(false);
         quantifiers.add(most);
 
         Quantifier almostAll = new Quantifier();
-        // almostAll.setName("Almost all");
+        almostAll.setName("Almost all");
         // zero = new SubFunc("0", 0, 0.75);
         // value = new SubFunc("exp(-(12.5 * x - 12.5)^2)", 0.75, 1.001);
         // zero2 = new SubFunc("0", 1.001, 1.001);
         // memberFunc = new MemberFunc(List.of(zero, value, zero2));
-        memberFunc = new GaussFuction(1, 1.0, 0.056);
+        memberFunc = new GaussFuction(1, 1.0, 0.056, 1);
         almostAll.setMemberFunc(memberFunc);
         almostAll.setIsAbsolute(false);
         quantifiers.add(almostAll);
 
         Quantifier muchMoreThan500 = new Quantifier();
-        // muchMoreThan500.setName("Much more than 500");
+        muchMoreThan500.setName("Much more than 500");
         // zero = new SubFunc("0", 0, 500);
         // value = new SubFunc("(2.0/3000.0) * x - (1.0/3.0)", 500, 2000);
         // SubFunc one = new SubFunc("1", 2000, 13544);
         // zero2 = new SubFunc("0", 13544, 13544);
         // memberFunc = new MemberFunc(List.of(zero, value, one, zero2));
-        memberFunc = new TrapezoidFuction(500, 2000, 13544, 13544);
+        memberFunc = new TrapezoidFuction(500, 2000, 13544, 13544, 13544);
         muchMoreThan500.setMemberFunc(memberFunc);
         muchMoreThan500.setIsAbsolute(true);
         quantifiers.add(muchMoreThan500);
 
         Quantifier muchLessThan8000 = new Quantifier();
-        // muchLessThan8000.setName("Much less than 8000");
+        muchLessThan8000.setName("Much less than 8000");
         // zero = new SubFunc("0", -1, 0);
         // one = new SubFunc("1", 0, 6000);
         // value = new SubFunc("-0.0005 * x + 4", 6000, 8000);
         // zero2 = new SubFunc("0", 8000, 13544);
         // memberFunc = new MemberFunc(List.of(zero, value, one, zero2));
-        memberFunc = new TrapezoidFuction(0, 0, 6000, 8000);
+        memberFunc = new TrapezoidFuction(1, 0, 6000, 8000, 13544);
         muchLessThan8000.setMemberFunc(memberFunc);
         muchLessThan8000.setIsAbsolute(true);
         quantifiers.add(muchLessThan8000);
 
         Quantifier aboutFewThousand = new Quantifier();
-        // aboutFewThousand.setName("Much less than 8000");
+        aboutFewThousand.setName("Much less than 8000");
         // zero = new SubFunc("0", -1, 0);
         // value = new SubFunc("exp(-(0.001 * x - 4)^2)", 0, 4000);
         // one = new SubFunc("1", 4000, 6000);
         // SubFunc value2 = new SubFunc("exp(-(0.001 * x - 4)^2)", 6000, 13544);
         // zero2 = new SubFunc("0", 13544, 13544);
         // memberFunc = new MemberFunc(List.of(zero, value, one, value2, zero2));
-        memberFunc = new GaussFuction(1, 5000, 850);
+        memberFunc = new GaussFuction(2, 5000, 850, 13544);
         aboutFewThousand.setMemberFunc(memberFunc);
         aboutFewThousand.setIsAbsolute(true);
         quantifiers.add(aboutFewThousand);
@@ -136,7 +137,7 @@ public class Init {
         List<String> values = List.of("low", "medium", "high");
 
         // low
-        memberFuncs.add(new TrapezoidFuction(0,0,85,200));
+        memberFuncs.add(new TrapezoidFuction(0,0,85,200,1000));
 
 
 
@@ -154,7 +155,7 @@ public class Init {
 //        subFuncs.clear();
 
         // medium
-        memberFuncs.add(new GaussFuction(1,300,35.5));
+        memberFuncs.add(new GaussFuction(1,300,35.5,1000));
 
 //        temp = new SubFunc("0", 0, 150);
 //        subFuncs.add(temp);
@@ -168,7 +169,7 @@ public class Init {
 //        subFuncs.clear();
 
         // high
-        memberFuncs.add(new TrapezoidFuction(350,500,902,902));
+        memberFuncs.add(new TrapezoidFuction(350,500,902,902,1000));
 
 //        temp = new SubFunc("0", 0, 350);
 //        subFuncs.add(temp);
@@ -184,7 +185,7 @@ public class Init {
 //        subFuncs.clear();
 
 
-        oldVariable caloricValue = new oldVariable("caloric value", foodItem.getClass().getDeclaredField("calories"), values, List.copyOf(memberFuncs));
+        Variable caloricValue = new Variable("caloric value", foodItem.getClass().getDeclaredField("calories"), values, List.copyOf(memberFuncs));
 
         variables.add(caloricValue);
 
@@ -195,7 +196,7 @@ public class Init {
         values = List.of("close to none", "low", "medium", "high");
 
         // close to none
-        memberFuncs.add(new TrapezoidFuction(0,0,1,2));
+        memberFuncs.add(new TrapezoidFuction(0,0,1,2,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("1", 0, 1);
@@ -210,7 +211,7 @@ public class Init {
 //        subFuncs.clear();
 
         // low
-        memberFuncs.add(new TrapezoidFuction(1,5,8,12));
+        memberFuncs.add(new TrapezoidFuction(1,5,8,12,100));
 //        temp = new SubFunc("0", 0, 1);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.25 * x - 0.25", 1, 5);
@@ -227,7 +228,7 @@ public class Init {
 //        subFuncs.clear();
 
         // medium
-        memberFuncs.add(new TriangleFuction(7,11,50));
+        memberFuncs.add(new TriangleFuction(7,11,50,100));
 //        temp = new SubFunc("0", 0, 7);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.25 * x - 7/3", 7, 11);
@@ -242,7 +243,7 @@ public class Init {
 //        subFuncs.clear();
 
         // high
-        memberFuncs.add(new TrapezoidFuction(20,40,100,100));
+        memberFuncs.add(new TrapezoidFuction(20,40,100,100,100));
 //        temp = new SubFunc("0", 0, 20);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.05 * x - 1", 20, 40);
@@ -257,7 +258,7 @@ public class Init {
 //        subFuncs.clear();
 
 
-        oldVariable fatContent = new oldVariable("Fat content", foodItem.getClass().getDeclaredField("fat"), values, List.copyOf(memberFuncs));
+        Variable fatContent = new Variable("Fat content", foodItem.getClass().getDeclaredField("fat"), values, List.copyOf(memberFuncs));
 
         variables.add(fatContent);
         memberFuncs.clear();
@@ -267,7 +268,7 @@ public class Init {
     values = List.of("low", "medium", "high");
 
     // low
-        memberFuncs.add(new TriangleFuction(0,6,10));
+        memberFuncs.add(new TriangleFuction(0,6,10,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("1/6 * x", 0, 6);
@@ -282,7 +283,7 @@ public class Init {
 //    subFuncs.clear();
 
     // medium
-        memberFuncs.add(new GaussFuction(1,10,2.5));
+        memberFuncs.add(new GaussFuction(1,10,2.5,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("exp(-(x-10)^2 / 16)", 0, 20);
@@ -295,7 +296,7 @@ public class Init {
 //    subFuncs.clear();
 
     // high
-        memberFuncs.add(new TrapezoidFuction(10,20,100,100));
+        memberFuncs.add(new TrapezoidFuction(10,20,100,100,100));
 //    temp = new SubFunc("0", 0, 10);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.1 * x - 1", 10, 20);
@@ -311,7 +312,7 @@ public class Init {
 
 
 
-    oldVariable proteinContent = new oldVariable("Protein content", foodItem.getClass().getDeclaredField("protein"), values, List.copyOf(memberFuncs));
+    Variable proteinContent = new Variable("Protein content", foodItem.getClass().getDeclaredField("protein"), values, List.copyOf(memberFuncs));
 
     variables.add(proteinContent);
     memberFuncs.clear();
@@ -321,7 +322,7 @@ public class Init {
     values = List.of("close to none", "low", "medium", "high");
 
     // close to none
-        memberFuncs.add(new TriangleFuction(0,0,1));
+        memberFuncs.add(new TriangleFuction(0,0,1,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("-x + 1", 0, 1);
@@ -334,7 +335,7 @@ public class Init {
 //    subFuncs.clear();
 
     // low
-        memberFuncs.add(new TrapezoidFuction(0,5,10,15));
+        memberFuncs.add(new TrapezoidFuction(0,5,10,15,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.2 * x", 0, 5);
@@ -351,7 +352,7 @@ public class Init {
 //    subFuncs.clear();
 
     // medium
-        memberFuncs.add(new TriangleFuction(15,40,60));
+        memberFuncs.add(new TriangleFuction(15,40,60,100));
 //    temp = new SubFunc("0", 0, 15);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.04 * x - 0.6", 15, 40);
@@ -366,7 +367,7 @@ public class Init {
 //    subFuncs.clear();
 
     // high
-        memberFuncs.add(new TrapezoidFuction(50,85,100,100));
+        memberFuncs.add(new TrapezoidFuction(50,85,100,100,100));
 //    temp = new SubFunc("0", 0, 50);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.029 * x - 1.429", 50, 85);
@@ -381,7 +382,7 @@ public class Init {
 //    subFuncs.clear();
 
 
-    oldVariable carbohydrateContent = new oldVariable("Carbohydrate content", foodItem.getClass().getDeclaredField("carbohydrates"), values, List.copyOf(memberFuncs));
+    Variable carbohydrateContent = new Variable("Carbohydrate content", foodItem.getClass().getDeclaredField("carbohydrates"), values, List.copyOf(memberFuncs));
 
     variables.add(carbohydrateContent);
     memberFuncs.clear();
@@ -391,7 +392,7 @@ public class Init {
     values = List.of("close to none", "low", "regular", "high");
 
     // close to none
-        memberFuncs.add(new TriangleFuction(0,0,1));
+        memberFuncs.add(new TriangleFuction(0,0,1,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("-x + 1", 0, 1);
@@ -404,7 +405,7 @@ public class Init {
 //    subFuncs.clear();
 
     // low
-        memberFuncs.add(new TriangleFuction(0,4,7));
+        memberFuncs.add(new TriangleFuction(0,4,7,100));
 //    temp = new SubFunc("0", -1, 0);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.25 * x", 0, 4);
@@ -419,7 +420,7 @@ public class Init {
 //    subFuncs.clear();
 
     // regular
-        memberFuncs.add(new TrapezoidFuction(5,7,12,15));
+        memberFuncs.add(new TrapezoidFuction(5,7,12,15,100));
 //    temp = new SubFunc("0", 0, 5);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("0.5 * x - 2.5", 5, 7);
@@ -436,7 +437,7 @@ public class Init {
 //    subFuncs.clear();
 
     // high
-        memberFuncs.add(new TrapezoidFuction(12,18,96,96));
+        memberFuncs.add(new TrapezoidFuction(12,18,96,96,100));
 //    temp = new SubFunc("0", 0, 12);
 //    subFuncs.add(temp);
 //    temp = new SubFunc("32/30 * x - 2", 12, 18);
@@ -451,7 +452,7 @@ public class Init {
 //    subFuncs.clear();
 
 
-    oldVariable satFatContent = new oldVariable("Saturated fats content", foodItem.getClass().getDeclaredField("saturatedFats"), values, List.copyOf(memberFuncs));
+    Variable satFatContent = new Variable("Saturated fats content", foodItem.getClass().getDeclaredField("saturatedFats"), values, List.copyOf(memberFuncs));
 
     variables.add(satFatContent);
     memberFuncs.clear();
@@ -464,7 +465,7 @@ public class Init {
          values = List.of("low", "medium", "high");
 
         //low
-        memberFuncs.add(new TrapezoidFuction(0,0,200,315));
+        memberFuncs.add(new TrapezoidFuction(0,0,0.200,0.315,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("1", 0, 200);
@@ -479,7 +480,7 @@ public class Init {
 //        subFuncs.clear();
 
         //medium
-        memberFuncs.add(new GaussFuction(1,315,46.25));
+        memberFuncs.add(new GaussFuction(1,0.315,0.04625,100));
 //        temp = new SubFunc("0", -1, 130);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("exp(-1*((x-315)^2)/75^2)", 130, 500);
@@ -492,7 +493,7 @@ public class Init {
 //        subFuncs.clear();
 
         //high
-        memberFuncs.add(new TrapezoidFuction(400,700,38758,38758));
+        memberFuncs.add(new TrapezoidFuction(0.400,0.700,100,100,100));
 //        temp = new SubFunc("0", -1, 400);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("1.0/300*x-1.25", 400, 700);
@@ -506,7 +507,7 @@ public class Init {
 //        memberFuncs.add(memberFunc);
 //        subFuncs.clear();
 
-        oldVariable SodiumContent = new oldVariable("Sodium Content", foodItem.getClass().getDeclaredField("sodium"), values, List.copyOf(memberFuncs));
+        Variable SodiumContent = new Variable("Sodium Content", foodItem.getClass().getDeclaredField("sodium"), values, List.copyOf(memberFuncs));
 
         variables.add(SodiumContent);
         memberFuncs.clear();
@@ -521,7 +522,7 @@ public class Init {
          values = List.of("low", "medium", "high");
 
         //low
-        memberFuncs.add(new TrapezoidFuction(0,0,40,100));
+        memberFuncs.add(new TrapezoidFuction(0,0,0.040,0.100,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("1", 0, 50);
@@ -536,7 +537,7 @@ public class Init {
 //        subFuncs.clear();
 
         //medium
-        memberFuncs.add(new GaussFuction(1,140,15));
+        memberFuncs.add(new GaussFuction(1,0.140,0.015,100));
 //        temp = new SubFunc("0", -1, 80);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("exp(-1*((x-140)^2)/20^2)", 80, 200);
@@ -549,7 +550,7 @@ public class Init {
 //        subFuncs.clear();
 
         //high
-        memberFuncs.add(new TrapezoidFuction(160,200,9918,9918));
+        memberFuncs.add(new TrapezoidFuction(0.160,0.200,100,100,100));
 //        temp = new SubFunc("0", -1, 160);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.025*x-4", 160, 200);
@@ -565,7 +566,7 @@ public class Init {
 
 
 
-        oldVariable PhosphorusContent = new oldVariable("Phosphorus Content", foodItem.getClass().getDeclaredField("phosphorus"), values, List.copyOf(memberFuncs));
+        Variable PhosphorusContent = new Variable("Phosphorus Content", foodItem.getClass().getDeclaredField("phosphorus"), values, List.copyOf(memberFuncs));
 
         variables.add(PhosphorusContent);
         memberFuncs.clear();
@@ -578,7 +579,7 @@ public class Init {
          values = List.of("low", "medium", "high");
 
         //low
-        memberFuncs.add(new TrapezoidFuction(0,5,25,35));
+        memberFuncs.add(new TrapezoidFuction(0,5,25,35,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.2*x", 0, 5);
@@ -595,7 +596,7 @@ public class Init {
 //        subFuncs.clear();
 
         //medium
-        memberFuncs.add(new TrapezoidFuction(30,45,55,75));
+        memberFuncs.add(new TrapezoidFuction(30,45,55,75,100));
 //        temp = new SubFunc("0", -1, 30);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.06667*x-2", 30, 45);
@@ -612,7 +613,7 @@ public class Init {
 //        subFuncs.clear();
 
         //high
-        memberFuncs.add(new TrapezoidFuction(65, 85,100,100));
+        memberFuncs.add(new TrapezoidFuction(65, 85,100,100,100));
 //        temp = new SubFunc("0", -1, 65);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.05*x-3.25", 65, 85);
@@ -628,7 +629,7 @@ public class Init {
 
 
 
-        oldVariable WaterContent = new oldVariable("Water Content", foodItem.getClass().getDeclaredField("water"), values, List.copyOf(memberFuncs));
+        Variable WaterContent = new Variable("Water Content", foodItem.getClass().getDeclaredField("water"), values, List.copyOf(memberFuncs));
 
         variables.add(WaterContent);
         memberFuncs.clear();
@@ -641,7 +642,7 @@ public class Init {
          values = List.of("poor", "medium", "rich");
 
         //poor
-        memberFuncs.add(new TriangleFuction(0,0,1.5));
+        memberFuncs.add(new TriangleFuction(0,0,0.0015,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("-0.6667*x+1", 0, 1.5);
@@ -654,7 +655,7 @@ public class Init {
 //        subFuncs.clear();
 
         //medium
-        memberFuncs.add(new TrapezoidFuction(0.75,2,5,7));
+        memberFuncs.add(new TrapezoidFuction(0.00075,0.002,0.005,0.007,100));
 //        temp = new SubFunc("0", -1, 0.75);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.8*x-0.6", 0.75, 2);
@@ -671,7 +672,7 @@ public class Init {
 //        subFuncs.clear();
 
         //rich
-        memberFuncs.add(new TrapezoidFuction(6,9,10,10));
+        memberFuncs.add(new TrapezoidFuction(0.006,0.009,100,100,100));
 //        temp = new SubFunc("0", -1, 6);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.3333*x-2", 6, 9);
@@ -687,7 +688,7 @@ public class Init {
 
 
 
-        oldVariable IronRichness = new oldVariable("RichnessOfIron", foodItem.getClass().getDeclaredField("iron"), values, List.copyOf(memberFuncs));
+        Variable IronRichness = new Variable("RichnessOfIron", foodItem.getClass().getDeclaredField("iron"), values, List.copyOf(memberFuncs));
 
         variables.add(IronRichness);
         memberFuncs.clear();
@@ -701,7 +702,7 @@ public class Init {
          values = List.of("low", "low-mid", "mid", "high-mid", "high");
 
         //low
-        memberFuncs.add(new TrapezoidFuction(0,5,10,15));
+        memberFuncs.add(new TrapezoidFuction(0,0.005,0.010,0.015,100));
 //        temp = new SubFunc("0", -1, 0);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.2 * x", 0, 5);
@@ -718,7 +719,7 @@ public class Init {
 //        subFuncs.clear();
 
         //low-mid
-        memberFuncs.add(new TrapezoidFuction(12,35,40,55));
+        memberFuncs.add(new TrapezoidFuction(0.012,0.035,0.040,0.055,100));
 //        temp = new SubFunc("0", -1, 12);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.043*x-0.522", 12 , 35);
@@ -735,7 +736,7 @@ public class Init {
 //        subFuncs.clear();
 
         //mid
-        memberFuncs.add(new TriangleFuction(50,70,90));
+        memberFuncs.add(new TriangleFuction(0.050,0.070,0.090,100));
 //        temp = new SubFunc("0", 0, 50);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.05 * x - 2.5", 50, 70);
@@ -750,7 +751,7 @@ public class Init {
 //        subFuncs.clear();
 
         //high-mid
-        memberFuncs.add(new TriangleFuction(85,120,150));
+        memberFuncs.add(new TriangleFuction(0.085,0.12,0.150,100));
 //        temp = new SubFunc("0", 0, 85);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.029*x -2.429", 85, 120);
@@ -766,7 +767,7 @@ public class Init {
 
         
         //high
-        memberFuncs.add(new TrapezoidFuction(140,160,7364,7364));
+        memberFuncs.add(new TrapezoidFuction(0.14,0.16,100,100,100));
 //        temp = new SubFunc("0", 0, 140);
 //        subFuncs.add(temp);
 //        temp = new SubFunc("0.05 * x - 7", 140, 160);
@@ -782,7 +783,7 @@ public class Init {
 
 
 
-        oldVariable CalciumContent = new oldVariable("Calcium Content", foodItem.getClass().getDeclaredField("calcium"), values, List.copyOf(memberFuncs));
+        Variable CalciumContent = new Variable("Calcium Content", foodItem.getClass().getDeclaredField("calcium"), values, List.copyOf(memberFuncs));
 
         variables.add(CalciumContent);
         memberFuncs.clear();

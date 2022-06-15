@@ -3,6 +3,7 @@ package ksr.grupa3.fuzzy;
 import java.util.ArrayList;
 import java.util.List;
 
+import ksr.grupa3.ling.Variable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class oldSet {
 
-    private oldVariable variable;
+    private Variable variable;
     private String value;
     /*
     public double DoM(FoodItem foodItem) {

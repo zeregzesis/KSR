@@ -28,7 +28,7 @@ public class CSVFileReader {
 
 
     public static List<FoodItem> readCsv() {
-        try (CSVReader reader = new CSVReader(new FileReader("food.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader("food_clean.csv"))) {
             List<String[]> r = reader.readAll();
             List<FoodItem> foodItems = new ArrayList<>();
             for ( int i=1;i<r.size();i++){

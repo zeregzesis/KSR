@@ -26,8 +26,16 @@ public record FoodItem
             return -1;
         }
 
-        public boolean equals(FoodItem other) {
-            return this.name.equals(other.name);
+        @Override
+        public boolean equals(Object other) {
+            if (other == null) {
+                return false;
+            }
+            if (other.getClass() != this.getClass()) {
+                return false;
+            }
+            FoodItem otherFoodItem = (FoodItem) other;
+            return this.name.equals(otherFoodItem.name);
         }
     }
 
