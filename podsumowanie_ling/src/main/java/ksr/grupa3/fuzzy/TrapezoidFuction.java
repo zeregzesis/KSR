@@ -13,7 +13,18 @@ public class TrapezoidFuction implements MembershipFuction {
     private double c;
     private double d;
     private double upperBound;
+    private String functionString;
 
+
+    public TrapezoidFuction(double a, double b, double c, double d, double upperBound) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.upperBound = upperBound;
+        this.functionString = asFunction();
+    }
+    
     @Override
     public double getValue(double x) {
         if (x <= a) {

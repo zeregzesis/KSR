@@ -13,6 +13,15 @@ public class GaussFuction implements MembershipFuction {
     private double b;
     private double c = 0.056;
     private double upperBound;
+    private String functionString;
+
+    public GaussFuction(double a, double b, double c, double upperBound) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.upperBound = upperBound;
+        this.functionString = asFunction();
+    }
 
 
     @Override

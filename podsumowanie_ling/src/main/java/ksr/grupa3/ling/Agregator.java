@@ -17,6 +17,7 @@ public class Agregator implements Serializable {
     List<FuzzySet> setList = new ArrayList<>();
     List<Boolean> andList = new ArrayList<>();
     List<Label> variableList = new ArrayList<>();
+    FuzzySet setForm;
 
     public Agregator(FuzzySet qualifier) {
         this.setList.add(qualifier);
@@ -37,11 +38,20 @@ public class Agregator implements Serializable {
         this.setList = summarizedSets;
         this.andList = summarizedAnd;
         this.variableList = summarizedVariables;
+
+        FuzzySet set = setList.get(0).copyOf();
+        for (int i = 1; i < setList.size(); i++) {
+            set = (andList.get(i - 1) ? set.setIntersect(setList.get(i).copyOf()) : set.setUnion(setList.get(i).copyOf()));
+        }
+
+        this.setForm = set;
+
     }
 
     public void addSet(FuzzySet set, boolean and) {
         setList.add(set);
         andList.add(and);
+        this.setForm = (and ? set.setIntersect(setForm.copyOf()) : set.setUnion(setForm.copyOf()));
     }
 
     // t-norma Gödela
@@ -74,25 +84,21 @@ public class Agregator implements Serializable {
     }
 
     public double cardinality() {
-        return asSet().cardinality();
+        return this.setForm.cardinality();
     }
 
     public double UoD() {
-        return asSet().getMembershipFuction().getUpperBound();
+        return this.setForm.getMembershipFuction().getUpperBound();
     }
 
     // public int size() {
     //     return UoD().size();
     // }
 
-    public FuzzySet asSet() {
-        FuzzySet set = setList.get(0).copyOf();
-        for (int i = 1; i < setList.size(); i++) {
-            set = (andList.get(i - 1) ? set.setIntersect(setList.get(i).copyOf()) : set.setUnion(setList.get(i).copyOf()));
-        }
-
-        return set;
-    }
+    // public FuzzySet asSet() {
+        
+    //     return this.setForm;
+    // }
 
     public String getVariableName(int index) {
         return variableList.get(index).getName();
@@ -103,7 +109,7 @@ public class Agregator implements Serializable {
     }
 
     public double size() {
-        return asSet().getFoodItems().size();
+        return this.setForm.getFoodItems().size();
     }
 
 }

@@ -167,50 +167,50 @@ public class App {
         start = System.currentTimeMillis();
         for (Summary s : firstForm) {
             first.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("first measures done in " + (end - start) + " ms");
+        System.out.println("first measures done in " + (end - start) / 60000.0 + " m");
 
         start = System.currentTimeMillis();
         for (Summary s : secondForm) {
             second.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("second measures done in " + (end - start) + " ms");
+        System.out.println("second measures done in " + (end - start) / 60000.0 + " m");
 
         start = System.currentTimeMillis();
         for (Summary s : compFirstForm) {
             compFirst.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("compound first measures done in " + (end - start) + " ms");
+        System.out.println("compound first measures done in " + (end - start) / 1000.0 + " s");
 
         start = System.currentTimeMillis();
         for (Summary s : compSecondForm) {
             compSecond.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("compound second measures done in " + (end - start) + " ms");
+        System.out.println("compound second measures done in " + (end - start) / 1000.0 + " s");
 
         start = System.currentTimeMillis();
         for (Summary s : compThirdForm) {
             compThird.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("compound third measures done in " + (end - start) + " ms");
+        System.out.println("compound third measures done in " + (end - start) / 1000.0 + " s");
 
         start = System.currentTimeMillis();
         for (Summary s : compForthForm) {
             compForth.write(s.generateLinguisticSummary() + "\n");
-            //System.out.println("Next!");
+            
         }
         end = System.currentTimeMillis();
-        System.out.println("compound forth measures done in " + (end - start) + " ms");
+        System.out.println("compound forth measures done in " + (end - start) / 1000.0 + " s");
 
         first.close();
         second.close();

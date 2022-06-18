@@ -12,6 +12,15 @@ public class TriangleFuction implements MembershipFuction {
     private double b;
     private double c;
     private double upperBound;
+    private String functionString;
+
+    public TriangleFuction(double a, double b, double c, double upperBound) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.upperBound = upperBound;
+        this.functionString = asFunction();
+    }
 
     @Override
     public double getValue(double x) {

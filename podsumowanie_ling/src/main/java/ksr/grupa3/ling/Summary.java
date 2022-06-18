@@ -24,7 +24,7 @@ public class Summary {
         if (qualifier.getSetList().size() == 0) 
             return quantifier.getValue(summarizer.cardinality() / summarizer.size());
 
-        FuzzySet union = summarizer.asSet().setIntersect(qualifier.asSet());
+        FuzzySet union = summarizer.getSetForm().setIntersect(qualifier.getSetForm());
         return quantifier.getValue(union.cardinality() / union.getFoodItems().size());
 
     }
@@ -49,9 +49,9 @@ public class Summary {
         int bottomSum = 0;
 
         if (qualifier.getSetList().size() == 0)
-            return summarizer.asSet().support().size() / summarizer.asSet().getFoodItems().size();
+            return summarizer.getSetForm().support().size() / summarizer.getSetForm().getFoodItems().size();
         
-        for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
+        for (FoodItem foodItem : summarizer.getSetForm().getFoodItems()) {
 
             int temp = (qualifier.DoM(foodItem) > 0) ? 1 : 0;
 
@@ -69,18 +69,23 @@ public class Summary {
 
         double agregate = 1;
         for (FuzzySet fuzzySet : summarizer.getSetList()) {
-
-            double r = 0;
-            for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
-                r += (fuzzySet.DoM(foodItem) > 0 ? 1 : 0);
-            }
-
-            r /= summarizer.asSet().getFoodItems().size();
+            double r = (double) fuzzySet.support().size() / (double) fuzzySet.getFoodItems().size();
             agregate *= r;
-
         }
 
         return Math.abs(agregate - T3());
+
+    }
+
+    private double T4(double t3_value){
+
+        double agregate = 1;
+        for (FuzzySet fuzzySet : summarizer.getSetList()) {
+            double r = (double) fuzzySet.support().size() / (double) fuzzySet.getFoodItems().size();
+            agregate *= r;
+        }
+
+        return Math.abs(agregate - t3_value);
 
     }
 
@@ -194,27 +199,61 @@ public class Summary {
 
         List<Double> ret = new ArrayList<>();
 
+        long start, end;
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T1()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T1 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T2()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T2 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T3()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T3 done in " + (end - start) + " ms");
 
-        ret.add((double) BigDecimal.valueOf(T4()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        start = System.currentTimeMillis();
+        ret.add((double) BigDecimal.valueOf(T4(ret.get(2))).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T4 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T5()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T5 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T6()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T6 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T7()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T7 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T8()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T8 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T9()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T9 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T10()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T10 done in " + (end - start) + " ms");
 
+        start = System.currentTimeMillis();
         ret.add((double) BigDecimal.valueOf(T11()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+        end = System.currentTimeMillis();
+        System.out.println("T11 done in " + (end - start) + " ms");
 
         if (weights.size() == 5) {
             ret.add((double) BigDecimal.valueOf(
@@ -254,7 +293,7 @@ public class Summary {
 
     public List<Double> getCompoundMeasure() {
 
-        List<FoodItem> items = summarizer.asSet().getFoodItems();
+        List<FoodItem> items = summarizer.getSetForm().getFoodItems();
 
         List<FoodItem> firstSubjectItems = subject.filter(items);
         List<FoodItem> secondSubjectItems = secondSubject.filter(items);
@@ -273,7 +312,7 @@ public class Summary {
                 // }
 
                 top = (1.0 / firstSubjectItems.size()) * summarizer.cardinality();
-                bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.asSet().setIntersect(qualifier.asSet()).cardinality()));
+                bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.getSetForm().setIntersect(qualifier.getSetForm()).cardinality()));
 
                 T = quantifier.getValue(top / bottom);
                 T = (double) BigDecimal.valueOf(T).setScale(2, RoundingMode.HALF_UP).doubleValue();
@@ -284,7 +323,7 @@ public class Summary {
                 //     combCard += Math.min(summarizer.DoM(foodItem), qualifier.DoM(foodItem));
                 // }
 
-                top = (1.0 / firstSubjectItems.size()) * summarizer.asSet().setIntersect(qualifier.asSet()).cardinality();
+                top = (1.0 / firstSubjectItems.size()) * summarizer.getSetForm().setIntersect(qualifier.getSetForm()).cardinality();
                 bottom =  (top + ((1.0 / secondSubjectItems.size()) * summarizer.cardinality()));
 
                 T = quantifier.getValue(top / bottom);
@@ -294,7 +333,7 @@ public class Summary {
             // nie mam pojęcia czy dobrze, trzeba będzie przetestować
             case FOURTH_FORM:
                 double incl = 0;
-                for (FoodItem foodItem : summarizer.asSet().getFoodItems()) {
+                for (FoodItem foodItem : summarizer.getSetForm().getFoodItems()) {
                     incl += Summarizer.implication( (secondSubjectItems.indexOf(foodItem) != -1 ? summarizer.DoM(foodItem) : 0), (firstSubjectItems.indexOf(foodItem) != -1 ? summarizer.DoM(foodItem) : 0));
                 }
                 incl /= (double) (secondSubjectItems.size() + firstSubjectItems.size());
