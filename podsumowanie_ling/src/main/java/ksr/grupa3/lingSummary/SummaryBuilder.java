@@ -2,11 +2,12 @@ package ksr.grupa3.lingSummary;
 
 import java.util.List;
 
-import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.fuzzy.oldSet;
 
 public class SummaryBuilder {
+    /*
 
-    public static Summarizer build(LingQuantifier lingQuantifier, List<FuzzySet> fuzzySets, List<Boolean> setAnd, List<FuzzySet> divisors, List<Boolean> divisorAnd, List<Qualifier> qualifiers) {
+    public static Summarizer build(LingQuantifier lingQuantifier, List<oldSet> fuzzySets, List<Boolean> setAnd, List<oldSet> divisors, List<Boolean> divisorAnd, List<Qualifier> qualifiers) {
         if (
             (fuzzySets.size() == 1 && setAnd.size() != 0) || 
             (fuzzySets.size() - 1 != setAnd.size()) ||
@@ -30,5 +31,6 @@ public class SummaryBuilder {
         return ret;
 
     }
+    */
     
 }

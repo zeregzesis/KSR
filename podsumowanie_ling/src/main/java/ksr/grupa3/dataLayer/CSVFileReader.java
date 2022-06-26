@@ -5,10 +5,10 @@ import java.util.List;
 import java.io. *;
 
 import ksr.grupa3.fuzzy.FoodItem;
-//import ksr.grupa3.fuzzy.FuzzySet;
-//import ksr.grupa3.lingSummary.LingQuantifier;
-//import lombok.Getter;
-//import lombok.Setter;
+import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.lingSummary.LingQuantifier;
+import lombok.Getter;
+import lombok.Setter;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 
@@ -28,7 +28,7 @@ public class CSVFileReader {
 
 
     public static List<FoodItem> readCsv() {
-        try (CSVReader reader = new CSVReader(new FileReader("food.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader("food_clean.csv"))) {
             List<String[]> r = reader.readAll();
             List<FoodItem> foodItems = new ArrayList<>();
             for ( int i=1;i<r.size();i++){

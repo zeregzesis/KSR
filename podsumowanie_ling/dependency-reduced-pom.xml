@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>ksr.grupa3</groupId>
-  <artifactId>ling</artifactId>
+  <artifactId>linguistic_summary</artifactId>
   <name>podsumowania_lingwistyczne</name>
   <version>1.0</version>
   <url>http://www.example.com</url>
@@ -32,7 +32,7 @@
           <archive>
             <manifest>
               <addClasspath>true</addClasspath>
-              <mainClass>ksr.grupa3.App</mainClass>
+              <mainClass>ksr.grupa3.start</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -64,12 +64,26 @@
               <shadedArtifactAttached>false</shadedArtifactAttached>
               <transformers>
                 <transformer>
-                  <mainClass>ksr.grupa3.App</mainClass>
+                  <mainClass>ksr.grupa3.start</mainClass>
                 </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerArgument>-XDignore.symbol.file</compilerArgument>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.openjfx</groupId>
+        <artifactId>javafx-maven-plugin</artifactId>
+        <version>0.0.8</version>
+        <configuration>
+          <mainClass>ksr.grupa3.start</mainClass>
+        </configuration>
       </plugin>
     </plugins>
   </build>

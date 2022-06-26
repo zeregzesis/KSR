@@ -12,17 +12,19 @@ public class Subject implements Serializable{
     
     private String toFind;
     private String name;
+    private boolean neg;
 
     public Subject(String name) {
         this.name = name;
         int begin = name.indexOf("\"");
         int end = name.lastIndexOf("\"");
         this.toFind = (begin != -1 ? name.substring(begin + 1, end) : "");
+        neg = (name.indexOf("don't") == -1 ? false : true);
     }
 
 
     public boolean isPartOf(FoodItem foodItem) {
-        return foodItem.name().contains(toFind);
+        return (neg ? !foodItem.name().contains(toFind) : foodItem.name().contains(toFind));
     }
 
     public List<FoodItem> filter(List<FoodItem> foodItems) {

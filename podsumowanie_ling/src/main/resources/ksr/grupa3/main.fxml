@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="740.0" prefWidth="1320.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ksr.grupa3.gui.MainController">
+   <center>
+      <TableView fx:id="Table" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn fx:id="SummaryColumn" prefWidth="226.00003361701965" text="Summary" />
+          <TableColumn fx:id="T1Column" minWidth="0.0" prefWidth="27.999984741210938" text="T1" />
+            <TableColumn fx:id="T2Column" minWidth="0.0" prefWidth="21.20001220703125" text="T2" />
+            <TableColumn fx:id="T3Column" minWidth="0.0" prefWidth="110.39996337890625" text="T3" />
+            <TableColumn fx:id="T4Column" prefWidth="44.4000244140625" text="T4" />
+            <TableColumn fx:id="T5Column" prefWidth="21.60003662109375" text="T5" />
+            <TableColumn fx:id="T6Column" prefWidth="75.0" text="T6" />
+            <TableColumn fx:id="T7Column" prefWidth="75.0" text="T7" />
+            <TableColumn fx:id="T8Column" prefWidth="75.0" text="T8" />
+            <TableColumn fx:id="T9Column" prefWidth="75.0" text="T9" />
+            <TableColumn fx:id="T10Column" prefWidth="75.0" text="T10" />
+            <TableColumn fx:id="T11Column" prefWidth="75.0" text="T11" />
+            <TableColumn fx:id="OSColumn" prefWidth="75.0" text="OS" />
+            <TableColumn fx:id="EOSColumn" prefWidth="75.0" text="EOS" />
+        </columns>
+      </TableView>
+   </center>
+   <top>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Separator layoutX="913.0" layoutY="6.0" orientation="VERTICAL" prefHeight="200.0" />
+            <Separator layoutX="550.0" layoutY="7.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="14.0" />
+            <ListView fx:id="qualifier_listview" layoutX="625.0" layoutY="79.0" prefHeight="70.0" prefWidth="240.0" />
+            <Label layoutX="720.0" layoutY="18.0" prefHeight="17.0" prefWidth="41.0" />
+            <ChoiceBox fx:id="qualifier_variable_dropdown" layoutX="589.0" layoutY="54.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="qualifier_label_dropdown" layoutX="739.0" layoutY="55.0" prefWidth="150.0" />
+            <Button fx:id="qualifier_add_button" layoutX="664.0" layoutY="159.0" mnemonicParsing="false" onAction="#qualifierAdd" text="Add" />
+            <Button fx:id="qualifier_reset_button" layoutX="784.0" layoutY="159.0" mnemonicParsing="false" onAction="#qualifierReset" text="Reset" />
+            <Button fx:id="apply_button" layoutX="1273.0" layoutY="176.0" mnemonicParsing="false" onAction="#Apply" text="Apply" />
+            <Separator layoutX="1061.0" layoutY="4.0" orientation="VERTICAL" prefHeight="200.0" />
+            <TextField fx:id="W1_textField_os" layoutX="1096.0" layoutY="28.0" prefHeight="25.0" prefWidth="31.0" text="0.2" />
+            <TextField fx:id="W2_textField_os" layoutX="1096.0" layoutY="54.0" prefHeight="25.0" prefWidth="31.0" text="0.2" />
+            <TextField fx:id="W3_textField_os" layoutX="1096.0" layoutY="81.0" prefHeight="25.0" prefWidth="32.0" text="0.2" />
+            <TextField fx:id="W4_textField_os" layoutX="1096.0" layoutY="110.0" prefHeight="25.0" prefWidth="32.0" text="0.2" />
+            <TextField fx:id="W5_textField_os" layoutX="1096.0" layoutY="138.0" prefHeight="25.0" prefWidth="33.0" text="0.2" />
+            <TextField fx:id="W6_textField_eos" layoutX="1273.0" layoutY="36.0" prefHeight="25.0" prefWidth="31.0" text="0.1" />
+            <TextField fx:id="W7_textField_eos" layoutX="1273.0" layoutY="62.0" prefHeight="25.0" prefWidth="31.0" text="0.1" />
+            <TextField fx:id="W8_textField_eos" layoutX="1273.0" layoutY="89.0" prefHeight="25.0" prefWidth="32.0" text="0.1" />
+            <TextField fx:id="W9_textField_eos" layoutX="1273.0" layoutY="118.0" prefHeight="25.0" prefWidth="32.0" text="0.1" />
+            <TextField fx:id="W10_textField_eos" layoutX="1273.0" layoutY="146.0" prefHeight="25.0" prefWidth="31.0" text="0.1" />
+            <Label layoutX="1064.0" layoutY="29.0" text="W1" />
+            <Label layoutX="1064.0" layoutY="58.0" text="W2" />
+            <Label layoutX="1061.0" layoutY="85.0" prefHeight="17.0" prefWidth="24.0" text="W3" />
+            <Label layoutX="1061.0" layoutY="114.0" prefHeight="17.0" prefWidth="24.0" text="W4" />
+            <Label layoutX="1065.0" layoutY="142.0" prefHeight="17.0" prefWidth="24.0" text="W5" />
+            <Label layoutX="1238.0" layoutY="37.0" prefHeight="17.0" prefWidth="24.0" text="W6" />
+            <Label layoutX="1238.0" layoutY="70.0" prefHeight="17.0" prefWidth="24.0" text="W7" />
+            <Label layoutX="1238.0" layoutY="93.0" prefHeight="17.0" prefWidth="24.0" text="W8" />
+            <Label layoutX="1238.0" layoutY="122.0" prefHeight="17.0" prefWidth="24.0" text="W9" />
+            <Label layoutX="1236.0" layoutY="150.0" prefHeight="17.0" prefWidth="27.0" text="W10" />
+            <Separator layoutX="1136.0" layoutY="4.0" orientation="VERTICAL" prefHeight="200.0" />
+            <Label layoutX="1065.0" layoutY="9.0" text="OS Weights" />
+            <TextField fx:id="W1_textField_eos" layoutX="1171.0" layoutY="36.0" prefHeight="25.0" prefWidth="33.0" text="0.1" />
+            <TextField fx:id="W2_textField_eos" layoutX="1171.0" layoutY="62.0" prefHeight="25.0" prefWidth="33.0" text="0.1" />
+            <TextField fx:id="W3_textField_eos" layoutX="1171.0" layoutY="89.0" prefHeight="25.0" prefWidth="32.0" text="0.1" />
+            <TextField fx:id="W4_textField_eos" layoutX="1171.0" layoutY="118.0" prefHeight="25.0" prefWidth="33.0" text="0.1" />
+            <TextField fx:id="W5_textField_eos" layoutX="1171.0" layoutY="146.0" prefHeight="25.0" prefWidth="32.0" text="0.1" />
+            <Label layoutX="1139.0" layoutY="37.0" text="W1" />
+            <Label layoutX="1139.0" layoutY="66.0" text="W2" />
+            <Label layoutX="1136.0" layoutY="93.0" prefHeight="17.0" prefWidth="24.0" text="W3" />
+            <Label layoutX="1136.0" layoutY="122.0" prefHeight="17.0" prefWidth="24.0" text="W4" />
+            <Label layoutX="1140.0" layoutY="150.0" prefHeight="17.0" prefWidth="24.0" text="W5" />
+            <TextField fx:id="W11_textField_eos" layoutX="1226.0" layoutY="176.0" prefHeight="25.0" prefWidth="24.0" text="0" />
+            <Label layoutX="1188.0" layoutY="180.0" prefHeight="17.0" prefWidth="31.0" text="W11" />
+            <Label layoutX="1195.0" layoutY="9.0" text="EOS Weights" />
+         </children></AnchorPane>
+   </top>
+   <left>
+      <VBox prefHeight="540.0" prefWidth="257.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="buttonSwitchToAdvancedUserPanel" mnemonicParsing="false" onAction="#switchToAdvancedPanel" prefHeight="25.0" prefWidth="260.0" text="Advanced Panel" />
+             <Button fx:id="LoadResults" mnemonicParsing="false" onAction="#loadResults" prefHeight="25.0" prefWidth="260.0" text="Load" />
+            <Button fx:id="ResetTableButton" mnemonicParsing="false" onAction="#resetTable" prefHeight="25.0" prefWidth="263.0" text="ResetTable" />
+            <Button fx:id="save_to_file" mnemonicParsing="false" onAction="#SaveToFile" prefHeight="25.0" prefWidth="266.0" text="Save to file" />
+            <Button fx:id="Advanced_panel_generation_button" mnemonicParsing="false" onAction="#switchToAdvancedPanelGeneration" prefHeight="25.0" prefWidth="260.0" text="Advanced Panel Summary Generation" />
+            <Button fx:id="save_all_to_file_button" mnemonicParsing="false" onAction="#saveAllToFile" prefHeight="25.0" prefWidth="264.0" text="Save All to File" />
+            <Label fx:id="counter" prefHeight="17.0" prefWidth="265.0" />
+
+         </children>
+      </VBox>
+   </left>
+</BorderPane>

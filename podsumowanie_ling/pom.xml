@@ -5,8 +5,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>ksr.grupa3</groupId>
-  <artifactId>ling</artifactId>
+  <artifactId>linguistic_summary</artifactId>
   <version>1.0</version>
+
 
   <name>podsumowania_lingwistyczne</name>
   <!-- FIXME change it to the project's website -->
@@ -20,7 +21,16 @@
   </properties>
 
   <dependencies>
-
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-controls</artifactId>
+      <version>17.0.2</version>
+    </dependency>
+    <dependency>
+      <groupId>org.openjfx</groupId>
+      <artifactId>javafx-fxml</artifactId>
+      <version>17.0.2</version>
+    </dependency>
     <dependency>
       <groupId>com.opencsv</groupId>
       <artifactId>opencsv</artifactId>
@@ -109,7 +119,7 @@
             <archive>
               <manifest>
                 <addClasspath>true</addClasspath>
-                <mainClass>ksr.grupa3.App</mainClass>
+                <mainClass>ksr.grupa3.start</mainClass>
               </manifest>
             </archive>
           </configuration>
@@ -145,7 +155,7 @@
                       <transformers>
                         <transformer implementation=
                             "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                        <mainClass>ksr.grupa3.App</mainClass>
+                        <mainClass>ksr.grupa3.start</mainClass>
                       </transformer>
                   </transformers>
               </configuration>
@@ -158,6 +168,14 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <configuration>
             <compilerArgument>-XDignore.symbol.file</compilerArgument>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.openjfx</groupId>
+          <artifactId>javafx-maven-plugin</artifactId>
+          <version>0.0.8</version>
+          <configuration>
+            <mainClass>ksr.grupa3.start</mainClass>
           </configuration>
         </plugin>
 

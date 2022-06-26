@@ -14,8 +14,8 @@ public class LingQuantifier implements Serializable {
     private MemberFunc memberFunc;
     private Boolean isAbsolute;
 
-    public double getValue(double x) {
-        return memberFunc.getValue(x);
-    }
+    // public double getValue(double x) {
+    //     return memberFunc.getValue(x);
+    // }
 
 }

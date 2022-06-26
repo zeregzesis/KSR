@@ -6,6 +6,7 @@ import java.util.List;
 
 import ksr.grupa3.fuzzy.FoodItem;
 import ksr.grupa3.fuzzy.FuzzySet;
+import ksr.grupa3.fuzzy.oldSet;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Qualifier implements Agregator, Serializable {
+public class Qualifier implements Serializable {
     List<FuzzySet> qualifierSets = new ArrayList<>();
     List<Boolean> qualifierAnd = new ArrayList<>();
+
+    public Qualifier(FuzzySet qualifier) {
+        this.qualifierSets.add(qualifier);
+    }
 
     public Qualifier(List<FuzzySet> qualifierSets, List<Boolean> qualifierAnd) {
         if (qualifierSets.size() == 1 && qualifierAnd.size() > 0) {
@@ -27,6 +32,11 @@ public class Qualifier implements Agregator, Serializable {
         }
         this.qualifierSets = qualifierSets;
         this.qualifierAnd = qualifierAnd;
+    }
+
+    public void addSet(FuzzySet set, boolean and) {
+        qualifierSets.add(set);
+        qualifierAnd.add(and);
     }
 
     public double tNorm(Double a, Double b) {

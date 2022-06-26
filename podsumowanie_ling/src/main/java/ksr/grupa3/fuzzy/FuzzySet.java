@@ -1,40 +1,87 @@
 package ksr.grupa3.fuzzy;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import lombok.AllArgsConstructor;
+import ksr.grupa3.ling.Variable;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 public class FuzzySet {
 
-    private LingVariable variable;
-    private String value;
+    //private MembershipFuction membershipFuction;
+    //private Field foodProperty;
+    private List<FoodItem> foodItems;
+    private List<Double> values = new ArrayList<>();
+    private MembershipFuction membershipFuction;
+    private Map<FoodItem, Double> valuesByFoodItem = new HashMap<FoodItem, Double>();
 
+
+    public FuzzySet(List<FoodItem> foodItems, Variable variable, String value) {
+        this.foodItems = foodItems;
+        this.membershipFuction = variable.getMemberFunc(value);
+        for (FoodItem foodItem : foodItems) {
+            try {
+            	double calculatedValue = variable.getFuncValue(value, foodItem.getProperty(variable.getFoodProperty()));
+                values.add(calculatedValue);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+        }
+        recalculateValuesByFoodItemMap();
+    }
+    
+    public FuzzySet(List<FoodItem> foodItems, List<Double> values, MembershipFuction membershipFuction) {
+    	this.foodItems = foodItems;
+    	this.values = values;
+    	this.membershipFuction = membershipFuction;
+    	recalculateValuesByFoodItemMap();
+    }
+    
+    private void recalculateValuesByFoodItemMap() {
+    	valuesByFoodItem.clear();
+    	for (int i=0; i<foodItems.size(); i++) {
+    		valuesByFoodItem.put(foodItems.get(i), values.get(i));
+    	}
+    }
+    
+    public double cardinality(List<FoodItem> foodItems) {
+
+        double sum = 0.0;
+        for (FoodItem foodItem : foodItems) {
+            sum += DoM(foodItem);
+        }
+        return sum;
+
+    }
     public double DoM(FoodItem foodItem) {
 
-        return variable.getFuncValue(this.value, foodItem.getProperty(variable.getFoodProperty()));
+    	//bottleneck - map (hashmap) is more efficient
+        //int index = foodItems.indexOf(foodItem);
+        //return (index != -1 ? values.get(index) : 0);
+    	
+    	Double value = valuesByFoodItem.get(foodItem);
+    	return value;
         
     }
 
-    public double cardinality(List<FoodItem> foodItems) {
+    public double cardinality() {
 
-        double ret = 0.0;
-        for (FoodItem foodItem : foodItems) {
-            ret += DoM(foodItem);
-        }
-
-        return ret;
+        return values.stream().mapToDouble(Double::doubleValue).sum();
 
     }
+    
+    public double UoD() {
+        return membershipFuction.getUpperBound();
+    }
+    
 
-    public List<FoodItem> support(List<FoodItem> foodItems) {
+    public List<FoodItem> support() {
 
         List<FoodItem> ret = new ArrayList<>();
         for (FoodItem foodItem : foodItems) {
@@ -47,13 +94,13 @@ public class FuzzySet {
 
     }
 
-    public int supportCount(List<FoodItem> foodItems) {
+    public int height() {
 
-        return support(foodItems).size();
+        return support().size();
 
     }
 
-    public List<FoodItem> alphaCut(List<FoodItem> foodItems, double alpha){
+    public List<FoodItem> alphaCut(double alpha){
 
         List<FoodItem> ret = new ArrayList<>();
         for (FoodItem foodItem : foodItems) {
@@ -66,151 +113,120 @@ public class FuzzySet {
 
     }
 
-    public int alphaCutCount(List<FoodItem> foodItems, double alpha){
-        return alphaCut(foodItems, alpha).size();
+    public int alphaCutHeight(double alpha){
+        return alphaCut(alpha).size();
+    }
+
+    public List<FoodItem> complement() {
+
+        List<FoodItem> ret = new ArrayList<>();
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) == 0) {
+                ret.add(foodItem);
+            }
+        }
+
+        return ret;
+
+    }
+
+    public boolean isNormal() {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) != 1) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean isEmpty() {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) != 0) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    // mock żeby się nie czepiał, bo nie mam pojęcia jak to gówno zrobić
+    public boolean isConvex() {
+
+        for (FoodItem foodItem : foodItems) {
+            if (DoM(foodItem) < 0.5) {
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    public boolean isConcave() {
+
+        if (isConvex() || isEmpty() || isNormal()) {
+            return false;
+        }
+
+        return true;
+
     }
 
     
-    public FuzzySet setSum(FuzzySet other) {
+    public FuzzySet setUnion(FuzzySet other) {
 
-        String newVariableName = this.getVariable().getName() + " or " + other.getVariable().getName();
-        String newValue = this.getValue() + " or " + other.getValue();
-
-        List<SubFunc> temp = this.getVariable().getMemberFunc(this.getValue()).getSubFuncs();
-        List<SubFunc> temp2 = this.getVariable().getMemberFunc(other.getValue()).getSubFuncs();
-            
-        double start = Math.min(
-                    temp.get(1).getStart(),
-                    temp2.get(1).getStart()
-                    );
-        double end = Math.max(
-                temp.get(temp.size()-2).getEnd(),
-                temp2.get(temp2.size()-2).getEnd()
-                );
-
-        int firtsIndex = 0, secondIndex = 0;
-        double rangeStart = start, rangeEnd = start;
-
-        SubFunc first = temp.get(firtsIndex);
-        SubFunc second = temp2.get(secondIndex);
-
-        List<SubFunc> subFuncs = new ArrayList<>();
-
-        for (int i = (int) start; i <= end; i++) {
-            if (first.getEnd() < i) {
-                firtsIndex++;
-                first = temp.get(firtsIndex);
-            }
-            if (second.getEnd() < i) {
-                secondIndex++;
-                second = temp2.get(secondIndex);
-            }
-            if (first.getValue((double)i) >= second.getValue((double)i)) {
-                rangeEnd++;
-            } else {
-                subFuncs.add(new SubFunc(first.getFunc(), rangeStart, rangeEnd));
-                rangeStart = rangeEnd;
-                SubFunc tempFunc = first;
-                first = second;
-                second = tempFunc;
-            }
+        List<FoodItem> ret = new ArrayList<>();
+        List<Double> retValues = new ArrayList<>();
+        for (int i = 0; i < foodItems.size(); i++) {
+            ret.add(foodItems.get(i));
+            retValues.add(Math.max(values.get(i), other.values.get(i)));
         }
-        if (rangeStart != rangeEnd) {
-            subFuncs.add(new SubFunc(first.getFunc(), rangeStart, rangeEnd));
+        for (int i = 0; i < other.foodItems.size(); i++) {
+            //if (this.foodItems.indexOf(other.getFoodItems().get(i)) == -1) continue;
+        	//readability - contains may be used instead of indexOf
+        	//general comment: continue is not recommended
+        	if (! this.foodItems.contains(other.getFoodItems().get(i))) continue;
+            ret.add(other.foodItems.get(i));
+            retValues.add(Math.max(values.get(i), other.values.get(i)));
         }
 
-        List<MemberFunc> newMemberFuncs = new ArrayList<>(this.getVariable().getMemberFuncList());
-        newMemberFuncs.add(new MemberFunc(subFuncs));
+        MembershipFuction combinedFunc = new CombinationFunction(this.membershipFuction, other.getMembershipFuction(), false);
 
-        List<String> newValues = new ArrayList<>(this.getVariable().getValues());
-        newValues.add(newValue);
-        
-        LingVariable newVariable = new LingVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
-        
-        return new FuzzySet(newVariable, newValue);
+        return new FuzzySet(ret, retValues, combinedFunc);
     }
 
     public FuzzySet setIntersect(FuzzySet other) {
 
-        String newVariableName = this.getVariable().getName() + " and " + other.getVariable().getName();
-        String newValue = this.getValue() + " and " + other.getValue();
-
-        List<SubFunc> temp = this.getVariable().getMemberFunc(this.getValue()).getSubFuncs();
-        List<SubFunc> temp2 = this.getVariable().getMemberFunc(other.getValue()).getSubFuncs();
-
-            double start = Math.min(
-                    temp.get(1).getStart(),
-                    temp2.get(1).getStart()
-                    );
-
-            double end = Math.max(
-                temp.get(temp.size()-2).getEnd(),
-                temp2.get(temp2.size()-2).getEnd()
-                );
-
-            int firtsIndex = 0, secondIndex = 0;
-            double rangeStart = 0, rangeEnd = 0;
-            double funcStart = 0, funcEnd = 0;
-    
-            SubFunc first = temp.get(firtsIndex);
-            SubFunc second = temp2.get(secondIndex);
-    
-            List<SubFunc> subFuncs = new ArrayList<>();
-            
-            for (int i = (int) start; i <= end; i++) {
-
-                if (first.getEnd() < i) {
-                    firtsIndex++;
-                    first = temp.get(firtsIndex);
-                }
-                if (second.getEnd() < i) {
-                    secondIndex++;
-                    second = temp2.get(secondIndex);
-                }
-
-                if (first.getValue((double)i) > 0 && second.getValue((double)i) > 0) {
-                    if (rangeStart == 0) {
-                        rangeStart = i;
-                        rangeEnd = i;
-                        funcStart = i;
-                        funcEnd = i;
-                    }
-                    else {
-                        rangeEnd = i;
-                        if (first.getValue((double)i) <= second.getValue((double)i)) {
-                            funcEnd = i;
-                        } else {
-                            subFuncs.add(new SubFunc(first.getFunc(), funcStart, funcEnd));
-                            funcStart = i;
-                            SubFunc tempFunc = first;
-                            first = second;
-                            second = tempFunc;
-                        }
-                    }
-                } else if (rangeStart != 0) {
-                    subFuncs.add(new SubFunc(first.getFunc(), rangeStart, rangeEnd));
-                    rangeStart = rangeEnd;
-                    SubFunc tempFunc = first;
-                    first = second;
-                    second = tempFunc;
-                }
+        List<FoodItem> ret = new ArrayList<>(foodItems);
+        List<Double> retValues = new ArrayList<>();
+        for (int i = 0; i < foodItems.size(); i++) {
+            //ret.add(foodItems.get(i));
+            retValues.add(Math.min(values.get(i), other.values.get(i)));
+        }
+        if (!this.foodItems.equals(other.getFoodItems())) {
+            for (int i = 0; i < other.foodItems.size(); i++) {
+                //System.out.println(i);
+                //if (this.foodItems.indexOf(other.getFoodItems().get(i)) != -1) continue;
+            	//readability - contains may be used instead of indexOf
+            	//general comment: continue is not recommended
+            	if (this.foodItems.contains(other.getFoodItems().get(i))) continue;
+                ret.add(other.foodItems.get(i));
+                retValues.add(Math.min(values.get(i), other.values.get(i)));
             }
+        }
 
-            if (rangeStart != rangeEnd) {
-                subFuncs.add(new SubFunc(first.getFunc(), rangeStart, rangeEnd));
-            }
+        MembershipFuction combinedFunc = new CombinationFunction(this.membershipFuction, other.getMembershipFuction(), true);
 
-            List<MemberFunc> newMemberFuncs = new ArrayList<>(this.getVariable().getMemberFuncList());
-            newMemberFuncs.add(new MemberFunc(subFuncs));
-
-            List<String> newValues = new ArrayList<>(this.getVariable().getValues());
-            newValues.add(newValue);
-
-            LingVariable newVariable = new LingVariable(newVariableName, this.getVariable().getFoodProperty(), newValues, newMemberFuncs);
-            
-            return new FuzzySet(newVariable, newValue);
+        return new FuzzySet(ret, retValues, combinedFunc);
     }
 
-    
+    public FuzzySet copyOf() {
+        return new FuzzySet(List.copyOf(foodItems), List.copyOf(values), membershipFuction);
+    }
 
 }

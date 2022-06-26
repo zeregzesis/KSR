@@ -7,10 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+// @NoArgsConstructor
+// @AllArgsConstructor
 public class MemberFunc implements Serializable{
 
+    /*
     private List<SubFunc> subFuncs;
 
     public double getValue(double x) {
@@ -20,5 +21,5 @@ public class MemberFunc implements Serializable{
             }
         }
         return 0;
-    }
+    }*/
 }

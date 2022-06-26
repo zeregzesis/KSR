@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Summarizer implements Agregator, Serializable {
+public class Summarizer implements Serializable {
     List<FuzzySet> summarizedSets = new ArrayList<>();
     List<Boolean> summarizedAnd = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class Summarizer implements Agregator, Serializable {
 
     }
 
-    // implikacja Łukasiewicza
+    // implikacja Łukasiewicza (nie powinna chyba być tutaj, ale nie mam pomysłu gdzie ją dać żeby miało to sens)
     public static double implication(Double a, Double b) {
 
         return Math.min(1, 1-a+b);
@@ -61,14 +61,21 @@ public class Summarizer implements Agregator, Serializable {
 
     }
 
-    public double cardinality(List<FoodItem> foodItems) {
-        double cardinality = 0;
-        for (FoodItem foodItem : foodItems) {
-            cardinality += DoM(foodItem);
+    public double cardinality() {
+        FuzzySet set = summarizedSets.get(0).copyOf();
+        for (int i = 1; i < summarizedSets.size(); i++) {
+            set = (summarizedAnd.get(i - 1) ? set.setIntersect(summarizedSets.get(i).copyOf()) : set.setUnion(summarizedSets.get(i).copyOf()));
         }
-        return cardinality;
+        return set.cardinality();
     }
 
-    
+    public double UoD() {
+        FuzzySet set = summarizedSets.get(0).copyOf();
+        for (int i = 1; i < summarizedSets.size(); i++) {
+            set = (summarizedAnd.get(i - 1) ? set.setIntersect(summarizedSets.get(i).copyOf()) : set.setUnion(summarizedSets.get(i).copyOf()));
+        }
+
+        return set.getMembershipFuction().getUpperBound();
+    }
 
 }
