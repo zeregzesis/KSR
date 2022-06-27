@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MainController implements Initializable {
 
@@ -363,21 +364,42 @@ public class MainController implements Initializable {
         }
         List<Quantifier> quantifiers=dataHolder.quantifiers;
         Quantifier forthFormQuantifier = quantifiers.remove(quantifiers.size() - 1);
-        List<Subject> subjects=dataHolder.subjects;
+        List<Subject> subjects = dataHolder.subjects;
         List<Summary> summaries=new ArrayList<>();
-        for (Quantifier q : quantifiers) {
+        List<List<List<List<Summary>>>> summariesList = new ArrayList<>();
+        // dla każdej treści podsumowania bez kwantyfikatora
+        for (int i = 0; i < allsubsetsS.size(); i++) {
+            List<List<List<Summary>>> summariesList2 = new ArrayList<>();
+            // dla każdej formy
+            for (int j = 0; j < 6; j++) {
+                List<List<Summary>> summariesList3 = new ArrayList<>();
+                // dla każdego kwantyfikatora
+                for (int k = 0; k < quantifiers.size(); k++) {
+                    List<Summary> summariesList4 = new ArrayList<>();
+                    summariesList3.add(summariesList4);
+                }
+                summariesList2.add(summariesList3);
+            }
+            summariesList.add(summariesList2);
+        }
+
+        for (int k = 0; k < quantifiers.size(); k++) {
+            Quantifier q = quantifiers.get(k);
             // pierwsza forma
             for (int i = 1; i < allsubsetsS.size(); i++) {
-                System.out.println(allsubsetsS.get(i).size());
+                //System.out.println(allsubsetsS.get(i).size());
                 Agregator summ = new Agregator(allsubsetsS.get(i), ands.get(allsubsetsS.get(i).size()-1), allsubsetsL.get(i));
                 // jednopodmiotowe
                 Summary s = SummaryBuilder.buildSummary(q, subjects.get(0), null, new Agregator(), summ, SummaryType.SINGLE_SUBJECT);
-                summaries.add(s);
+                //summaries.add(s);
+                summariesList.get(i).get(0).get(k).add(s);
                 // wielopodmiotowe
                 Summary s2 = SummaryBuilder.buildSummary(q, subjects.get(1), subjects.get(2), new Agregator(), summ, SummaryType.FIRST_FORM);
-                summaries.add(s2);
+                //summaries.add(s2);
+                summariesList.get(i).get(2).get(k).add(s2);
                 Summary s3 = SummaryBuilder.buildSummary(q, subjects.get(2), subjects.get(1), new Agregator(), summ, SummaryType.FIRST_FORM);
-                summaries.add(s3);
+                //summaries.add(s3);
+                summariesList.get(i).get(2).get(k).add(s3);
             }
             //druga i trzecia forma
             for (int i = 1; i < allsubsetsS.size() - 1; i++) {
@@ -386,27 +408,37 @@ public class MainController implements Initializable {
                     Agregator qual = new Agregator(allsubsetsS.get(j), ands.get(allsubsetsS.get(j).size()-1), allsubsetsL.get(j));
                     // jednopodmiotowe druga forma
                     Summary s = SummaryBuilder.buildSummary(q, subjects.get(0), null, qual, summ, SummaryType.SINGLE_SUBJECT);
-                    summaries.add(s);
+                    //summaries.add(s);
+                    summariesList.get(i).get(1).get(k).add(s);
                     Summary s2 = SummaryBuilder.buildSummary(q, subjects.get(0), null, summ, qual, SummaryType.SINGLE_SUBJECT);
-                    summaries.add(s2);
+                    //summaries.add(s2);
+                    summariesList.get(j).get(1).get(k).add(s2);
                     // wielopodmiotowe druga forma
                     Summary s3 = SummaryBuilder.buildSummary(q, subjects.get(1), subjects.get(2), qual, summ, SummaryType.SECOND_FORM);
-                    summaries.add(s3);
+                    //summaries.add(s3);
+                    summariesList.get(i).get(3).get(k).add(s3);
                     Summary s4 = SummaryBuilder.buildSummary(q, subjects.get(1), subjects.get(2), summ, qual, SummaryType.SECOND_FORM);
-                    summaries.add(s4);
+                    //summaries.add(s4);
+                    summariesList.get(j).get(3).get(k).add(s4);
                     Summary s5 = SummaryBuilder.buildSummary(q, subjects.get(2), subjects.get(1), qual, summ, SummaryType.SECOND_FORM);
-                    summaries.add(s5);
+                    //summaries.add(s5);
+                    summariesList.get(j).get(3).get(k).add(s5);
                     Summary s6 = SummaryBuilder.buildSummary(q, subjects.get(2), subjects.get(1), summ, qual, SummaryType.SECOND_FORM);
-                    summaries.add(s6);
+                    //summaries.add(s6);
+                    summariesList.get(j).get(3).get(k).add(s6);
                     // wielopodmiotowe trzecia forma
                     Summary s7 = SummaryBuilder.buildSummary(q, subjects.get(1), subjects.get(2), qual, summ, SummaryType.THIRD_FORM);
-                    summaries.add(s7);
+                    //summaries.add(s7);
+                    summariesList.get(i).get(4).get(k).add(s7);
                     Summary s8 = SummaryBuilder.buildSummary(q, subjects.get(1), subjects.get(2), summ, qual, SummaryType.THIRD_FORM);
-                    summaries.add(s8);
+                    //summaries.add(s8);
+                    summariesList.get(j).get(4).get(k).add(s8);
                     Summary s9 = SummaryBuilder.buildSummary(q, subjects.get(2), subjects.get(1), qual, summ, SummaryType.THIRD_FORM);
-                    summaries.add(s9);
+                    //summaries.add(s9);
+                    summariesList.get(j).get(4).get(k).add(s9);
                     Summary s10 = SummaryBuilder.buildSummary(q, subjects.get(2), subjects.get(1), summ, qual, SummaryType.THIRD_FORM);
-                    summaries.add(s10);
+                    //summaries.add(s10);
+                    summariesList.get(j).get(4).get(k).add(s10);
                 }
             }
         }
@@ -415,10 +447,20 @@ public class MainController implements Initializable {
             Agregator summ = new Agregator(allsubsetsS.get(i), ands.get(allsubsetsS.get(i).size()-1), allsubsetsL.get(i));
 
             Summary s = SummaryBuilder.buildSummary(forthFormQuantifier, subjects.get(1), subjects.get(2), new Agregator(), summ, SummaryType.FOURTH_FORM);
-            summaries.add(s);
+            //summaries.add(s);
+            summariesList.get(i).get(5).get(summariesList.get(i).get(5).size()-1).add(s);
             Summary s2 = SummaryBuilder.buildSummary(forthFormQuantifier, subjects.get(2), subjects.get(1), new Agregator(), summ, SummaryType.FOURTH_FORM);
-            summaries.add(s2);
+            //summaries.add(s2);
+            summariesList.get(i).get(5).get(summariesList.get(i).get(5).size()-1).add(s2);
         }
+
+        summaries = summariesList.stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList()).stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList()).stream()
+        .flatMap(List::stream)
+        .collect(Collectors.toList());
 
         List<Double> weights=new ArrayList<>();
         List<Double> extweights=new ArrayList<>();

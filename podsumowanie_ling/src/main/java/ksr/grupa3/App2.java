@@ -54,7 +54,7 @@ public class App2 extends Application {
 
         List<FoodItem> foodItems = CSVFileReader.readCsv();
 
-        DataHolder dataHolder=new DataHolder(quantifiers,variables,subjects,foodItems);
+        DataHolder dataHolder=new DataHolder(new ArrayList<>(quantifiers),variables,subjects,foodItems);
         System.out.println(dataHolder.quantifiers.size());
 
 

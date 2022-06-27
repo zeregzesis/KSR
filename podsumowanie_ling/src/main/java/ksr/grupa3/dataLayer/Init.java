@@ -109,7 +109,7 @@ public class Init {
         quantifiers.add(muchLessThan8000);
 
         Quantifier aboutFewThousand = new Quantifier();
-        aboutFewThousand.setName("Much less than 8000");
+        aboutFewThousand.setName("About few thousand");
         // zero = new SubFunc("0", -1, 0);
         // value = new SubFunc("exp(-(0.001 * x - 4)^2)", 0, 4000);
         // one = new SubFunc("1", 4000, 6000);
